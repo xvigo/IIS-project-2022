@@ -44,8 +44,9 @@ posts = [
     #     pass
 
 
-app = Flask(__name__, instance_relative_config=True)
-app.config.from_mapping(SECRET_KEY='b76d4859dd2d340dfe47dbf8993f0386')
+app = Flask(__name__)
+app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
+
 
 @app.route("/")
 @app.route("/home")
@@ -66,12 +67,12 @@ def register():
         
     return render_template('register.html', title='Register', form=form)
 
-@app.route("/login")
+@app.route("/login", methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     return render_template('login.html', title='Log In', form=form)
 
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=False)
