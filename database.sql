@@ -1,113 +1,113 @@
 DROP EXTENSION pgcrypto;
 CREATE EXTENSION pgcrypto;
 
-DROP TABLE IF EXISTS uživatel CASCADE;
-DROP TABLE IF EXISTS správce_města CASCADE;
-DROP TABLE IF EXISTS servisní_technik CASCADE;
-DROP TABLE IF EXISTS obyvatel CASCADE;
-DROP TABLE IF EXISTS servisní_požadavek CASCADE;
-DROP TABLE IF EXISTS komentář_požadavku CASCADE;
-DROP TABLE IF EXISTS komentář_tiketu CASCADE;
-DROP TABLE IF EXISTS tiket CASCADE;
-DROP TABLE IF EXISTS obrázek CASCADE;
+DROP TABLE IF EXISTS u_user CASCADE;
+DROP TABLE IF EXISTS city_manager CASCADE;
+DROP TABLE IF EXISTS service_technician CASCADE;
+DROP TABLE IF EXISTS resident CASCADE;
+DROP TABLE IF EXISTS service_requirement CASCADE;
+DROP TABLE IF EXISTS requirement_comment CASCADE;
+DROP TABLE IF EXISTS ticket_comment CASCADE;
+DROP TABLE IF EXISTS ticket CASCADE;
+DROP TABLE IF EXISTS image CASCADE;
 
-CREATE TABLE uživatel(
-	id_uživatel INT PRIMARY KEY NOT NULL,
-	jméno VARCHAR(50) NOT NULL,
-	příjmení VARCHAR(50) NOT NULL,
-	email TEXT NOT NULL,
-	heslo TEXT NOT NULL
+CREATE TABLE u_user(
+	id_user INT PRIMARY KEY NOT NULL,
+	u_name VARCHAR(50) NOT NULL,
+	u_surname VARCHAR(50) NOT NULL,
+	u_email TEXT NOT NULL,
+	u_password TEXT NOT NULL
 );
 
-CREATE TABLE správce_města(
-	id_správce INT PRIMARY KEY NOT NULL,
-	telefon VARCHAR(50) NOT NULL,
-	id_uživatel INT NOT NULL,
-	CONSTRAINT uživatel_správce FOREIGN KEY (id_uživatel)
-		REFERENCES uživatel(id_uživatel) ON DELETE CASCADE
+CREATE TABLE city_manager(
+	id_city_manager INT PRIMARY KEY NOT NULL,
+	phone_number VARCHAR(50) NOT NULL,
+	id_user INT NOT NULL,
+	CONSTRAINT user_city_manager FOREIGN KEY (id_user)
+		REFERENCES u_user(id_user) ON DELETE CASCADE
 );
 
-CREATE TABLE servisní_technik(
-	id_technik INT PRIMARY KEY NOT NULL,
-	telefon VARCHAR(50) NOT NULL,
-	id_uživatel INT NOT NULL,
-	CONSTRAINT uživatel_technik FOREIGN KEY (id_uživatel)
-		REFERENCES uživatel(id_uživatel) ON DELETE CASCADE
+CREATE TABLE service_technician(
+	id_service_technician INT PRIMARY KEY NOT NULL,
+	phone_number VARCHAR(50) NOT NULL,
+	id_user INT NOT NULL,
+	CONSTRAINT user_technician FOREIGN KEY (id_user)
+		REFERENCES u_user(id_user) ON DELETE CASCADE
 );
 
-CREATE TABLE obyvatel(
-	id_obyvatel INT PRIMARY KEY NOT NULL,
-	id_uživatel INT NOT NULL,
-	CONSTRAINT uživatel_obyvatel FOREIGN KEY (id_uživatel)
-		REFERENCES uživatel(id_uživatel) ON DELETE CASCADE
+CREATE TABLE resident(
+	id_resident INT PRIMARY KEY NOT NULL,
+	id_user INT NOT NULL,
+	CONSTRAINT user_resident FOREIGN KEY (id_user)
+		REFERENCES u_user(id_user) ON DELETE CASCADE
 );
 
-CREATE TABLE tiket(
-	id_tiket INT PRIMARY KEY NOT NULL,
-	název VARCHAR(50) NOT NULL,
-	popis TEXT NOT NULL,
-	ulice TEXT NOT NULL,
-	číslo_popisné INT NOT NULL,
-	stav TEXT NOT NULL,
-	id_obyvatel INT NOT NULL,
-	CONSTRAINT tiket_obyvatel FOREIGN KEY (id_obyvatel)
-		REFERENCES obyvatel(id_obyvatel) ON DELETE CASCADE
+CREATE TABLE ticket(
+	id_ticket INT PRIMARY KEY NOT NULL,
+	t_name VARCHAR(50) NOT NULL,
+	description TEXT NOT NULL,
+	street TEXT NOT NULL,
+	house_number INT NOT NULL,
+	t_state TEXT NOT NULL,
+	id_resident INT NOT NULL,
+	CONSTRAINT ticket_resident FOREIGN KEY (id_resident)
+		REFERENCES resident(id_resident) ON DELETE CASCADE
 );
 
-CREATE TABLE servisní_požadavek(
-	id_požadavek INT PRIMARY KEY NOT NULL,
-	popis TEXT NOT NULL,
-	stav_řešení BOOLEAN DEFAULT FALSE,
-	předpokládaný_čas TIME NOT NULL,
-	cena INT NOT NULL,
-	vykázaný_čas TIME NOT NULL,
-	id_správce INT NOT NULL,
-	id_technik INT NOT NULL,
-	id_tiket INT NOT NULL,
-	CONSTRAINT požadavek_správce FOREIGN KEY (id_správce)
-		REFERENCES správce_města(id_správce) ON DELETE CASCADE,
-	CONSTRAINT požadavek_technik FOREIGN KEY (id_technik)
-		REFERENCES servisní_technik(id_technik) ON DELETE CASCADE,
-	CONSTRAINT požadavek_tiket FOREIGN KEY (id_tiket)
-		REFERENCES tiket(id_tiket) ON DELETE CASCADE
+CREATE TABLE service_requirement(
+	id_service_requirement INT PRIMARY KEY NOT NULL,
+	description TEXT NOT NULL,
+	r_state BOOLEAN DEFAULT FALSE,
+	estimated_time TIME NOT NULL,
+	price INT NOT NULL,
+	real_time TIME NOT NULL,
+	id_city_manager INT NOT NULL,
+	id_service_technician INT NOT NULL,
+	id_ticket INT NOT NULL,
+	CONSTRAINT requirement_city_manager FOREIGN KEY (id_city_manager)
+		REFERENCES city_manager(id_city_manager) ON DELETE CASCADE,
+	CONSTRAINT requirement_technician FOREIGN KEY (id_service_technician)
+		REFERENCES service_technician(id_service_technician) ON DELETE CASCADE,
+	CONSTRAINT requirement_ticket FOREIGN KEY (id_ticket)
+		REFERENCES ticket(id_ticket) ON DELETE CASCADE
 );
 
-CREATE TABLE komentář_požadavku(
-	id_komentář_požadavek SERIAL PRIMARY KEY NOT NULL,
-	datum DATE NOT NULL,
-	k_text TEXT NOT NULL,
-	id_požadavek INT NOT NULL,
-	id_technik INT NOT NULL,
-	CONSTRAINT komentář_požadavek FOREIGN KEY (id_požadavek)
-		REFERENCES servisní_požadavek(id_požadavek) ON DELETE CASCADE,
-	CONSTRAINT komentář_technik FOREIGN KEY (id_technik)
-		REFERENCES servisní_technik(id_technik) ON DELETE CASCADE
+CREATE TABLE requirement_comment(
+	id_requirement_comment SERIAL PRIMARY KEY NOT NULL,
+	rc_date DATE NOT NULL,
+	rc_text TEXT NOT NULL,
+	id_service_requirement INT NOT NULL,
+	id_service_technician INT NOT NULL,
+	CONSTRAINT requirement_comment_requirement FOREIGN KEY (id_service_requirement)
+		REFERENCES service_requirement(id_service_requirement) ON DELETE CASCADE,
+	CONSTRAINT requirement_comment_technik FOREIGN KEY (id_service_technician)
+		REFERENCES service_technician(id_service_technician) ON DELETE CASCADE
 );
 
-CREATE TABLE komentář_tiketu(
-	id_komentář_tiket INT PRIMARY KEY NOT NULL,
-	datum DATE NOT NULL,
-	k_text TEXT NOT NULL,
-	id_správce INT NOT NULL,
-	id_tiket INT NOT NULL,
-	CONSTRAINT komentář_správce FOREIGN KEY (id_správce)
-		REFERENCES správce_města(id_správce) ON DELETE CASCADE,
-	CONSTRAINT komentář_tiket FOREIGN KEY (id_tiket)
-		REFERENCES tiket(id_tiket) ON DELETE CASCADE
+CREATE TABLE ticket_comment(
+	id_ticket_comment INT PRIMARY KEY NOT NULL,
+	tc_date DATE NOT NULL,
+	tc_text TEXT NOT NULL,
+	id_city_manager INT NOT NULL,
+	id_ticket INT NOT NULL,
+	CONSTRAINT comment_city_manager FOREIGN KEY (id_city_manager)
+		REFERENCES city_manager(id_city_manager) ON DELETE CASCADE,
+	CONSTRAINT comment_ticket FOREIGN KEY (id_ticket)
+		REFERENCES ticket(id_ticket) ON DELETE CASCADE
 );
 
-CREATE TABLE obrázek(
-	id_obrázek INT PRIMARY KEY NOT NULL,
-	název VARCHAR(50) NOT NULL,
-	o_data TEXT NOT NULL,
-	id_tiket INT NOT NULL,
-	CONSTRAINT tiket_obrázek FOREIGN KEY (id_tiket)
-		REFERENCES tiket(id_tiket) ON DELETE CASCADE
+CREATE TABLE image(
+	id_image INT PRIMARY KEY NOT NULL,
+	i_name VARCHAR(50) NOT NULL,
+	i_data TEXT NOT NULL,
+	id_ticket INT NOT NULL,
+	CONSTRAINT ticket_image FOREIGN KEY (id_ticket)
+		REFERENCES ticket(id_ticket) ON DELETE CASCADE
 );
 
-/************************** UŽIVATEL **************************/
+/************************** USER **************************/
 INSERT INTO
-	uživatel(id_uživatel, jméno, příjmení, email, heslo)
+	u_user(id_user, u_name, u_surname, u_email, u_password)
 VALUES
 	(1, 'Karel', 'Havlíček', 'karel.hav@seznam.cz', crypt('karlovoheslo', gen_salt('bf'))),
 	(2, 'Adam', 'Novák', 'adam.novak@seznam.cz', crypt('adamovoheslo', gen_salt('bf'))),
@@ -115,69 +115,69 @@ VALUES
 	(4, 'Test2', 'Test2', 'test2@test2.cz', crypt('test2', gen_salt('bf'))),
 	(5, 'Test3', 'Test3', 'test3@test3.cz', crypt('test3', gen_salt('bf')));
 	
-/************************** SPRÁVCE **************************/
+/************************** CITY MANAGER **************************/
 INSERT INTO
-	správce_města(id_správce, telefon, id_uživatel)
+	city_manager(id_city_manager, phone_number, id_user)
 VALUES
 	(1, '111222333', 1);
 	
-/************************** TECHNIK **************************/
+/************************** SERVICE TECHNICIAN **************************/
 INSERT INTO
-	servisní_technik(id_technik, telefon, id_uživatel)
+	service_technician(id_service_technician, phone_number, id_user)
 VALUES
 	(1, '444555666', 2);
 	
-/************************** OBYVATEL **************************/
+/************************** RESIDENT **************************/
 INSERT INTO
-	obyvatel(id_obyvatel, id_uživatel)
+	resident(id_resident, id_user)
 VALUES
 	(1, 3),
 	(2, 4),
 	(3, 5);
 
-/************************** TIKET **************************/
+/************************** TICKET **************************/
 INSERT INTO
-	tiket(id_tiket, název, popis, ulice, číslo_popisné, stav, id_obyvatel)
+	ticket(id_ticket, t_name, description, street, house_number, t_state, id_resident)
 VALUES
 	(1, 'Lampa', 'Lampa nesvítí', 'U Bobra', 12, 'Servisák se na to podívá', 1),
 	(2, 'Lampa', 'Lampa až moc svítí', 'U Řeky', 14, 'Servisák se na to nepodívá', 1),
 	(3, 'Silnice', 'Špatné značení', 'U Borovičky', 12, 'Servisák na tom pracuje', 2),
 	(4, 'Značka', 'Značka byla ukradena', 'U Konvice', 12, 'Servisák na tom pracuje', 3);
 	
-/************************** OBRÁZEK **************************/
+/************************** IMAGE **************************/
 INSERT INTO
-	obrázek(id_obrázek, název, o_data, id_tiket)
+	image(id_image, i_name, i_data, id_ticket)
 VALUES
 	(1, 'Lampa', 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png', 1),
 	(2, 'Lampa', 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png', 2),
 	(3, 'Silnice', 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png', 3),
 	(4, 'Značka', 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png', 4);
 
-/************************** KOMENTÁŘ TIKETU **************************/
+/************************** TICKET COMMENT **************************/
 INSERT INTO
-	komentář_tiketu(id_komentář_tiket, datum, k_text, id_správce, id_tiket)
+	ticket_comment(id_ticket_comment, tc_date, tc_text, id_city_manager, id_ticket)
 VALUES
 	(1, '1996-12-02', 'Dělá se na tom', 1, 1),
 	(2, '1996-1-02', 'Dělá se na tom', 1, 2),
 	(3, '1996-2-22', 'Dělá se na tom', 1, 3),
 	(4, '1996-3-12', 'Dělá se na tom', 1, 4);
 
-/************************** SERVISNÍ POŽADAVEK **************************/
+/************************** SERVICE REQUIREMENT **************************/
 INSERT INTO
-	servisní_požadavek(id_požadavek, popis, stav_řešení, předpokládaný_čas, cena, vykázaný_čas, id_správce, id_technik, id_tiket)
+	service_requirement(id_service_requirement, description, r_state, estimated_time, price, real_time, id_city_manager, id_service_technician, id_ticket)
 VALUES
 	(1, 'Chce to víc lepidla pro příště', TRUE, '02:00:00', 5000, '02:00:00', 1, 1, 1),
 	(2, 'Snad hotovo', TRUE, '02:00:00', 500, '02:00:00', 1, 1, 2),
 	(3, 'Konečně hotovo', TRUE, '20:00:00', 2000, '20:00:00', 1, 1, 3),
 	(4, 'Dávám tomu týden', FALSE, '24:00:00', 50000, '00:00:00', 1, 1, 4);
 
-/************************** KOMENTÁŘ POŽADAVKU **************************/
+/************************** REQUIREMENT COMMENT **************************/
 INSERT INTO
-	komentář_požadavku(id_komentář_požadavek, datum, k_text, id_požadavek, id_technik)
+	requirement_comment(id_requirement_comment, rc_date, rc_text, id_service_requirement, id_service_technician)
 VALUES
 	(1, '1996-12-02', 'Dělá se na tom', 1, 1),
 	(2, '1996-1-02', 'Dělá se na tom', 2, 1),
 	(3, '1996-2-22', 'Dělá se na tom', 3, 1),
 	(4, '1996-3-12', 'Dělá se na tom', 4, 1);
 
-SELECT * FROM uživatel WHERE heslo = crypt('karlovoheslo', heslo);
+SELECT * FROM u_user WHERE u_password = crypt('karlovoheslo', u_password);
