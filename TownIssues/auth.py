@@ -1,4 +1,5 @@
 import functools
+from unicodedata import name
 from TownIssues.forms import RegistrationForm, LoginForm
 
 from flask import (
@@ -11,14 +12,7 @@ from flask import (
 bp = Blueprint('auth', __name__)
 
 
-@bp.route("/register", methods=['GET', 'POST'])
-def register():
-    form = RegistrationForm()
-    if form.validate_on_submit():
-        flash(f'Account created for {form.email.data}', 'success')
-        return redirect(url_for('home'))
-        
-    return render_template('register.html', title='Register', form=form)
+
 
 @bp.route("/login", methods=['GET', 'POST'])
 def login():

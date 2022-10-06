@@ -11,17 +11,17 @@ DROP TABLE IF EXISTS komentář_tiketu CASCADE;
 DROP TABLE IF EXISTS tiket CASCADE;
 DROP TABLE IF EXISTS obrázek CASCADE;
 
-CREATE TABLE uživatel(
-	id_uživatel INT PRIMARY KEY NOT NULL,
-	jméno VARCHAR(50) NOT NULL,
-	příjmení VARCHAR(50) NOT NULL,
-	email TEXT NOT NULL,
-	heslo TEXT NOT NULL
+CREATE TABLE users(
+	id_user SERIAL PRIMARY KEY NOT NULL,
+	name VARCHAR(50) NOT NULL,
+	surname VARCHAR(50) NOT NULL,
+	email VARCHAR(50) NOT NULL,
+	password VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE správce_města(
 	id_správce INT PRIMARY KEY NOT NULL,
-	telefon VARCHAR(50) NOT NULL,
+	telefon VARCHAR(20) NOT NULL,
 	id_uživatel INT NOT NULL,
 	CONSTRAINT uživatel_správce FOREIGN KEY (id_uživatel)
 		REFERENCES uživatel(id_uživatel) ON DELETE CASCADE

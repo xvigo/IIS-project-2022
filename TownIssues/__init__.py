@@ -1,5 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, flash, redirect, url_for
 from TownIssues import auth
+from TownIssues.forms import RegistrationForm
+
 
 import os
 
@@ -21,14 +23,15 @@ posts = [
         'content': 'Content 3'
     }
 ]
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
 
 def create_app(test_config=None):
     #create and configure the app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='b76d4859dd2d340dfe47dbf8993f0386',
-        #DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
+        SQLALCHEMY_DATABASE_URI = "postgresql://iisadmin:PassWord@localhost:5432/iis_database")
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -43,16 +46,27 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-
-    app = Flask(__name__)
-    app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
-
+    global db
+    db = SQLAlchemy(app)
 
     @app.route("/")
     @app.route("/home")
     def home():
         return render_template('home.html', posts=posts)
 
+
+
+    @app.route("/register", methods=['GET', 'POST'])
+    def register():
+        form = RegistrationForm()
+        if form.validate_on_submit():
+            user = Users(name=form.name.data, surname=form.surname.data, email=form.email.data, password=form.password.data)
+            db.session.add(user)
+            db.session.commit()
+            flash('Your account has been created! You are now able to log in', 'success')
+            return redirect(url_for('home'))
+        
+        return render_template('register.html', title='Register', form=form)
 
     @app.route("/about")
     def about():
@@ -61,3 +75,13 @@ def create_app(test_config=None):
     app.register_blueprint(auth.bp)
 
     return app
+
+
+# Create A Model For Table
+class Users(db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50))
+    surname = db.Column(db.String(50))
+    email = db.Column(db.String(50))
+    password = db.Column(db.String(50))
