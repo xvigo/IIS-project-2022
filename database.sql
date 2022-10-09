@@ -12,7 +12,7 @@ DROP TABLE IF EXISTS ticket CASCADE;
 DROP TABLE IF EXISTS image CASCADE;
 
 CREATE TABLE u_user(
-	id_user INT PRIMARY KEY NOT NULL,
+	id_user SERIAL PRIMARY KEY NOT NULL,
 	u_name VARCHAR(50) NOT NULL,
 	u_surname VARCHAR(50) NOT NULL,
 	u_email TEXT NOT NULL,
@@ -20,7 +20,7 @@ CREATE TABLE u_user(
 );
 
 CREATE TABLE city_manager(
-	id_city_manager INT PRIMARY KEY NOT NULL,
+	id_city_manager SERIAL PRIMARY KEY NOT NULL,
 	phone_number VARCHAR(50) NOT NULL,
 	id_user INT NOT NULL,
 	CONSTRAINT user_city_manager FOREIGN KEY (id_user)
@@ -28,7 +28,7 @@ CREATE TABLE city_manager(
 );
 
 CREATE TABLE service_technician(
-	id_service_technician INT PRIMARY KEY NOT NULL,
+	id_service_technician SERIAL PRIMARY KEY NOT NULL,
 	phone_number VARCHAR(50) NOT NULL,
 	id_user INT NOT NULL,
 	CONSTRAINT user_technician FOREIGN KEY (id_user)
@@ -36,14 +36,14 @@ CREATE TABLE service_technician(
 );
 
 CREATE TABLE resident(
-	id_resident INT PRIMARY KEY NOT NULL,
+	id_resident SERIAL PRIMARY KEY NOT NULL,
 	id_user INT NOT NULL,
 	CONSTRAINT user_resident FOREIGN KEY (id_user)
 		REFERENCES u_user(id_user) ON DELETE CASCADE
 );
 
 CREATE TABLE ticket(
-	id_ticket INT PRIMARY KEY NOT NULL,
+	id_ticket SERIAL PRIMARY KEY NOT NULL,
 	t_name VARCHAR(50) NOT NULL,
 	description TEXT NOT NULL,
 	street TEXT NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE ticket(
 );
 
 CREATE TABLE service_requirement(
-	id_service_requirement INT PRIMARY KEY NOT NULL,
+	id_service_requirement SERIAL PRIMARY KEY NOT NULL,
 	description TEXT NOT NULL,
 	r_state BOOLEAN DEFAULT FALSE,
 	estimated_time TIME NOT NULL,
@@ -85,7 +85,7 @@ CREATE TABLE requirement_comment(
 );
 
 CREATE TABLE ticket_comment(
-	id_ticket_comment INT PRIMARY KEY NOT NULL,
+	id_ticket_comment SERIAL PRIMARY KEY NOT NULL,
 	tc_date DATE NOT NULL,
 	tc_text TEXT NOT NULL,
 	id_city_manager INT NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE ticket_comment(
 );
 
 CREATE TABLE image(
-	id_image INT PRIMARY KEY NOT NULL,
+	id_image SERIAL PRIMARY KEY NOT NULL,
 	i_name VARCHAR(50) NOT NULL,
 	i_data TEXT NOT NULL,
 	id_ticket INT NOT NULL,
