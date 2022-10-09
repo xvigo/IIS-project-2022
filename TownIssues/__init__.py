@@ -31,7 +31,7 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='b76d4859dd2d340dfe47dbf8993f0386',
-        SQLALCHEMY_DATABASE_URI = "postgresql://iisadmin:PassWord@localhost:5432/iis_database")
+        SQLALCHEMY_DATABASE_URI = "postgresql://zrrprrwknjjdep:d143387eaa7912d36c839ea21ca1a22725c86a68c87ecd05ec5f0c54fad453cd@ec2-34-247-72-29.eu-west-1.compute.amazonaws.com:5432/d4fts6bs7pgc1d")
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
@@ -60,7 +60,7 @@ def create_app(test_config=None):
     def register():
         form = RegistrationForm()
         if form.validate_on_submit():
-            user = Users(name=form.name.data, surname=form.surname.data, email=form.email.data, password=form.password.data)
+            user = Users(u_name=form.name.data, u_surname=form.surname.data, u_email=form.email.data, u_password=form.password.data)
             db.session.add(user)
             db.session.commit()
             flash('Your account has been created! You are now able to log in', 'success')
@@ -79,9 +79,9 @@ def create_app(test_config=None):
 
 # Create A Model For Table
 class Users(db.Model):
-    __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    surname = db.Column(db.String(50))
-    email = db.Column(db.String(50))
-    password = db.Column(db.String(50))
+    __tablename__ = 'u_user'
+    id_user = db.Column(db.Integer, primary_key=True)
+    u_name = db.Column(db.String(50))
+    u_surname = db.Column(db.String(50))
+    u_email = db.Column(db.String(50))
+    u_password = db.Column(db.String(50))
