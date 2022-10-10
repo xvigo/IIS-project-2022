@@ -52,14 +52,15 @@
                         </div>
                     {% else %}
                         {{ form.confirm_password(class="form-control-lg form-control") }}
-                    {% endif %}                </div>
+                    {% endif %}                
+                </div>
             </fieldset>
             <div class="form-group">
                 {{ form.submit(class="btn btn-outline-info") }}
             </div>
         </form>
         <small class="text-muted">
-            Already have an account? <a class="ml-2" href="{{ url_for('auth.login') }}">Sign In</a>
+            Already have an account? <a class="ml-2" href="{{ url_for('login') }}">Sign In</a>
         </small>
     </div>
 

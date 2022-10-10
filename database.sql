@@ -1,6 +1,3 @@
-DROP EXTENSION pgcrypto;
-CREATE EXTENSION pgcrypto;
-
 DROP TABLE IF EXISTS u_user CASCADE;
 DROP TABLE IF EXISTS city_manager CASCADE;
 DROP TABLE IF EXISTS service_technician CASCADE;
@@ -15,8 +12,8 @@ CREATE TABLE u_user(
 	id_user SERIAL PRIMARY KEY NOT NULL,
 	u_name VARCHAR(50) NOT NULL,
 	u_surname VARCHAR(50) NOT NULL,
-	u_email TEXT NOT NULL,
-	u_password TEXT NOT NULL
+	u_email VARCHAR(254) NOT NULL,
+	u_password VARCHAR(60) NOT NULL
 );
 
 CREATE TABLE city_manager(
@@ -45,18 +42,19 @@ CREATE TABLE resident(
 CREATE TABLE ticket(
 	id_ticket SERIAL PRIMARY KEY NOT NULL,
 	t_name VARCHAR(50) NOT NULL,
-	description TEXT NOT NULL,
+	t_description TEXT NOT NULL,
 	street TEXT NOT NULL,
 	house_number INT NOT NULL,
 	t_state TEXT NOT NULL,
-	id_resident INT NOT NULL,
-	CONSTRAINT ticket_resident FOREIGN KEY (id_resident)
-		REFERENCES resident(id_resident) ON DELETE CASCADE
+	id_user INT NOT NULL,
+	datetime_created TIMESTAMP NOT NULL,
+	CONSTRAINT ticket_resident FOREIGN KEY (id_user)
+		REFERENCES u_user(id_user) ON DELETE CASCADE
 );
 
 CREATE TABLE service_requirement(
 	id_service_requirement SERIAL PRIMARY KEY NOT NULL,
-	description TEXT NOT NULL,
+	r_description TEXT NOT NULL,
 	r_state BOOLEAN DEFAULT FALSE,
 	estimated_time TIME NOT NULL,
 	price INT NOT NULL,
@@ -105,15 +103,15 @@ CREATE TABLE image(
 		REFERENCES ticket(id_ticket) ON DELETE CASCADE
 );
 
-/************************** USER **************************/
+/************************** USER (hashed passwords: heslo)**************************/
 INSERT INTO
 	u_user(u_name, u_surname, u_email, u_password)
 VALUES
-	('Karel', 'Havlíček', 'karel.hav@seznam.cz', crypt('karlovoheslo', gen_salt('bf'))),
-	('Adam', 'Novák', 'adam.novak@seznam.cz', crypt('adamovoheslo', gen_salt('bf'))),
-	('Test1', 'Test1', 'test1@test1.cz', crypt('test1', gen_salt('bf'))),
-	('Test2', 'Test2', 'test2@test2.cz', crypt('test2', gen_salt('bf'))),
-	('Test3', 'Test3', 'test3@test3.cz', crypt('test3', gen_salt('bf')));
+	('Karel', 'Havlíček', 'karel.hav@seznam.cz', '$2b$12$zwLjku1vkbTi46JnGLbsb.tTHALok7blJZA3g4g8Q8fgIC7UHZ5Oe'),
+	('Adam', 'Novák', 'adam.novak@seznam.cz', '$2b$12$aV9aJFHZb8VLPi7DRjp2H.Nk62o1/g0BlhpwBsz6aTLh3rZkRWD7K'),
+	('Test1', 'Test1', 'test1@test1.cz', '$2b$12$vmxa7fyyI9G4SH8j7mupVe3axqWfD99IIHKs6ycOVAypLF01JEO6K'),
+	('Test2', 'Test2', 'test2@test2.cz', '$2b$12$VPAXc4QCzdpDb1UufEC6qenNML2e6/4j1bTNQuo0eOPChUmpyyyCO'),
+	('Test3', 'Test3', 'test3@test3.cz', '$2b$12$3fpZ1xUp0npph3nhRWjmE.uFC8wKmA2pQ7npr9Mtaut8E5cuKJuCu');
 	
 /************************** CITY MANAGER **************************/
 INSERT INTO
@@ -137,12 +135,12 @@ VALUES
 
 /************************** TICKET **************************/
 INSERT INTO
-	ticket(t_name, description, street, house_number, t_state, id_resident)
+	ticket(t_name, t_description, street, house_number, t_state, datetime_created, id_user)
 VALUES
-	('Lampa', 'Lampa nesvítí', 'U Bobra', 12, 'Servisák se na to podívá', 1),
-	('Lampa', 'Lampa až moc svítí', 'U Řeky', 14, 'Servisák se na to nepodívá', 1),
-	('Silnice', 'Špatné značení', 'U Borovičky', 12, 'Servisák na tom pracuje', 2),
-	('Značka', 'Značka byla ukradena', 'U Konvice', 12, 'Servisák na tom pracuje', 3);
+	('Lampa', 'Lampa nesvítí', 'U Bobra', 12, 'Servisák se na to podívá', '2004-10-19 10:23:54', 3),
+	('Lampa', 'Lampa až moc svítí', 'U Řeky', 14, 'Servisák se na to nepodívá', '2005-10-19 10:23:54', 3),
+	('Silnice', 'Špatné značení', 'U Borovičky', 12, 'Servisák na tom pracuje', '2006-10-19 10:23:54', 4),
+	('Značka', 'Značka byla ukradena', 'U Konvice', 12, 'Servisák na tom pracuje', '2007-10-19 10:23:54', 5);
 	
 /************************** IMAGE **************************/
 INSERT INTO
@@ -164,7 +162,7 @@ VALUES
 
 /************************** SERVICE REQUIREMENT **************************/
 INSERT INTO
-	service_requirement(description, r_state, estimated_time, price, real_time, id_city_manager, id_service_technician, id_ticket)
+	service_requirement(r_description, r_state, estimated_time, price, real_time, id_city_manager, id_service_technician, id_ticket)
 VALUES
 	('Chce to víc lepidla pro příště', TRUE, '02:00:00', 5000, '02:00:00', 1, 1, 1),
 	('Snad hotovo', TRUE, '02:00:00', 500, '02:00:00', 1, 1, 2),

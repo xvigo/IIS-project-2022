@@ -14,11 +14,11 @@ Commands:
   Connecting to the db via terminal (psql has to be installed on your machine):
 
 
-    $ psql --host=ec2-34-247-72-29.eu-west-1.compute.amazonaws.com --port=5432 --username=zrrprrwknjjdep --password --dbname=d4fts6bs7pgc1d
+    $ psql --host=ec2-54-194-180-51.eu-west-1.compute.amazonaws.com --port=5432 --username=xrazzggtkegawp --password --dbname=dfur7dcgfmutjb
 
 * You will be aksed for password, which is:
     ```
-    d143387eaa7912d36c839ea21ca1a22725c86a68c87ecd05ec5f0c54fad453cd
+    38c7259d2fb0f773960265fa484c1725954e22d58496cc988aa6697a8c4f6b6a
     ```
 
 
@@ -38,5 +38,5 @@ Commands:
 ### App connection string:
 
     
-    postgresql://zrrprrwknjjdep:d143387eaa7912d36c839ea21ca1a22725c86a68c87ecd05ec5f0c54fad453cd@ec2-34-247-72-29.eu-west-1.compute.amazonaws.com:5432/d4fts6bs7pgc1d
+    postgresql://xrazzggtkegawp:38c7259d2fb0f773960265fa484c1725954e22d58496cc988aa6697a8c4f6b6a@ec2-54-194-180-51.eu-west-1.compute.amazonaws.com:5432/dfur7dcgfmutjb
     

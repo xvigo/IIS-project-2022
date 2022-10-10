@@ -11,9 +11,9 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
 
     {% if title %}
-        <title>Town Issues - {{ title }}</title>
+      <title>Town Issues - {{ title }}</title>
     {% else %}
-        <title>Town Issues</title>
+      <title>Town Issues</title>
     {% endif %}
 </head>
 <body>
@@ -31,8 +31,13 @@
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
+              {% if current_user.is_authenticated %}
+              <a class="nav-item nav-link" href="/account">Account</a>
+              <a class="nav-item nav-link" href="/logout">Logout</a>
+              {% else %}
               <a class="nav-item nav-link" href="/login">Login</a>
               <a class="nav-item nav-link" href="/register">Register</a>
+              {% endif %}
             </div>
           </div>
         </div>
