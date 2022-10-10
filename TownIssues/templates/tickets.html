@@ -1,0 +1,18 @@
+{% extends "layout.html" %}
+{% block content %}
+    {% for ticket in tickets %}
+        <article class="media content-section">
+          <div class="media-body">
+            {% if current_user != ticket.author %}
+            <h2 class="article-title">{{ ticket.title }}</h2>
+            {% else %}
+            <h2><a class="article-title" href="/tickets/{{ ticket.id }}/update">{{ ticket.title }}</a></h2>
+            {% endif %}
+            
+            
+            <p class="article-content">{{ ticket.description }}</p>
+          </div>
+            <a class="author-title" href="#">{{ ticket.author.name }} {{ ticket.author.surname }}</a>
+        </article>
+    {% endfor %}
+{% endblock content %}

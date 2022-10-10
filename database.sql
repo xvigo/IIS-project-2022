@@ -41,7 +41,7 @@ CREATE TABLE resident(
 
 CREATE TABLE ticket(
 	id_ticket SERIAL PRIMARY KEY NOT NULL,
-	t_name VARCHAR(50) NOT NULL,
+	title VARCHAR(50) NOT NULL,
 	t_description TEXT NOT NULL,
 	street TEXT NOT NULL,
 	house_number INT NOT NULL,

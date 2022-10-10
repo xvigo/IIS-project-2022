@@ -25,14 +25,14 @@ class User(db.Model, UserMixin):
 class Ticket(db.Model):
 	__tablename__ = 'ticket'
 	id = db.Column('id_ticket', db.Integer, primary_key=True)
-	name = db.Column('t_name', db.String(50), nullable=False)
+	title = db.Column('title', db.String(50), nullable=False)
 	description = db.Column('t_description', db.Text, nullable=False)
 	street = db.Column(db.Text, nullable=False)
 	house_number = db.Column(db.Integer, nullable=False)
-	state = db.Column('t_state', db.Text, nullable=False)
+	state = db.Column('t_state', db.Text, nullable=False, default='recieved')
 	datetime_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 	# FK
-	id_resident = db.Column(db.Integer, db.ForeignKey('u_user.id_user'), nullable=False)
+	id_user = db.Column(db.Integer, db.ForeignKey('u_user.id_user'), nullable=False)
 	# relationship
 	#service_requirements = db.relationship('ServiceRequirement', backref='belong_to', lazy=True)
 	#ticket_comments = db.relationship('TicketComment', backref='belong_to', lazy=True)
@@ -123,10 +123,10 @@ class Ticket(db.Model):
 # 		return f"TicketComment('{self.date}, {self.text}')"
 
 
-class Image(db.Model):
-    __tablename__ = 'image'
-    id = db.Column('id_image', db.Integer, primary_key=True)
-    name = db.Column('i_name', db.String(50), nullable=False)
-    data = db.Column('i_date', db.String(20), nullable=False) #use hash
-    # FK
-    id_ticket = db.Column(db.Integer, db.ForeignKey('ticket.id'), nullable=False)
+# class Image(db.Model):
+#     __tablename__ = 'image'
+#     id = db.Column('id_image', db.Integer, primary_key=True)
+#     name = db.Column('i_name', db.String(50), nullable=False)
+#     data = db.Column('i_date', db.String(20), nullable=False) #use hash
+#     # FK
+#     id_ticket = db.Column(db.Integer, db.ForeignKey('ticket.id'), nullable=False)

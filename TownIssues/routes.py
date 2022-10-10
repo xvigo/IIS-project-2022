@@ -1,5 +1,7 @@
-from flask import render_template, flash, redirect, url_for, request
-from TownIssues.forms import RegistrationForm, LoginForm, ChangePasswordForm, UpdateAccountForm
+from audioop import add
+from flask import abort, render_template, flash, redirect, url_for, request
+from sqlalchemy import desc
+from TownIssues.forms import RegistrationForm, AddTicketForm, LoginForm, ChangePasswordForm, UpdateAccountForm, UpdateTicketForm
 from TownIssues.models import User, Ticket    
 from TownIssues import app, db, bcrypt
 from flask_login import login_user, current_user, logout_user, login_required
@@ -26,9 +28,10 @@ posts = [
     
     
 @app.route("/")
-@app.route("/home")
+@app.route("/tickets")
 def home():
-    return render_template('home.html', posts=posts)
+    tickets = Ticket.query.order_by(desc(Ticket.datetime_created)).all()
+    return render_template('tickets.html', tickets=tickets)
 
 
 
@@ -100,6 +103,43 @@ def account():
 
     return render_template('account.html', title='Account', password_form=password_form, profile_form=profile_form)
 
-@app.route("/about")
-def about():
-    return render_template('about.html', title='About')
+@app.route("/tickets/add", methods=['GET', 'POST'])
+@login_required
+def add_ticket():
+    form = AddTicketForm()
+
+
+    if form.validate_on_submit():
+        ticket = Ticket(title=form.title.data, description=form.description.data, street=form.description.data, house_number=form.house_num.data, author=current_user)
+        db.session.add(ticket)
+        db.session.commit()
+        flash('Ticked created succesfully.', 'success')
+        return redirect(url_for('home'))
+
+    return render_template('update_ticket.html', title='Account', form=form, legend='Create New Ticket')
+
+@app.route("/tickets/<int:ticket_id>/update", methods=['GET', 'POST'])
+@login_required
+def update_ticket(ticket_id):
+    ticket = Ticket.query.get_or_404(ticket_id)
+    if ticket.author != current_user:
+        abort(403)
+
+    form = UpdateTicketForm()
+    if request.method == 'GET':
+        form.title.data = ticket.title
+        form.description.data = ticket.description
+        form.street.data = ticket.street
+        form.house_num.data = ticket.house_number
+
+    elif form.validate_on_submit():
+        ticket.title = form.title.data
+        ticket.description = form.description.data
+        ticket.street = form.street.data
+        ticket.house_number = form.house_num.data
+        db.session.commit()
+        flash('Ticket updated succesfully.', 'success')
+        return redirect(url_for('home'))
+
+    return render_template('update_ticket.html', title='Account', form=form, legend='Update Ticket')
+
