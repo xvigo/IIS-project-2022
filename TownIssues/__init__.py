@@ -2,14 +2,18 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
-from TownIssues.config import Config
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 login_manager = LoginManager()
 
-def create_app(config_class=Config):
+def create_app(config_class=None):
     app = Flask(__name__)
+
+    if config_class is None:
+        from TownIssues.config import Config
+        config_class = Config
+
     app.config.from_object(config_class)
 
     db.init_app(app)

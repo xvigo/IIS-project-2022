@@ -77,3 +77,10 @@ def account():
             flash("Couldn't change password, current password is incorrect.", 'danger')
 
     return render_template('account.html', title='Account', password_form=password_form, profile_form=profile_form)
+
+@users.route("/account/delete", methods=['POST'])
+@login_required
+def delete_account():
+    db.session.delete(current_user)
+    db.session.commit()
+    return redirect(url_for('user.login'))

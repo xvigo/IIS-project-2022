@@ -55,7 +55,7 @@ def ticket_detail(ticket_id):
 
     return render_template('ticket_detail.html', title='Account', ticket=ticket, legend='Ticket Details')
 
-@tickets.route("/tickets/<int:ticket_id>/delete")
+@tickets.route("/tickets/<int:ticket_id>/delete", methods=['POST'])
 @login_required
 def delete_ticket(ticket_id):
     ticket = Ticket.query.get_or_404(ticket_id)
