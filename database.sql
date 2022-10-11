@@ -14,6 +14,7 @@ CREATE TABLE u_user(
 	u_surname VARCHAR(50) NOT NULL,
 	u_email VARCHAR(254) NOT NULL,
 	u_password VARCHAR(60) NOT NULL
+
 );
 
 CREATE TABLE city_manager(
@@ -41,6 +42,7 @@ CREATE TABLE resident(
 
 CREATE TABLE ticket(
 	id_ticket SERIAL PRIMARY KEY NOT NULL,
+
 	title VARCHAR(50) NOT NULL,
 	t_description TEXT NOT NULL,
 	street TEXT NOT NULL,
@@ -50,6 +52,7 @@ CREATE TABLE ticket(
 	datetime_created TIMESTAMP NOT NULL,
 	CONSTRAINT ticket_resident FOREIGN KEY (id_user)
 		REFERENCES u_user(id_user) ON DELETE CASCADE
+
 );
 
 CREATE TABLE service_requirement(
@@ -103,9 +106,10 @@ CREATE TABLE image(
 		REFERENCES ticket(id_ticket) ON DELETE CASCADE
 );
 
-/************************** USER (hashed passwords: heslo)**************************/
+
+/************************** USER **************************/
 INSERT INTO
-	u_user(u_name, u_surname, u_email, u_password)
+	u_user(id_user, u_name, u_surname, u_email, u_password)
 VALUES
 	('Karel', 'Havlíček', 'karel.hav@seznam.cz', '$2b$12$zwLjku1vkbTi46JnGLbsb.tTHALok7blJZA3g4g8Q8fgIC7UHZ5Oe'),
 	('Adam', 'Novák', 'adam.novak@seznam.cz', '$2b$12$aV9aJFHZb8VLPi7DRjp2H.Nk62o1/g0BlhpwBsz6aTLh3rZkRWD7K'),
@@ -135,6 +139,7 @@ VALUES
 
 /************************** TICKET **************************/
 INSERT INTO
+ db-test
 	ticket(title, t_description, street, house_number, t_state, datetime_created, id_user)
 VALUES
 	('Lampa', 'Lampa nesvítí', 'U Bobra', 12, 'Servisák se na to podívá', '2004-11-19 10:23:54', 3),
@@ -177,3 +182,4 @@ VALUES
 	('1996-1-02', 'Dělá se na tom', 2, 1),
 	('1996-2-22', 'Dělá se na tom', 3, 1),
 	('1996-3-12', 'Dělá se na tom', 4, 1);
+
