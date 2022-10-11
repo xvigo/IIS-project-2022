@@ -1,7 +1,6 @@
-from TownIssues import bcrypt
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, TextAreaField, PasswordField, SubmitField, BooleanField, ValidationError
-from wtforms.validators import DataRequired, Length, Email, EqualTo, NumberRange
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 from TownIssues.models import User
 from flask_login import current_user
 
@@ -57,17 +56,3 @@ class ChangePasswordForm(FlaskForm):
     confirm_new_password = PasswordField('Confirm New Password', validators=[DataRequired(), Length(min=4, max=50)]) 
 
     submit = SubmitField('Change Password')
-
-class AddTicketForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
-    street = StringField('Street', validators=[DataRequired()])
-    house_num = IntegerField('House Number', validators=[DataRequired(), NumberRange(min=1, message="Please enter a valid house number.")])
-    submit = SubmitField('Create Ticket')
-
-class UpdateTicketForm(FlaskForm):
-    title = StringField('Title', validators=[DataRequired()])
-    description = TextAreaField('Description', validators=[DataRequired()])
-    street = StringField('Street', validators=[DataRequired()])
-    house_num = IntegerField('House Number', validators=[DataRequired(), NumberRange(min=1, message="Please enter a valid house number.")])
-    submit = SubmitField('Update Ticket')

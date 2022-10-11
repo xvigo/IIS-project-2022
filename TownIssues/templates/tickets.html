@@ -1,18 +1,25 @@
 {% extends "layout.html" %}
 {% block content %}
-    {% for ticket in tickets %}
+    {% for ticket in tickets.items %}
         <article class="media content-section">
           <div class="media-body">
-            {% if current_user != ticket.author %}
-            <h2 class="article-title">{{ ticket.title }}</h2>
-            {% else %}
-            <h2><a class="article-title" href="/tickets/{{ ticket.id }}/update">{{ ticket.title }}</a></h2>
-            {% endif %}
-            
-            
+            <h2><a class="article-title" href="{{ url_for('tickets.ticket_detail', ticket_id=ticket.id) }}">{{ ticket.title }}</a></h2>
             <p class="article-content">{{ ticket.description }}</p>
           </div>
             <a class="author-title" href="#">{{ ticket.author.name }} {{ ticket.author.surname }}</a>
         </article>
     {% endfor %}
+    {% for page_num in tickets.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+      {% if page_num %}
+        {% if tickets.page == page_num %}
+          <a class="btn btn-info mb-4">{{page_num}}</a>
+        {% else %}
+          <a class="btn btn-outline-info mb-4" href="{{ url_for('main.home', page=page_num)}}">{{page_num}}</a>
+        {% endif %}
+      {% else %}
+        <span class="align-top">...</span>
+        {% endif %}
+    {% endfor %}
+    
 {% endblock content %}
+

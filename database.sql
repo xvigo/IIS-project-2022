@@ -135,12 +135,12 @@ VALUES
 
 /************************** TICKET **************************/
 INSERT INTO
-	ticket(t_name, t_description, street, house_number, t_state, datetime_created, id_user)
+	ticket(title, t_description, street, house_number, t_state, datetime_created, id_user)
 VALUES
-	('Lampa', 'Lampa nesvítí', 'U Bobra', 12, 'Servisák se na to podívá', '2004-10-19 10:23:54', 3),
-	('Lampa', 'Lampa až moc svítí', 'U Řeky', 14, 'Servisák se na to nepodívá', '2005-10-19 10:23:54', 3),
-	('Silnice', 'Špatné značení', 'U Borovičky', 12, 'Servisák na tom pracuje', '2006-10-19 10:23:54', 4),
-	('Značka', 'Značka byla ukradena', 'U Konvice', 12, 'Servisák na tom pracuje', '2007-10-19 10:23:54', 5);
+	('Lampa', 'Lampa nesvítí', 'U Bobra', 12, 'Servisák se na to podívá', '2004-11-19 10:23:54', 3),
+	('Lampa', 'Lampa až moc svítí', 'U Řeky', 14, 'Servisák se na to nepodívá', '2005-11-19 10:23:54', 3),
+	('Silnice', 'Špatné značení', 'U Borovičky', 12, 'Servisák na tom pracuje', '2006-11-19 10:23:54', 4),
+	('Značka', 'Značka byla ukradena', 'U Konvice', 12, 'Servisák na tom pracuje', '2007-11-19 10:23:54', 5);
 	
 /************************** IMAGE **************************/
 INSERT INTO
