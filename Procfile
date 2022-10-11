@@ -1,1 +1,1 @@
-web: gunicorn create_app():TownIssues
+web: gunicorn app:run
