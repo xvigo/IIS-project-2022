@@ -1,1 +1,1 @@
-web: gunicorn TownIssues:create_app()
+web: gunicorn run.py:app
