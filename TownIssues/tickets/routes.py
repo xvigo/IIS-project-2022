@@ -3,65 +3,57 @@ from flask_login import login_required, current_user
 from TownIssues.tickets.forms import AddTicketForm, UpdateTicketForm
 from TownIssues.models import Ticket
 from TownIssues import db
-
+from TownIssues.tickets.repository import db_add_ticket_from_form, db_delete_ticket, db_update_ticket_from_form, db_get_ticket_or_404
 
 tickets = Blueprint('tickets', __name__)
 
-
-
+# Add ticket
 @tickets.route("/tickets/add", methods=['GET', 'POST'])
 @login_required
 def add_ticket():
     form = AddTicketForm()
 
     if form.validate_on_submit():
-        ticket = Ticket(title=form.title.data, description=form.description.data, street=form.description.data, house_number=form.house_num.data, author=current_user)
-        db.session.add(ticket)
-        db.session.commit()
+        db_add_ticket_from_form(form)
         flash('Ticked created succesfully.', 'success')
         return redirect(url_for('main.home'))
 
     return render_template('update_ticket.html', title='Account', form=form, legend='Create New Ticket')
 
+# Update ticket
 @tickets.route("/tickets/<int:ticket_id>/update", methods=['GET', 'POST'])
 @login_required
 def update_ticket(ticket_id):
-    ticket = Ticket.query.get_or_404(ticket_id)
+    ticket = db_get_ticket_or_404(ticket_id)
     if ticket.author != current_user:
         abort(403)
 
     form = UpdateTicketForm()
     if request.method == 'GET':
-        form.title.data = ticket.title
-        form.description.data = ticket.description
-        form.street.data = ticket.street
-        form.house_num.data = ticket.house_number
+        form.prefill(ticket)
 
     elif form.validate_on_submit():
-        ticket.title = form.title.data
-        ticket.description = form.description.data
-        ticket.street = form.street.data
-        ticket.house_number = form.house_num.data
-        db.session.commit()
+        db_update_ticket_from_form(ticket, form)
         flash('Ticket updated succesfully.', 'success')
         return redirect(url_for('tickets.ticket_detail', ticket_id=ticket.id))
 
     return render_template('update_ticket.html', title='Account', form=form, legend='Update Ticket')
 
-@tickets.route("/tickets/<int:ticket_id>")
-@login_required
-def ticket_detail(ticket_id):
-    ticket = Ticket.query.get_or_404(ticket_id)
-
-    return render_template('ticket_detail.html', title='Account', ticket=ticket, legend='Ticket Details')
-
+# Delete ticket
 @tickets.route("/tickets/<int:ticket_id>/delete", methods=['POST'])
 @login_required
 def delete_ticket(ticket_id):
-    ticket = Ticket.query.get_or_404(ticket_id)
+    ticket = db_get_ticket_or_404(ticket_id)
     if ticket.author != current_user:
         abort(403)
 
-    db.session.delete(ticket)
-    db.session.commit()
+    db_delete_ticket(ticket)
     return redirect(url_for('main.home'))
+
+# Detail of ticket
+@tickets.route("/tickets/<int:ticket_id>")
+@login_required
+def ticket_detail(ticket_id):
+    ticket = db_get_ticket_or_404(ticket_id)
+    return render_template('ticket_detail.html', title='Account', ticket=ticket, legend='Ticket Details')
+

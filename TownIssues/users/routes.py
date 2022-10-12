@@ -2,7 +2,7 @@ from flask import Blueprint, redirect, render_template, url_for, flash, request
 from TownIssues import db, bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
 from TownIssues.users.forms import RegistrationForm, LoginForm, ChangePasswordForm, UpdateAccountForm
-from TownIssues.models import User
+from TownIssues.models import User, Resident
 
 users = Blueprint('users', __name__)
 
@@ -15,7 +15,7 @@ def register():
     if form.validate_on_submit():
         # Add new user to DB
         hashed_pwd = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        user = User(name=form.name.data, surname=form.surname.data, email=form.email.data, password=hashed_pwd)
+        user = User(name=form.name.data, surname=form.surname.data, email=form.email.data, password=hashed_pwd, resident=Resident())
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
