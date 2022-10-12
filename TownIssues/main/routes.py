@@ -1,13 +1,20 @@
-from flask import Blueprint, render_template, request
-from flask_login import login_required
+from flask import Blueprint, redirect, url_for, abort
+from flask_login import login_required, current_user
 from TownIssues.models import Ticket
 
 main = Blueprint('main', __name__)
 
 @main.route("/")
-@main.route("/tickets")
 @login_required
 def home():
-    page = request.args.get('page', 1, type=int)
-    tickets = Ticket.query.order_by(Ticket.created_at.desc()).paginate(page=page, per_page=5)
-    return render_template('tickets.html', tickets=tickets)
+    if current_user.role == 'admin':
+        return redirect(url_for('users.users_list'))
+    elif current_user.role == 'resident':
+        return redirect(url_for('tickets.tickets_list'))
+    elif current_user.role == 'manager':
+        return redirect(url_for('users.users_list'))
+    elif current_user.role == 'technician':
+        return redirect(url_for('users.users_list'))
+    else:
+        abort(404)
+    return

@@ -26,8 +26,19 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarToggle">
             <div class="navbar-nav mr-auto">
-              <a class="nav-item nav-link" href="/">Tickets</a>
-              <a class="nav-item nav-link" href="/tickets/add">New Ticket</a>
+              {% if current_user.is_anonymous %}
+
+              {% elif current_user.role == 'resident' %}
+                <a class="nav-item nav-link" href="/">Tickets</a>
+                <a class="nav-item nav-link" href="/tickets/add">New Ticket</a>
+              {% elif current_user.role == 'manager' %}
+
+              {% elif current_user.role == 'technician' %}
+
+              {% else %}
+                <a class="nav-item nav-link" href="/admin/users">Users</a>
+                <a class="nav-item nav-link" href="/admin/users/add">New User</a>
+              {% endif %}
             </div>
             <!-- Navbar Right Side -->
             <div class="navbar-nav">

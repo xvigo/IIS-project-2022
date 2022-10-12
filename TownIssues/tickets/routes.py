@@ -16,7 +16,7 @@ def add_ticket():
     if form.validate_on_submit():
         db_add_ticket_from_form(form)
         flash('Ticked created succesfully.', 'success')
-        return redirect(url_for('main.home'))
+        return redirect(url_for('tickets.tickets_list'))
 
     return render_template('update_ticket.html', title='Account', form=form, legend='Create New Ticket')
 
@@ -25,7 +25,7 @@ def add_ticket():
 @login_required
 def update_ticket(ticket_id):
     ticket = db_get_ticket_or_404(ticket_id)
-    if ticket.author != current_user:
+    if ticket.author != current_user.resident:
         abort(403)
 
     form = UpdateTicketForm()
@@ -44,7 +44,7 @@ def update_ticket(ticket_id):
 @login_required
 def delete_ticket(ticket_id):
     ticket = db_get_ticket_or_404(ticket_id)
-    if ticket.author != current_user:
+    if ticket.author != current_user.resident:
         abort(403)
 
     db_delete_ticket(ticket)
@@ -57,3 +57,10 @@ def ticket_detail(ticket_id):
     ticket = db_get_ticket_or_404(ticket_id)
     return render_template('ticket_detail.html', title='Account', ticket=ticket, legend='Ticket Details')
 
+
+@tickets.route("/tickets")
+@login_required
+def tickets_list():
+    page = request.args.get('page', 1, type=int)
+    tickets = Ticket.query.order_by(Ticket.created_at.desc()).paginate(page=page, per_page=5)
+    return render_template('tickets_list.html', tickets=tickets)
