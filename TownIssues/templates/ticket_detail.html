@@ -8,10 +8,12 @@
             <p class="article-content">{{ ticket.content }}</p>
             <p class="article-content">Street: {{ ticket.street }}</p>
             <p class="article-content">House number: {{ ticket.house_number }}</p>
-            <img class="ticket-img" src="../static/ticket_pics/img.jpg">
+            {% for img in ticket.images %}
+              <img class="ticket-img" src="{{ img }}">
+            {% endfor %}
           </div>
         </div>
-        {% if ticket.author == current_user %}
+        {% if ticket.author == current_user.resident %}
           <div>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('tickets.update_ticket', ticket_id=ticket.id) }}">Edit</a>
             <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
