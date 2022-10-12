@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from enum import unique
 from flask_login import UserMixin
 from TownIssues import db, login_manager
@@ -64,7 +64,7 @@ class Ticket(db.Model):
     street = db.Column(db.String(200), nullable=False)
     house_number = db.Column(db.Integer, nullable=True)
     current_state = db.Column(db.String(200), nullable=False, default='recieved')
-    created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.utcnow)
+    created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     
     id_resident = db.Column(db.Integer, db.ForeignKey('resident.id_resident'), nullable=True)
     author = db.relationship('Resident', backref='tickets', lazy=True)
@@ -82,7 +82,7 @@ class ServiceRequirement(db.Model):
     estimated_time = db.Column(db.Time, nullable=True)
     real_time = db.Column(db.Time, nullable=True)
     price = db.Column(db.Integer, nullable=True)
-    created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.utcnow)
+    created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     id_manager = db.Column(db.Integer, db.ForeignKey('manager.id_manager'), nullable=True)
     id_technician = db.Column(db.Integer, db.ForeignKey('technician.id_technician'), nullable=True)

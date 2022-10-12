@@ -3,12 +3,12 @@
     <article class="media content-section">
         <div class="media-body">
           <h2 class="article-title">{{ ticket.title }}</h2>
-          <p class="article-content">Author: {{ ticket.author.name }} {{ ticket.author.surname }}</p>
+          <p class="article-content">Author: {{ ticket.author.user.name }} {{ ticket.author.user.surname }}</p>
           <div>
-            <p class="article-content">{{ ticket.description }}</p>
+            <p class="article-content">{{ ticket.content }}</p>
             <p class="article-content">Street: {{ ticket.street }}</p>
             <p class="article-content">House number: {{ ticket.house_number }}</p>
-            <img class="ticket-img" src="{{ }}">
+            <img class="ticket-img" src="../static/ticket_pics/img.jpg">
           </div>
         </div>
         {% if ticket.author == current_user %}
