@@ -67,12 +67,12 @@ CREATE TABLE service_requirement(
 	price INT,
    	created_at TIMESTAMP NOT NULL,
 
-	id_manager INT,
+	id_manager INT NOT NULL,
 	id_technician INT,
 	id_ticket INT NOT NULL,
 
 	CONSTRAINT fk_manager FOREIGN KEY (id_manager)
-		REFERENCES manager(id_manager) ON DELETE SET NULL,
+		REFERENCES manager(id_manager) ON DELETE CASCADE,
 	CONSTRAINT fk_technician FOREIGN KEY (id_technician)
 		REFERENCES technician(id_technician) ON DELETE SET NULL,
 	CONSTRAINT fk_ticket FOREIGN KEY (id_ticket)
@@ -121,11 +121,11 @@ CREATE TABLE attached_image(
 INSERT INTO
 	user_t(firstname, surname, email, u_role, password_hash)
 VALUES
-	('Admin', 'Administrator', 'admin@admin.cz', 'admin', '$2a$14$V9yntkS60KcYKivhAOYQJuAWm2Ac6jZn4cVyIR9G4ztbK2Axr6NjC'),
-	('Karel', 'Havlíček',      'karel@mesto.cz', 'manager','$2b$12$zwLjku1vkbTi46JnGLbsb.tTHALok7blJZA3g4g8Q8fgIC7UHZ5Oe'),
+	('Admin', 'Administrator', 'admin@test.cz', 'admin', '$2b$12$zwLjku1vkbTi46JnGLbsb.tTHALok7blJZA3g4g8Q8fgIC7UHZ5Oe'),
+	('Manager', 'Havlíček',      'manager@test.cz', 'manager','$2b$12$zwLjku1vkbTi46JnGLbsb.tTHALok7blJZA3g4g8Q8fgIC7UHZ5Oe'),
 	('Adam',  'Novák',         'adam@mesto.cz',  'manager','$2b$12$aV9aJFHZb8VLPi7DRjp2H.Nk62o1/g0BlhpwBsz6aTLh3rZkRWD7K'),
-	('Petr',  'Novotny',       'test1@test1.cz', 'technician','$2b$12$vmxa7fyyI9G4SH8j7mupVe3axqWfD99IIHKs6ycOVAypLF01JEO6K'),
-	('Tom',   'Skala',         'test2@test2.cz', 'resident','$2b$12$VPAXc4QCzdpDb1UufEC6qenNML2e6/4j1bTNQuo0eOPChUmpyyyCO'),
+	('Technik',  'Novotny',       'technician@test.cz', 'technician','$2b$12$vmxa7fyyI9G4SH8j7mupVe3axqWfD99IIHKs6ycOVAypLF01JEO6K'),
+	('Resident', 'Test',         'resident@test.cz', 'resident','$2b$12$VPAXc4QCzdpDb1UufEC6qenNML2e6/4j1bTNQuo0eOPChUmpyyyCO'),
 	('Ivan',  'Mladek',        'test3@test3.cz', 'resident','$2b$12$3fpZ1xUp0npph3nhRWjmE.uFC8wKmA2pQ7npr9Mtaut8E5cuKJuCu');
 	
 /************************** CITY MANAGER **************************/

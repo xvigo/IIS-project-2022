@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     password = db.Column('password_hash', db.String(60), nullable=False)
     role = db.Column('u_role', db.Enum('admin', 'resident', 'manager', 'technician'), nullable=False)
 
-    resident = db.relationship('Resident', uselist=False, backref='user', lazy=True)
+    resident = db.relationship('Resident', uselist=False, cascade='delete', backref='user', lazy=True)
     manager = db.relationship('Manager', uselist=False, backref='user', lazy=True)
     technician = db.relationship('Technician', uselist=False, backref='user', lazy=True)
 
@@ -32,6 +32,9 @@ class Manager(db.Model):
 
     id_user = db.Column(db.Integer, db.ForeignKey('user_t.id_user'), nullable=False)
 
+    requirements = db.relationship('ServiceRequirement', cascade='delete', backref='manager', lazy=True)
+    comments = db.relationship('TicketComment', cascade='delete', backref='author', lazy=True)
+
     def __repr__(self): #returns data
         return f"CityManager('{self.phone_number} {self.user}')"
     
@@ -43,6 +46,10 @@ class Technician(db.Model):
 
     id_user = db.Column(db.Integer, db.ForeignKey('user_t.id_user'), nullable=False)
 
+    requirements = db.relationship('ServiceRequirement', backref='technician', lazy=True)
+    comments = db.relationship('RequirementComment', cascade='delete', backref='author', lazy=True)
+
+
     def __repr__(self): #returns data
         return f"ServiceTechnician('{self.phone_number} {self.user}')"
     
@@ -52,6 +59,8 @@ class Resident(db.Model):
     id = db.Column('id_resident', db.Integer, primary_key=True)
 
     id_user = db.Column(db.Integer, db.ForeignKey('user_t.id_user'), nullable=False)
+
+    tickets = db.relationship('Ticket', cascade='delete', backref='author', lazy=True)
     
     def __repr__(self): #returns data
         return f"Resident('{self.user}')"
@@ -67,7 +76,10 @@ class Ticket(db.Model):
     created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
     
     id_resident = db.Column(db.Integer, db.ForeignKey('resident.id_resident'), nullable=True)
-    author = db.relationship('Resident', backref='tickets', lazy=True)
+    
+    images = db.relationship('Image', cascade='delete', backref='ticket', lazy=True)
+    requirements = db.relationship('ServiceRequirement', cascade='delete', backref='ticket', lazy=True)
+    comments = db.relationship('TicketComment', cascade='delete', backref='ticket', lazy=True)
 
     def __repr__(self): #returns data
         return f"""Ticket('{self.title}, {self.content}, {self.street}, {self.house_number},
@@ -84,14 +96,13 @@ class ServiceRequirement(db.Model):
     price = db.Column(db.Integer, nullable=True)
     created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
-    id_manager = db.Column(db.Integer, db.ForeignKey('manager.id_manager'), nullable=True)
+    id_manager = db.Column(db.Integer, db.ForeignKey('manager.id_manager'), nullable=False)
     id_technician = db.Column(db.Integer, db.ForeignKey('technician.id_technician'), nullable=True)
     id_ticket = db.Column(db.Integer, db.ForeignKey('ticket.id_ticket'), nullable=False)
-    
-    manager = db.relationship('Manager', backref='requirements', lazy=True)
-    technician = db.relationship('Technician', backref='requirements', lazy=True)
-    ticket = db.relationship('Ticket', backref='requirements', lazy=True)
- 
+
+    comments = db.relationship('RequirementComment', cascade='delete', backref='requirement', lazy=True)
+
+     
     def __repr__(self): #returns data
         return f"""ServiceRequirement('{self.content}, {self.is_finished}, {self.estimated_time},
          {self.real_time}, {self.price}, {self.created_at}, {self.manager}, {self.technician}, {self.ticket}')"""
@@ -106,9 +117,6 @@ class RequirementComment(db.Model):
     id_service_requirement = db.Column(db.Integer, db.ForeignKey('service_requirement.id_service_requirement'), nullable=False)
     id_technician = db.Column(db.Integer, db.ForeignKey('technician.id_technician'), nullable=False)
 
-    requirement = db.relationship('ServiceRequirement', backref='comments', lazy=True)
-    author = db.relationship('Technician', backref='comments', lazy=True)
-
     def __repr__(self): #returns data
         return f"RequirementComment('{self.content}, {self.created_at}, {self.requirement}, {self.author}')"
 
@@ -119,12 +127,9 @@ class TicketComment(db.Model):
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.TIMESTAMP, nullable=False)
 
-    id_service_requirement = db.Column(db.Integer, db.ForeignKey('ticket.id_ticket'), nullable=False)
-    id_technician = db.Column(db.Integer, db.ForeignKey('manager.id_manager'), nullable=False)
+    id_ticket = db.Column(db.Integer, db.ForeignKey('ticket.id_ticket'), nullable=False)
+    id_manager = db.Column(db.Integer, db.ForeignKey('manager.id_manager'), nullable=False)
 
-    ticket = db.relationship('Ticket', backref='comments', lazy=True)
-    author = db.relationship('Manager', backref='comments', lazy=True)
- 
     def __repr__(self): #returns data
         return f"RequirementComment('{self.content}, {self.created_at}, {self.ticket}, {self.author}')"
 
@@ -135,4 +140,3 @@ class Image(db.Model):
     url = db.Column('url_path', db.Text, nullable=False)
 
     id_ticket = db.Column(db.Integer, db.ForeignKey('ticket.id_ticket'), nullable=False)
-    ticket = db.relationship('Ticket', backref='images', lazy=True)
