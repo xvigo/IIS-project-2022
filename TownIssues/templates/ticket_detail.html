@@ -2,16 +2,21 @@
 {% block content %}
     <article class="media content-section">
         <div class="media-body">
-            {% if ticket.author == current_user %}
-            <div>
-              <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('tickets.update_ticket', ticket_id=ticket.id) }}">Edit</a>
-              <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
-            </div>
-          {% endif %}
-        <h2 class="article-title">{{ ticket.title }}</h2>
-        <p class="article-content">{{ ticket.description }}</p>
+          <h2 class="article-title">{{ ticket.title }}</h2>
+          <p class="article-content">Author: {{ ticket.author.name }} {{ ticket.author.surname }}</p>
+          <div>
+            <p class="article-content">{{ ticket.description }}</p>
+            <p class="article-content">Street: {{ ticket.street }}</p>
+            <p class="article-content">House number: {{ ticket.house_number }}</p>
+            <img class="ticket-img" src="{{ }}">
+          </div>
         </div>
-        <a class="author-title" href="#">{{ ticket.author.name }} {{ ticket.author.surname }}</a>
+        {% if ticket.author == current_user %}
+          <div>
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('tickets.update_ticket', ticket_id=ticket.id) }}">Edit</a>
+            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+          </div>
+        {% endif %}
     </article>
 
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">

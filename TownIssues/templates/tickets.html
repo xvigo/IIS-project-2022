@@ -4,9 +4,9 @@
         <article class="media content-section">
           <div class="media-body">
             <h2><a class="article-title" href="{{ url_for('tickets.ticket_detail', ticket_id=ticket.id) }}">{{ ticket.title }}</a></h2>
-            <p class="article-content">{{ ticket.description }}</p>
+            <p class="author-title">{{ ticket.author.name }} {{ ticket.author.surname }}</p>
           </div>
-            <a class="author-title" href="#">{{ ticket.author.name }} {{ ticket.author.surname }}</a>
+            <p class="time-title">{{ ticket.datetime_created }}</p>
         </article>
     {% endfor %}
     {% for page_num in tickets.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
@@ -22,4 +22,3 @@
     {% endfor %}
     
 {% endblock content %}
-
