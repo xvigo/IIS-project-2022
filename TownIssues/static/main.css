@@ -34,6 +34,7 @@ body {
   
   .article-title {
     color: #444444;
+    padding-bottom: 20px;
   }
 
   .time-title {
@@ -81,8 +82,47 @@ body {
   .account-heading {
     font-size: 2.5rem;
   }
-  
-  .ticket-img {
-    max-width: 500px;
-    width: auto;
+
+  .responsive {
+    padding: 0 6px;
+    float: left;
+    width: 25%;
+  }
+
+  div.gallery {
+    border: 1px solid #ccc;
+  }
+
+  div.gallery:hover {
+    border: 1px solid #777;
+  }
+
+  div.gallery img {
+    width: 100%;
+    height: auto;
+    min-width: 140px;
+  }
+
+  .pics-per-row {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+
+  .flex {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 30px;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .responsive {
+      width: 50%;
+    }
+  }
+
+  @media only screen and (max-width: 570px) {
+    .responsive {
+      width: 100%;
+    }
   }

@@ -20,7 +20,7 @@ def register():
         new_user = User()
         form.populate_resident_user(new_user)
         db.session.add(new_user)
-        db.commit()
+        db.session.commit()
 
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('users.login'))

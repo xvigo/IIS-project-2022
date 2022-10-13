@@ -4,7 +4,8 @@
         <article class="media content-section">
           <div class="media-body">
             <h2><a class="article-title" href="{{ url_for('tickets.ticket_detail', ticket_id=ticket.id) }}">{{ ticket.title }}</a></h2>
-            <p class="author-title">{{ ticket.author.user.name }} {{ ticket.author.user.surname }}</p>
+            
+            <p class="author-title">{{ ticket.author.name }} {{ ticket.author.surname }}</p>
           </div>
           <p class="time-title" href="#">{{ ticket.created_at }}</p>
         </article>

@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block content %}
-    <article class="media content-section">
+    <article class="media content-section flex">
         <div class="media-body">
           <h2 class="article-title">{{ ticket.title }}</h2>
           <p class="article-content">Author: {{ ticket.author.user.name }} {{ ticket.author.user.surname }}</p>
@@ -8,17 +8,25 @@
             <p class="article-content">{{ ticket.content }}</p>
             <p class="article-content">Street: {{ ticket.street }}</p>
             <p class="article-content">House number: {{ ticket.house_number }}</p>
-            {% for img in ticket.images %}
-              <img class="ticket-img" src="{{ img.url }}">
-            {% endfor %}
           </div>
         </div>
         {% if can_edit %}
-          <div>
+          <div class="detail-buttons">
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('tickets.update_ticket', ticket_id=ticket.id) }}">Edit</a>
             <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
           </div>
         {% endif %}
+        <div class="pics-per-row">
+          {% for img in ticket.images %}
+            <div class="responsive">
+              <div class="gallery">
+                <a target="_blank" href="{{ img.url }}">
+                  <img src="{{ img.url }}" alt=".">
+                </a>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
     </article>
 
     <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
