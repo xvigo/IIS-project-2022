@@ -9,11 +9,11 @@
             <p class="article-content">Street: {{ ticket.street }}</p>
             <p class="article-content">House number: {{ ticket.house_number }}</p>
             {% for img in ticket.images %}
-              <img class="ticket-img" src="{{ img }}">
+              <img class="ticket-img" src="{{ img.url }}">
             {% endfor %}
           </div>
         </div>
-        {% if ticket.author == current_user.resident %}
+        {% if can_edit %}
           <div>
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('tickets.update_ticket', ticket_id=ticket.id) }}">Edit</a>
             <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>

@@ -22,17 +22,19 @@ def db_add_ticket_from_form(form):
     
     if not isinstance(form, AddTicketForm):
         raise TypeError 
-
+    
+    
     ticket = Ticket(title=form.title.data,
                     content=form.content.data,
                     street=form.street.data, 
                     house_number=form.house_num.data,
                     author=current_user.resident)
 
-    picture = save_picture(form.picture.data)
-    image = Image(url='/static/ticket_pics/' + picture, ticket=ticket)
+    for form_image in form.picture.data:
+        picture = save_picture(form_image)
+        image = Image(url='/static/ticket_pics/' + picture)
+        ticket.images.append(image)
 
-    db.session.add(image)
     db.session.add(ticket)
     db.session.commit()
 
@@ -44,6 +46,13 @@ def db_update_ticket_from_form(ticket, form):
     ticket.content = form.content.data
     ticket.street = form.street.data
     ticket.house_number = form.house_num.data
+
+    ticket.images.clear()
+    for form_image in form.picture.data:
+        picture = save_picture(form_image)
+        image = Image(url='/static/ticket_pics/' + picture)
+        ticket.images.append(image)
+        
     db.session.commit()
 
 def db_delete_ticket(ticket):

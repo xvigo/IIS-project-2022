@@ -77,7 +77,7 @@ class Ticket(db.Model):
     
     id_resident = db.Column(db.Integer, db.ForeignKey('resident.id_resident'), nullable=True)
     
-    images = db.relationship('Image', cascade='delete', backref='ticket', lazy=True)
+    images = db.relationship('Image', cascade='delete, save-update, delete-orphan', backref='ticket', lazy=True)
     requirements = db.relationship('ServiceRequirement', cascade='delete', backref='ticket', lazy=True)
     comments = db.relationship('TicketComment', cascade='delete', backref='ticket', lazy=True)
 

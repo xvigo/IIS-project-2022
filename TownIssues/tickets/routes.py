@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from TownIssues.tickets.forms import AddTicketForm, UpdateTicketForm
 from TownIssues.models import Ticket
 from TownIssues import db
+from TownIssues.users.utils import check_permissions, has_permissions
 from TownIssues.tickets.repository import db_add_ticket_from_form, db_delete_ticket, db_update_ticket_from_form, db_get_ticket_or_404
 
 tickets = Blueprint('tickets', __name__)
@@ -11,8 +12,9 @@ tickets = Blueprint('tickets', __name__)
 @tickets.route("/tickets/add", methods=['GET', 'POST'])
 @login_required
 def add_ticket():
-    form = AddTicketForm()
+    check_permissions(allowed_roles=['resident'])
 
+    form = AddTicketForm()
     if form.validate_on_submit():
         db_add_ticket_from_form(form)
         flash('Ticked created succesfully.', 'success')
@@ -25,8 +27,7 @@ def add_ticket():
 @login_required
 def update_ticket(ticket_id):
     ticket = db_get_ticket_or_404(ticket_id)
-    if ticket.author != current_user.resident:
-        abort(403)
+    check_permissions(allowed_roles=['resident', 'admin'], allowed_user=ticket.author.user)
 
     form = UpdateTicketForm()
     if request.method == 'GET':
@@ -44,8 +45,7 @@ def update_ticket(ticket_id):
 @login_required
 def delete_ticket(ticket_id):
     ticket = db_get_ticket_or_404(ticket_id)
-    if ticket.author != current_user.resident:
-        abort(403)
+    check_permissions(allowed_roles=['resident', 'admin'], allowed_user=ticket.author.user)
 
     db_delete_ticket(ticket)
     return redirect(url_for('main.home'))
@@ -55,12 +55,14 @@ def delete_ticket(ticket_id):
 @login_required
 def ticket_detail(ticket_id):
     ticket = db_get_ticket_or_404(ticket_id)
-    return render_template('ticket_detail.html', title='Account', ticket=ticket, legend='Ticket Details')
+    can_edit = has_permissions(allowed_roles=['resident', 'admin'], allowed_user=ticket.author.user)
+    return render_template('ticket_detail.html', title='Account', ticket=ticket, can_edit=can_edit, legend='Ticket Details')
 
 
 @tickets.route("/tickets")
 @login_required
 def tickets_list():
+    check_permissions(banned_roles=['technician'])
     page = request.args.get('page', 1, type=int)
     tickets = Ticket.query.order_by(Ticket.created_at.desc()).paginate(page=page, per_page=5)
     return render_template('tickets_list.html', tickets=tickets)
