@@ -1,7 +1,7 @@
 from flask import Blueprint, abort, redirect, render_template, url_for, flash, request
 from TownIssues import db, bcrypt
 from flask_login import current_user, login_user, logout_user, login_required
-from TownIssues.users.forms import RegistrationForm, LoginForm, ChangePasswordForm, AccountDetailsForm, UserDetailForm
+from TownIssues.users.forms import AddUserForm, RegistrationForm, LoginForm, ChangePasswordForm, AccountDetailsForm, UserDetailForm
 from TownIssues.models import User, Resident
 from TownIssues.users.utils import check_permissions
 import os
@@ -166,5 +166,18 @@ def delete_user(user_id):
 
 # Register
 @users.route("/admin/users/add", methods=['GET', 'POST'])
+@login_required
 def add_user():
-    abort(501)
+    check_permissions(allowed_roles=['admin'])
+
+    form = AddUserForm()
+    if form.validate_on_submit():
+        # Add new resident to db
+        new_user = User()
+        form.populate_user(new_user)
+        db.session.add(new_user)
+        db.session.commit()
+        flash(f'User {new_user.name} {new_user.surname}  has been created!', 'success')
+        return redirect(url_for('users.users_list'))
+    
+    return render_template('add_user.html', title='Add User', form=form)

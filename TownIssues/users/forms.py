@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, SelectField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
-from TownIssues.models import User, Resident
+from TownIssues.models import Technician, User, Resident, Manager
 from flask_login import current_user
 from TownIssues import bcrypt
 
@@ -97,6 +97,31 @@ class UserDetailForm(FlaskForm):
             user.manager.phone_number = self.phone_number.data
         elif user.technician:
             user.technician.phone_number = self.phone_number.data
+
+
+class AddUserForm(FlaskForm):              
+    email = StringField('Email', validators=[DataRequired(), Email(message="Email address has invalid format.")])
+    name = StringField('Name', validators=[DataRequired(), Length(min=2, max=50)])
+    surname = StringField('Surname', validators=[DataRequired(), Length(min=2, max=50)])  
+    role = SelectField(u'Role', choices=[('manager', 'Town Manager'), ('technician', 'Service Technician'), ('resident', 'Town Resident'), ('admin', 'Administrator')]) 
+    phone_number = StringField('Phone Number')   
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=4, max=50), EqualTo('confirm_password', message="Passwords do not match. Try again!")])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=4, max=50)])
+    submit = SubmitField('Add User')
+
+    def populate_user(self, user):
+        user.email = self.email.data
+        user.password = bcrypt.generate_password_hash(self.password.data).decode('utf-8')
+        user.name = self.name.data
+        user.surname = self.surname.data
+        user.role = self.role.data
+
+        if user.role == 'resident':
+            user.resident = Resident()
+        elif user.role == 'manager':
+            user.manager = Manager(phone_number=self.phone_number.data)
+        elif user.role == 'technician':
+            user.technician = Technician(phone_number=self.phone_number.data)
 
 
 class ChangePasswordForm(FlaskForm):              
