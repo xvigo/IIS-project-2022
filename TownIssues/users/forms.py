@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError
 from TownIssues.models import User, Resident
 from flask_login import current_user
+from TownIssues import bcrypt
 
 class RegistrationForm(FlaskForm):              
     email = StringField('Email', validators=[DataRequired(), Email(message="Email address has invalid format.")])
@@ -19,10 +20,11 @@ class RegistrationForm(FlaskForm):
 
     def populate_resident_user(self, user):
         user.email = self.email.data
-        user.password = self.password.data
+        user.password = bcrypt.generate_password_hash(self.password.data).decode('utf-8')
         user.name = self.name.data
         user.surname = self.surname.data
         user.resident = Resident()
+        user.role = 'resident'
 
 
 

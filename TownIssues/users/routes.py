@@ -4,6 +4,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from TownIssues.users.forms import RegistrationForm, LoginForm, ChangePasswordForm, AccountDetailsForm, UserDetailForm
 from TownIssues.models import User, Resident
 from TownIssues.users.utils import check_permissions
+import os
 
 users = Blueprint('users', __name__)
 
@@ -20,7 +21,7 @@ def register():
         new_user = User()
         form.populate_resident_user(new_user)
         db.session.add(new_user)
-        db.commit()
+        db.session.commit()
 
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('users.login'))
@@ -38,9 +39,8 @@ def login():
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
-        password_correct = bcrypt.check_password_hash(user.password, form.password.data)
 
-        if user and password_correct:
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
             login_user(user, remember=form.remember_me.data)
             next_page = request.args.get('next', url_for('main.home'))
             return redirect(next_page)
@@ -87,6 +87,13 @@ def account_details():
 @users.route("/account/delete", methods=['POST'])
 @login_required
 def delete_account():
+    if current_user.role == 'resident':
+        for ticket in current_user.resident.tickets:
+            for image in ticket.images:
+                path = 'TownIssues' + image.url
+                if os.path.exists(path):
+                    os.remove(path) 
+
     db.session.delete(current_user)
     db.session.commit()
     return redirect(url_for('users.login'))
@@ -146,6 +153,12 @@ def user_detail(user_id):
 def delete_user(user_id):
     check_permissions(allowed_roles=['admin'])
     user = User.query.get_or_404(user_id)
+    if user.role == 'resident':
+        for ticket in user.resident.tickets:
+            for image in ticket.images:
+                path = 'TownIssues' + image.url
+                if os.path.exists(path):
+                    os.remove(path) 
     db.session.delete(user)
     db.session.commit()
     return redirect(url_for('users.users_list'))

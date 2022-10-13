@@ -16,9 +16,9 @@ class User(db.Model, UserMixin):
     password = db.Column('password_hash', db.String(60), nullable=False)
     role = db.Column('u_role', db.Enum('admin', 'resident', 'manager', 'technician'), nullable=False)
 
-    resident = db.relationship('Resident', uselist=False, cascade='delete', backref='user', lazy=True)
-    manager = db.relationship('Manager', uselist=False, backref='user', lazy=True)
-    technician = db.relationship('Technician', uselist=False, backref='user', lazy=True)
+    resident = db.relationship('Resident', uselist=False, cascade='all, delete-orphan', backref='user', lazy=True)
+    manager = db.relationship('Manager', uselist=False, cascade='all, delete-orphan', backref='user', lazy=True)
+    technician = db.relationship('Technician', uselist=False, cascade='all, delete-orphan', backref='user', lazy=True)
 
 
     def __repr__(self): #returns data
@@ -32,8 +32,8 @@ class Manager(db.Model):
 
     id_user = db.Column(db.Integer, db.ForeignKey('user_t.id_user'), nullable=False)
 
-    requirements = db.relationship('ServiceRequirement', cascade='delete', backref='manager', lazy=True)
-    comments = db.relationship('TicketComment', cascade='delete', backref='author', lazy=True)
+    requirements = db.relationship('ServiceRequirement', cascade='all, delete-orphan', backref='manager', lazy=True)
+    comments = db.relationship('TicketComment', cascade='all, delete-orphan', backref='author', lazy=True)
 
     def __repr__(self): #returns data
         return f"CityManager('{self.phone_number} {self.user}')"
@@ -47,7 +47,7 @@ class Technician(db.Model):
     id_user = db.Column(db.Integer, db.ForeignKey('user_t.id_user'), nullable=False)
 
     requirements = db.relationship('ServiceRequirement', backref='technician', lazy=True)
-    comments = db.relationship('RequirementComment', cascade='delete', backref='author', lazy=True)
+    comments = db.relationship('RequirementComment', cascade='all, delete-orphan', backref='author', lazy=True)
 
 
     def __repr__(self): #returns data
@@ -60,7 +60,7 @@ class Resident(db.Model):
 
     id_user = db.Column(db.Integer, db.ForeignKey('user_t.id_user'), nullable=False)
 
-    tickets = db.relationship('Ticket', cascade='delete', backref='author', lazy=True)
+    tickets = db.relationship('Ticket',  cascade='all, delete-orphan', backref='author', lazy=True)
     
     def __repr__(self): #returns data
         return f"Resident('{self.user}')"
@@ -77,9 +77,9 @@ class Ticket(db.Model):
     
     id_resident = db.Column(db.Integer, db.ForeignKey('resident.id_resident'), nullable=True)
     
-    images = db.relationship('Image', cascade='delete, save-update, delete-orphan', backref='ticket', lazy=True)
-    requirements = db.relationship('ServiceRequirement', cascade='delete', backref='ticket', lazy=True)
-    comments = db.relationship('TicketComment', cascade='delete', backref='ticket', lazy=True)
+    images = db.relationship('Image',  cascade='all, delete-orphan', backref='ticket', lazy=True)
+    requirements = db.relationship('ServiceRequirement',  cascade='all, delete-orphan', backref='ticket', lazy=True)
+    comments = db.relationship('TicketComment',  cascade='all, delete-orphan', backref='ticket', lazy=True)
 
     def __repr__(self): #returns data
         return f"""Ticket('{self.title}, {self.content}, {self.street}, {self.house_number},
@@ -100,7 +100,7 @@ class ServiceRequirement(db.Model):
     id_technician = db.Column(db.Integer, db.ForeignKey('technician.id_technician'), nullable=True)
     id_ticket = db.Column(db.Integer, db.ForeignKey('ticket.id_ticket'), nullable=False)
 
-    comments = db.relationship('RequirementComment', cascade='delete', backref='requirement', lazy=True)
+    comments = db.relationship('RequirementComment',  cascade='all, delete-orphan', backref='requirement', lazy=True)
 
      
     def __repr__(self): #returns data

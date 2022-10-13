@@ -31,9 +31,10 @@ def db_add_ticket_from_form(form):
                     author=current_user.resident)
 
     for form_image in form.picture.data:
-        picture = save_picture(form_image)
-        image = Image(url='/static/ticket_pics/' + picture)
-        ticket.images.append(image)
+        if form_image.filename:
+            picture = save_picture(form_image)
+            image = Image(url='/static/ticket_pics/' + picture)
+            ticket.images.append(image)
 
     db.session.add(ticket)
     db.session.commit()
@@ -47,15 +48,28 @@ def db_update_ticket_from_form(ticket, form):
     ticket.street = form.street.data
     ticket.house_number = form.house_num.data
 
+    for image in ticket.images:
+        path = 'TownIssues' + image.url
+        if os.path.exists(path):
+            os.remove(path) 
+
     ticket.images.clear()
     for form_image in form.picture.data:
-        picture = save_picture(form_image)
-        image = Image(url='/static/ticket_pics/' + picture)
-        ticket.images.append(image)
+        if form_image.filename:
+            picture = save_picture(form_image)
+            image = Image(url='/static/ticket_pics/' + picture)
+            ticket.images.append(image)
         
     db.session.commit()
 
 def db_delete_ticket(ticket):
+    # Delete ticket images from file system
+    for image in ticket.images:
+        path = 'TownIssues' + image.url
+        if os.path.exists(path):
+            os.remove(path) 
+
+
     db.session.delete(ticket)
     db.session.commit()
 

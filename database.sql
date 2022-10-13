@@ -163,8 +163,8 @@ INSERT INTO
 VALUES
 	('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png', 1),
 	('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png', 2),
-	('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png', 3),
-	('https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/640px-Image_created_with_a_mobile_phone.png', 4);
+	('/static/ticket_pics/0546b613552daf5e.jpg', 3),
+	('/static/ticket_pics/6f29d8680002c081.jpg', 4);
 
 /************************** TICKET COMMENT **************************/
 INSERT INTO
