@@ -126,3 +126,8 @@ body {
       width: 100%;
     }
   }
+
+#tickets{
+  width: 100%;
+  border-spacing: 0
+}

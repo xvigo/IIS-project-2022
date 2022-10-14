@@ -1,14 +1,23 @@
 {% extends "layout.html" %}
 {% block content %}
+ <table id="tickets" class="table table-striped table-bordered table-hover" >
+    <thead>
+        <tr>
+            <th>Uživatel</th>
+            <th>Role</th>
+            <th>E-mail</th>
+        </tr>
+    </thead>
+    <tbody>
     {% for user in users.items %}
-        <article class="media content-section">
-          <div class="media-body">
-            <h2><a class="article-title" href="{{ url_for('users.user_detail', user_id=user.id) }}">{{ user.name }} {{ user.surname }}</a></h2>
-            <p class="text-info font-weight-bold">{{user.role}}</p>
-            <p class="author-title">{{user.email}}</p>
-          </div>
-        </article>
+        <tr>
+            <td><a href="{{ url_for('users.user_detail', user_id=user.id) }}">{{ user.name }} {{ user.surname }}</a></td>
+            <td>{{user.role}}</td>
+            <td>{{user.email}}</td>
+        </tr>
     {% endfor %}
+    </tbody>
+ </table>
     {% for page_num in users.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
       {% if page_num %}
         {% if users.page == page_num %}
