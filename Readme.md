@@ -1,11 +1,12 @@
 ## Setup - to start application locally
 Commands: 
- * pip3 install virtualenv
- * python -m venv .venv
- * source .venv/bin/activate
- * pip install requirements.txt
- * python run_debug.py
 
+```
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+python run_debug.py
+```
 
 ## Project files
  * **Procfile** - file that tells heroku how to run this app
