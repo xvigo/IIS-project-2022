@@ -1,7 +1,7 @@
 from flask import Blueprint, flash, redirect, url_for, render_template, abort, request
 from flask_login import login_required, current_user
-from TownIssues.tickets.forms import AddTicketForm, UpdateTicketForm
-from TownIssues.models import Ticket
+from TownIssues.tickets.forms import AddTicketForm, CommentForm, UpdateTicketForm
+from TownIssues.models import Ticket, TicketComment
 from TownIssues import db
 from TownIssues.users.utils import check_permissions, has_permissions
 from TownIssues.tickets.repository import db_add_ticket_from_form, db_delete_ticket, db_update_ticket_from_form, db_get_ticket_or_404
@@ -51,12 +51,21 @@ def delete_ticket(ticket_id):
     return redirect(url_for('main.home'))
 
 # Detail of ticket
-@tickets.route("/tickets/<int:ticket_id>")
+@tickets.route("/tickets/<int:ticket_id>", methods=['GET', 'POST'])
 @login_required
 def ticket_detail(ticket_id):
     ticket = db_get_ticket_or_404(ticket_id)
-    can_edit = has_permissions(allowed_roles=['resident', 'admin'], allowed_user=ticket.author.user)
-    return render_template('ticket_detail.html', title='Account', ticket=ticket, can_edit=can_edit, legend='Ticket Details')
+
+    form = CommentForm()
+    if request.method == 'POST' and form.validate_on_submit() and current_user.role == 'manager':
+
+        comment = TicketComment(content=form.content.data, ticket=ticket, author=current_user.manager)
+        db.session.add(comment)
+        db.session.commit()
+        flash('Comment added succesfully.', 'success')
+        return redirect(url_for('tickets.ticket_detail', ticket_id=ticket.id))
+
+    return render_template('ticket_detail.html', title='Account', ticket=ticket, has_permissions=has_permissions, form=form, legend='Ticket Details')
 
 
 @tickets.route("/tickets")
@@ -64,5 +73,5 @@ def ticket_detail(ticket_id):
 def tickets_list():
     check_permissions(banned_roles=['technician'])
     page = request.args.get('page', 1, type=int)
-    tickets = Ticket.query.order_by(Ticket.created_at.desc()).paginate(page=page, per_page=5)
+    tickets = Ticket.query.order_by(Ticket.created_at.desc()).paginate(page=page, per_page=50)
     return render_template('tickets_list.html', tickets=tickets)

@@ -10,10 +10,10 @@
             <p class="article-content">House number: {{ ticket.house_number }}</p>
           </div>
         </div>
-        {% if can_edit %}
+        {%  if has_permissions(allowed_roles=['resident', 'admin'], allowed_user=ticket.author.user) %}
           <div class="detail-buttons">
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('tickets.update_ticket', ticket_id=ticket.id) }}">Edit</a>
-            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
+            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteTicketModal">Delete</button>
           </div>
         {% endif %}
         <div class="pics-per-row">
@@ -29,11 +29,53 @@
         </div>
     </article>
 
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    {% if current_user.role == 'manager' %}
+    <div>
+      <form method="POST" action="">
+        {{ form.hidden_tag()}}
+        <legend class="border-bottom mb-4"> 
+          Comments      
+        </legend>
+        <div class="form-group row">
+          <div class="col-sm-10">
+            {{ form.content(class="form-control-lg form-control", rows="1") }}
+          </div>
+          <div class="col-sm-2 mt-1">
+            {{ form.submit(class="btn btn-outline-info") }}
+          </div>
+      </div>
+
+      </form>
+    </div>
+    {% endif %}
+    {% for comment in ticket.comments %}
+      <div class="row content-section">
+        <div class = "col-md-11 row">
+          <div class="col-md-6 text-left">
+            <h4>{{comment.author.user.name}} {{comment.author.user.surname}}</h4>
+          </div>
+          <div class="col-md-6 text-right">
+            {{comment.created_at}}
+          </div>
+          <div class="mx-3 ">
+          {{comment.content}}
+          </div>
+        </div>
+        {% if has_permissions(allowed_roles=['admin', 'manager'], allowed_user=comment.author.user) %}
+            <div class="detail-buttons col-md-1">
+              <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Edit</a>
+              <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+        {% endif %}
+      </div>
+    {% endfor %}
+    
+
+
+    <div class="modal fade" id="deleteTicketModal" tabindex="-1" role="dialog" aria-labelledby="deleteTicketModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="deleteModalLabel">Delete Ticket</h5>
+              <h5 class="modal-title" id="deleteTicketModalLabel">Delete Ticket</h5>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>

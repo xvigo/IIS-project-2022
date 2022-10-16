@@ -108,7 +108,7 @@ def users_list():
     check_permissions(allowed_roles=['admin'])
 
     page = request.args.get('page', 1, type=int)
-    users = User.query.order_by(User.id.desc()).paginate(page=page, per_page=10)
+    users = User.query.order_by(User.id.desc()).paginate(page=page, per_page=50)
     return render_template('users_list.html', users=users)
 
 @users.route("/admin/users/<int:user_id>", methods=['GET', 'POST'])

@@ -12,7 +12,7 @@ def home():
     elif current_user.role == 'resident':
         return redirect(url_for('tickets.tickets_list'))
     elif current_user.role == 'manager':
-        return redirect(url_for('users.users_list'))
+        return redirect(url_for('tickets.tickets_list'))
     elif current_user.role == 'technician':
         return redirect(url_for('users.users_list'))
     else:

@@ -112,7 +112,7 @@ class RequirementComment(db.Model):
     __tablename__ = 'requirement_comment'
     id = db.Column('id_requirement_comment', db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.TIMESTAMP, nullable=False)
+    created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     id_service_requirement = db.Column(db.Integer, db.ForeignKey('service_requirement.id_service_requirement'), nullable=False)
     id_technician = db.Column(db.Integer, db.ForeignKey('technician.id_technician'), nullable=False)
@@ -125,7 +125,7 @@ class TicketComment(db.Model):
     __tablename__ = 'ticket_comment'
     id = db.Column('id_ticket_comment', db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.TIMESTAMP, nullable=False)
+    created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 
     id_ticket = db.Column(db.Integer, db.ForeignKey('ticket.id_ticket'), nullable=False)
     id_manager = db.Column(db.Integer, db.ForeignKey('manager.id_manager'), nullable=False)
