@@ -28,3 +28,9 @@ class UpdateTicketForm(FlaskForm):
 class CommentForm(FlaskForm):
     content = TextAreaField('Comment', validators=[DataRequired()])
     submit = SubmitField('Add')
+
+class EditCommentForm(FlaskForm):
+    edit_id = IntegerField('Id', id="modal_edit_comment_id")
+    edit_content = TextAreaField('Comment', id="modal_edit_comment_content", validators=[DataRequired()])
+    edit_submit = SubmitField('Save')
+

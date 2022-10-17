@@ -32,24 +32,23 @@
     {% if current_user.role == 'manager' %}
     <div>
       <form method="POST" action="">
-        {{ form.hidden_tag()}}
+        {{ add_comment_form.hidden_tag()}}
         <legend class="border-bottom mb-4"> 
           Comments      
         </legend>
         <div class="form-group row">
           <div class="col-sm-10">
-            {{ form.content(class="form-control-lg form-control", rows="1") }}
+            {{ add_comment_form.content(class="form-control-lg form-control", rows="1") }}
           </div>
           <div class="col-sm-2 mt-1">
-            {{ form.submit(class="btn btn-outline-info") }}
+            {{ add_comment_form.submit(class="btn btn-outline-info") }}
           </div>
-      </div>
-
+        </div>
       </form>
     </div>
     {% endif %}
     {% for comment in ticket.comments %}
-      <div class="row content-section">
+      <div id="comment_{{comment.id}}" class="row content-section">
         <div class = "col-md-11 row">
           <div class="col-md-6 text-left">
             <h4>{{comment.author.user.name}} {{comment.author.user.surname}}</h4>
@@ -57,14 +56,14 @@
           <div class="col-md-6 text-right">
             {{comment.created_at}}
           </div>
-          <div class="mx-3 ">
+          <div id="comment_{{comment.id}}_content" class="mx-3 ">
           {{comment.content}}
           </div>
         </div>
         {% if has_permissions(allowed_roles=['admin', 'manager'], allowed_user=comment.author.user) %}
-            <div class="detail-buttons col-md-1">
-              <a class="btn btn-secondary btn-sm mt-1 mb-1" href="#">Edit</a>
-              <a class="btn btn-danger btn-sm mt-1 mb-1" href="#">Delete</a>
+            <div id="comment_{{comment.id}}_buttons" class="detail-buttons col-md-1">
+              <a class="btn btn-secondary btn-sm mt-1 mb-1" data-toggle="modal" data-target="#editCommentModal" onclick="loadEditComment({{comment.id}})">Edit</a>
+              <a class="btn btn-danger btn-sm mt-1 mb-1" data-toggle="modal" data-target="#deleteCommentModal" onclick="configureModal({{comment.id}})">Delete</a>
             </div>
         {% endif %}
       </div>
@@ -93,4 +92,73 @@
           </div>
         </div>
       </div>
+
+
+
+    <div class="modal fade" id="deleteCommentModal" tabindex="-1" role="dialog" aria-labelledby="deleteCommentModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteCommentModalLabel">Delete Comment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <p>Do you really want to delete your comment?</p>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button id="delete_btn_modal" type="button" class="btn btn-danger" data-dismiss="modal" onclick="">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="editCommentModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editCommentModalLabel">Edit Comment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <form method="POST" action="">
+              {{ edit_comment_form.hidden_tag()}}
+              <div class="modal-body">
+
+                {{ edit_comment_form.edit_id(type="hidden", class="form-control-lg form-control") }}
+                {{ edit_comment_form.edit_content(class="form-control-lg form-control", rows="1") }}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                {{ edit_comment_form.edit_submit(class="btn btn-outline-info") }}
+              </div>
+            </form>           
+        </div>
+      </div>
+    </div>
+
+      <script>
+        function deleteComment(commentId) {
+          const comment = document.getElementById(`comment_${commentId}`);
+          fetch(`/delete_ticket_comment/${commentId}`, { method: "POST" });
+          comment.remove()
+        }
+
+        function configureModal(commentId) {
+          deleteBtn = document.getElementById("delete_btn_modal");
+          deleteBtn.setAttribute("onclick", `deleteComment(${commentId})`)
+        }
+
+        function loadEditComment(commentId) {
+          comment_id_field = document.getElementById("modal_edit_comment_id").setAttribute("value", commentId);
+          const comment_content = document.getElementById(`comment_${commentId}_content`).innerHTML.trim();
+          document.getElementById("modal_edit_comment_content").innerHTML = comment_content;
+        }
+
+    </script>
 {% endblock content %}

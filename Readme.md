@@ -50,8 +50,7 @@ python run_debug.py
         3 | Test1   | Test1     | test1@test1.cz       | $2a$06$lOz4SKgNPUIWDGJLc5RLuurndAkwGpGiTMpu9vtcYH3MvuqKrFxGy
         4 | Test2   | Test2     | test2@test2.cz       | $2a$06$Yns7BGwi05bJop00FK3NXupbwpslOp2m9OSDkKTaziI2JnqhQ5QRa
         5 | Test3   | Test3     | test3@test3.cz       | $2a$06$/sOLzui8PYoKeR2yn5Ob0uuoPiZaotvVGkV5VeX7X5aBtPhjwcqY.
-        6 | pridano | webem     | aa@aaa.cz            | heslo
-    (6 rows)
+    (5 rows)
 
 ### App connection string
 
