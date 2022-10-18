@@ -1,6 +1,8 @@
 import datetime
 from enum import unique
 from flask_login import UserMixin
+from sqlalchemy.ext.hybrid import hybrid_property
+
 from TownIssues import db, login_manager
 from sqlalchemy.ext.hybrid import hybrid_property
 

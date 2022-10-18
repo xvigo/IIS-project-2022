@@ -29,23 +29,37 @@
         </div>
     </article>
 
-    {% if current_user.role == 'manager' %}
-    <div>
-      <form method="POST" action="">
-        {{ add_comment_form.hidden_tag()}}
-        <legend class="border-bottom mb-4"> 
-          Comments      
-        </legend>
-        <div class="form-group row">
-          <div class="col-sm-10">
-            {{ add_comment_form.content(class="form-control-lg form-control", rows="1") }}
-          </div>
-          <div class="col-sm-2 mt-1">
-            {{ add_comment_form.submit(class="btn btn-outline-info") }}
-          </div>
-        </div>
-      </form>
+    {% if has_permissions(allowed_roles=['admin', 'manager']) %}
+
+    <div class="btn-group btn-group-toggle" data-toggle="buttons">
+      <label class="btn btn-secondary active">
+        <input type="radio" name="options" id="comments_option" autocomplete="off" checked> Comments
+      </label>
+      <label class="btn btn-secondary">
+        <input type="radio" name="options" id="sreq_option" autocomplete="off"> Service requirements
+      </label>
     </div>
+
+    {% endif %}
+
+    {% if current_user.role == 'manager' %}
+    <div class="ticket_detail_blocks" id="comments_block">
+        <div>
+          <form method="POST" action="">
+            {{ add_comment_form.hidden_tag()}}
+            <legend class="border-bottom mb-4">
+              Comments
+            </legend>
+            <div class="form-group row">
+              <div class="col-sm-10">
+                {{ add_comment_form.content(class="form-control-lg form-control", rows="1") }}
+              </div>
+              <div class="col-sm-2 mt-1">
+                {{ add_comment_form.submit(class="btn btn-outline-info") }}
+              </div>
+            </div>
+          </form>
+        </div>
     {% endif %}
     {% for comment in ticket.comments %}
       <div id="comment_{{comment.id}}" class="row content-section">
@@ -60,7 +74,7 @@
           {{comment.content}}
           </div>
         </div>
-        {% if has_permissions(allowed_roles=['admin', 'manager'], allowed_user=comment.author.user) %}
+        {% if has_permissions(allowed_roles=['admin', 'manager']) %}
             <div id="comment_{{comment.id}}_buttons" class="detail-buttons col-md-1">
               <a class="btn btn-secondary btn-sm mt-1 mb-1" data-toggle="modal" data-target="#editCommentModal" onclick="loadEditComment({{comment.id}})">Edit</a>
               <a class="btn btn-danger btn-sm mt-1 mb-1" data-toggle="modal" data-target="#deleteCommentModal" onclick="configureModal({{comment.id}})">Delete</a>
@@ -68,7 +82,29 @@
         {% endif %}
       </div>
     {% endfor %}
-    
+    </div>
+
+    <div class="ticket_detail_blocks" id="sreq_block">
+        <a class="btn btn-primary mb-2" type="submit" href="/tickets/{{ ticket.id }}/add_requirement">Add requirement</a>
+      {% for requirement in ticket.requirements %}
+      <div id="requirement_{{requirement.id}}" class="row content-section">
+        <div class = "col-md-11 row">
+          <div class="col-md-6 text-left">
+          <h4>{{requirement.technician.user.name}} {{requirement.technician.user.surname}}</h4>
+          </div>
+          <div class="col-md-6 text-right">
+            {{requirement.created_at}}
+          </div>
+          <div id="requirement_{{requirement.id}}_content" class="mx-3 ">
+          {{requirement.content}}
+          </div>
+            <div id="requirement_{{requirement.id}}_technician" class="mx-3 ">
+          {{requirement.manager.user.name}} {{requirement.manager.user.surname}}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
     <div class="modal fade" id="deleteTicketModal" tabindex="-1" role="dialog" aria-labelledby="deleteTicketModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -90,7 +126,6 @@
           </div>
         </div>
       </div>
-
 
 
     <div class="modal fade" id="deleteCommentModal" tabindex="-1" role="dialog" aria-labelledby="deleteCommentModalLabel" aria-hidden="true">
@@ -157,6 +192,16 @@
           const comment_content = document.getElementById(`comment_${commentId}_content`).innerHTML.trim();
           document.getElementById("modal_edit_comment_content").innerHTML = comment_content;
         }
+
+        $("#comments_option").parent().on("click", function(){
+            $("#comments_block").css("display", "block");
+            $("#sreq_block").css("display", "none");
+        })
+
+        $("#sreq_option").parent().on("click", function(){
+            $("#comments_block").css("display", "none");
+            $("#sreq_block").css("display", "block");
+        })
 
     </script>
 {% endblock content %}
