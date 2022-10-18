@@ -28,8 +28,18 @@
                         {{ form.house_num(class="form-control-lg form-control") }}
                     </div>
                 </div>
-                
-                <div class="form-group">
+                <div class="pics-per-row">
+                    {% for img in ticket.images %}
+                      <div class="responsive">
+                        <div class="gallery">
+                          <a target="_blank" href="{{ img.url }}">
+                            <img src="{{ img.url }}" alt=".">
+                          </a>
+                        </div>
+                      </div>
+                    {% endfor %}
+                </div>
+                <div class="form-group mt-2">
                     {{ form.picture.label() }}
                     {{ form.picture(class="form-control-file") }}
                     {% if form.picture.errors %}

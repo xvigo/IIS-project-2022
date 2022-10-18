@@ -16,7 +16,7 @@ class UpdateTicketForm(FlaskForm):
     content = TextAreaField('Description', validators=[DataRequired()])
     street = StringField('Street', validators=[DataRequired()])
     house_num = IntegerField('House Number', validators=[DataRequired(), NumberRange(min=1, message="Please enter a valid house number.")])
-    picture = MultipleFileField('Choose picture', validators=[FileAllowed(['jpg', 'png'])])
+    picture = MultipleFileField('Add new pictures', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Update Ticket')
 
     def prefill(self, ticket):

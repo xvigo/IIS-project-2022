@@ -132,3 +132,21 @@ class ChangePasswordForm(FlaskForm):
     confirm_new_password = PasswordField('Confirm New Password', validators=[DataRequired(), Length(min=4, max=50)]) 
 
     submit = SubmitField('Change Password')
+
+
+class AddTechnicianForm(FlaskForm):              
+    email = StringField('Email', validators=[DataRequired(), Email(message="Email address has invalid format.")])
+    name = StringField('Name', validators=[DataRequired(), Length(min=2, max=50)])
+    surname = StringField('Surname', validators=[DataRequired(), Length(min=2, max=50)])  
+    phone_number = StringField('Phone Number')   
+    password = PasswordField('Password', validators=[DataRequired(), Length(min=4, max=50), EqualTo('confirm_password', message="Passwords do not match. Try again!")])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), Length(min=4, max=50)])
+    submit = SubmitField('Add Technician')
+
+    def populate_user(self, user):
+        user.email = self.email.data
+        user.password = bcrypt.generate_password_hash(self.password.data).decode('utf-8')
+        user.name = self.name.data
+        user.surname = self.surname.data
+        user.role = "technician"
+        user.technician = Technician(phone_number=self.phone_number.data)

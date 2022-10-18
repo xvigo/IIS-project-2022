@@ -48,12 +48,6 @@ def db_update_ticket_from_form(ticket, form):
     ticket.street = form.street.data
     ticket.house_number = form.house_num.data
 
-    for image in ticket.images:
-        path = 'TownIssues' + image.url
-        if os.path.exists(path):
-            os.remove(path) 
-
-    ticket.images.clear()
     for form_image in form.picture.data:
         if form_image.filename:
             picture = save_picture(form_image)

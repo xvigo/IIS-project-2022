@@ -38,7 +38,7 @@ def update_ticket(ticket_id):
         flash('Ticket updated succesfully.', 'success')
         return redirect(url_for('tickets.ticket_detail', ticket_id=ticket.id))
 
-    return render_template('update_ticket.html', title='Account', form=form, legend='Update Ticket')
+    return render_template('update_ticket.html', title='Account', ticket=ticket, form=form, legend='Update Ticket')
 
 # Delete ticket
 @tickets.route("/tickets/<int:ticket_id>/delete", methods=['POST'])
@@ -74,8 +74,6 @@ def ticket_detail(ticket_id):
 
     return render_template('ticket_detail.html', title='Account', ticket=ticket, has_permissions=has_permissions, add_comment_form=add_comment_form, edit_comment_form=edit_comment_form, legend='Ticket Details')
 
-
-
 @tickets.route("/tickets")
 @login_required
 def tickets_list():
@@ -83,7 +81,6 @@ def tickets_list():
     page = request.args.get('page', 1, type=int)
     tickets = Ticket.query.order_by(Ticket.created_at.desc()).paginate(page=page, per_page=50)
     return render_template('tickets_list.html', tickets=tickets)
-
 
 @tickets.route("/delete_ticket_comment/<int:comment_id>", methods=['POST'])
 @login_required
