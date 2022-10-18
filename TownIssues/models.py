@@ -1,6 +1,8 @@
 import datetime
 from enum import unique
 from flask_login import UserMixin
+from sqlalchemy.ext.hybrid import hybrid_property
+
 from TownIssues import db, login_manager
 
 @login_manager.user_loader
@@ -20,7 +22,9 @@ class User(db.Model, UserMixin):
     manager = db.relationship('Manager', uselist=False, cascade='all, delete-orphan', backref='user', lazy=True)
     technician = db.relationship('Technician', uselist=False, cascade='all, delete-orphan', backref='user', lazy=True)
 
-
+    @hybrid_property
+    def fullname(self):
+        return self.name + " " + self.surname
     def __repr__(self): #returns data
         return f"User('{self.name}', {self.surname}, {self.email})"
     
