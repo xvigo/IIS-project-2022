@@ -85,6 +85,16 @@ def tickets_list():
     return render_template('tickets_list.html', tickets=tickets)
 
 
+@tickets.route("/my_tickets")
+@login_required
+def my_tickets_list():
+    check_permissions(banned_roles=['technician'])
+    page = request.args.get('page', 1, type=int)
+    tickets = Ticket.query.filter(Ticket.author == current_user.resident).order_by(Ticket.created_at.desc()).paginate(page=page, per_page=50)
+    return render_template('tickets_list.html', tickets=tickets)
+
+
+
 @tickets.route("/delete_ticket_comment/<int:comment_id>", methods=['POST'])
 @login_required
 def delete_comment(comment_id):

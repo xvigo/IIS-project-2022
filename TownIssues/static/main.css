@@ -131,3 +131,7 @@ body {
   width: 100%;
   border-spacing: 0
 }
+
+.row {
+  display: flex;
+}
