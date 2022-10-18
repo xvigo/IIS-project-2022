@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
-
+    <script src="{{ url_for('static', filename='filter.js') }}"></script>
+    
     {% if title %}
       <title>Town Issues - {{ title }}</title>
     {% else %}
@@ -32,6 +33,7 @@
 
               {% elif current_user.role == 'resident' %}
                 <a class="nav-item nav-link" href="/">Tickets</a>
+                <a class="nav-item nav-link" href="/my_tickets">My Tickets</a>
                 <a class="nav-item nav-link" href="/tickets/add">New Ticket</a>
               {% elif current_user.role == 'manager' %}
 

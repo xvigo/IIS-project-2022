@@ -132,11 +132,6 @@ body {
   border-spacing: 0
 }
 
-.ticket_detail_blocks{
-  margin-top: 10px;
-  margin-bottom: 10px;
-}
-
-#sreq_block {
-  display: none;
+.row{
+  display: flex;
 }
