@@ -5,7 +5,7 @@ from TownIssues import db
 from flask_login import current_user
 from TownIssues.models import Image, Ticket, ServiceRequirement
 import os
-from TownIssues.service_requirements.forms import AddRequirementForm
+from TownIssues.service_requirements.forms import AddRequirementForm, UpdateRequirementForm
 
 
 def db_add_requirement_from_form(form):
@@ -17,27 +17,14 @@ def db_add_requirement_from_form(form):
     db.session.commit()
 
 
-def db_update_ticket_from_form(ticket, form):
-    if not isinstance(form, UpdateTicketForm):
+def db_update_requirement_from_form(requirement, form):
+    if not isinstance(form, UpdateRequirementForm):
         raise TypeError
 
-    ticket.title = form.title.data
-    ticket.content = form.content.data
-    ticket.street = form.street.data
-    ticket.house_number = form.house_num.data
-
-    for image in ticket.images:
-        path = 'TownIssues' + image.url
-        if os.path.exists(path):
-            os.remove(path)
-
-    ticket.images.clear()
-    for form_image in form.picture.data:
-        if form_image.filename:
-            picture = save_picture(form_image)
-            image = Image(url='/static/ticket_pics/' + picture)
-            ticket.images.append(image)
-
+    requirement.content = form.content.data
+    requirement.estimated_time = form.estimated_time.data
+    requirement.real_time = form.real_time.data
+    requirement.price = form.price.data
     db.session.commit()
 
 

@@ -138,3 +138,15 @@ body {
 .row{
   display: flex;
 }
+
+.status{
+  font-size: 2rem;
+}
+
+.failure{
+  color: red;
+}
+
+.success{
+  color:green;
+}

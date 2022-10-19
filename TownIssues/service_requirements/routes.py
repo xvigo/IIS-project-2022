@@ -1,10 +1,11 @@
 from flask import Blueprint, flash, jsonify, redirect, url_for, render_template, abort, request
 from flask_login import login_required, current_user
 
-from TownIssues.service_requirements.forms import AddRequirementForm
-from TownIssues.models import Ticket, ServiceRequirement, Technician
+from TownIssues.service_requirements.forms import AddRequirementForm, UpdateRequirementForm, RequirementCommentForm, \
+    RequirementEditCommentForm
+from TownIssues.models import Ticket, ServiceRequirement, Technician, RequirementComment
 from TownIssues import db
-from TownIssues.service_requirements.repository import db_add_requirement_from_form
+from TownIssues.service_requirements.repository import db_add_requirement_from_form, db_update_requirement_from_form
 from TownIssues.users.utils import check_permissions, has_permissions
 
 service_requirements = Blueprint('service_requirements', __name__)
@@ -33,22 +34,31 @@ def add_requirement(ticket_id):
 
 
 # Update ticket
-@service_requirements.route("/tickets/<int:ticket_id>/update", methods=['GET', 'POST'])
+@service_requirements.route("/tickets/<int:ticket_id>/requirements/<int:requirement_id>", methods=['GET', 'POST'])
 @login_required
-def update_ticket(ticket_id):
-    ticket = db_get_ticket_or_404(ticket_id)
-    check_permissions(allowed_roles=['resident', 'admin'], allowed_user=ticket.author.user)
+def requirement_detail(requirement_id, ticket_id):
 
-    form = UpdateTicketForm()
-    if request.method == 'GET':
-        form.prefill(ticket)
+    add_comment_form = RequirementCommentForm()
+    edit_comment_form = RequirementEditCommentForm()
+    requirement = ServiceRequirement.query.get_or_404(requirement_id)
+    ticket = Ticket.query.get_or_404(ticket_id)
 
-    elif form.validate_on_submit():
-        db_update_ticket_from_form(ticket, form)
-        flash('Ticket updated succesfully.', 'success')
-        return redirect(url_for('tickets.ticket_detail', ticket_id=ticket.id))
+    if request.method == 'POST' and add_comment_form.validate_on_submit() and current_user.role in ['admin', 'technician']:
 
-    return render_template('update_ticket.html', title='Account', form=form, legend='Update Ticket')
+        comment = RequirementComment(content=add_comment_form.content.data, requirement=requirement, id_technician=current_user.id)
+        db.session.add(comment)
+        db.session.commit()
+        flash('Comment added succesfully.', 'success')
+
+    elif request.method == 'POST' and edit_comment_form.validate_on_submit():
+        comment = RequirementComment.query.get_or_404(edit_comment_form.edit_id.data)
+        comment.content = edit_comment_form.edit_content.data
+        db.session.commit()
+        flash('Comment updated succesfully.', 'success')
+
+    return render_template('requirement_detail.html', requirement=requirement, has_permissions=has_permissions,
+                           title='Update requirement', legend='Update requirement', add_comment_form=add_comment_form,
+                           edit_comment_form=edit_comment_form,)
 
 
 # Delete ticket
