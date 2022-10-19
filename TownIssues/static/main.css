@@ -132,6 +132,9 @@ body {
   border-spacing: 0
 }
 
+#sreq_block{
+  display: none;
+}
 .row{
   display: flex;
 }

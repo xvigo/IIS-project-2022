@@ -22,7 +22,7 @@ def add_ticket():
         flash('Ticked created succesfully.', 'success')
         return redirect(url_for('tickets.tickets_list'))
 
-    return render_template('update_ticket.html', title='Account', form=form, legend='Create New Ticket')
+    return render_template('add_ticket.html', title='Account', form=form, legend='Create New Ticket')
 
 
 # Update ticket
