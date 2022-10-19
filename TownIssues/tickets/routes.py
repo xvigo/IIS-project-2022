@@ -87,7 +87,7 @@ def ticket_detail(ticket_id):
 def tickets_list():
     check_permissions(banned_roles=['technician'])
     page = request.args.get('page', 1, type=int)
-    tickets = Ticket.query.order_by(Ticket.created_at.desc()).paginate(page=page, per_page=50)
+    tickets = Ticket.query.order_by(Ticket.created_at.desc()).paginate(page=page, per_page=100)
     return render_template('tickets_list.html', tickets=tickets)
 
 

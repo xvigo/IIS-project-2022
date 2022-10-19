@@ -108,7 +108,7 @@ def users_list():
     check_permissions(allowed_roles=['admin'])
 
     page = request.args.get('page', 1, type=int)
-    users = User.query.order_by(User.id.desc()).paginate(page=page, per_page=50)
+    users = User.query.order_by(User.id.desc()).paginate(page=page, per_page=100)
     return render_template('users_list.html', users=users)
 
 @users.route("/admin/users/<int:user_id>", methods=['GET', 'POST'])
@@ -206,5 +206,7 @@ def add_technician():
 def technicians_list():
     check_permissions(allowed_roles=['manager'])
 
-    users = User.query.filter_by(role="technician").order_by(User.id.desc())
+    page = request.args.get('page', 1, type=int)
+    users = User.query.filter_by(role="technician").order_by(User.id.desc()).paginate(page=page, per_page=100)
     return render_template('technicians_list.html', users=users)
+
