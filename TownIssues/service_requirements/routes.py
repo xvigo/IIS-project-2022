@@ -80,7 +80,8 @@ def update_requirement(requirement_id, ticket_id):
     elif form.validate_on_submit():
         db_update_requirement_from_form(requirement, form)
         flash('Requirement updated successfully.', 'success')
-        return redirect(url_for('tickets.ticket_detail'))
+        return redirect(url_for('service_requirements.requirement_detail', ticket_id = ticket.id, requirement_id = requirement.id))
+
 
     return render_template('update_requirement.html', title='Update Requirement', requirement=requirement, ticket=ticket,
                            form=form, legend='Update Requirement')

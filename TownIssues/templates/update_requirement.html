@@ -14,12 +14,22 @@
                 <div class="form-group">
                     {{ form.estimated_time.label(class="form-control-label") }}
                     {{ form.estimated_time(class="form-control-lg form-control") }}
+                    {% if form.estimated_time.errors %}
+                        {% for error in form.estimated_time.errors %}
+                            <span class="text-danger"> {{ error }} </span>
+                        {% endfor %}
+                    {% endif %}
                 </div>
 
                 <div class="row form-group">
                     <div class="col-sm-6">
                         {{ form.real_time.label(class="form-control-label") }}
                         {{ form.real_time(class="form-control-lg form-control") }}
+                        {% if form.real_time.errors %}
+                            {% for error in form.real_time.errors %}
+                                <span class="text-danger"> {{ error }} </span>
+                            {% endfor %}
+                        {% endif %}
                     </div>
                     <div class="col-sm-6">
                         {{ form.price.label(class="form-control-label") }}

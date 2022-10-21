@@ -1,11 +1,16 @@
 from time import strftime
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, IntegerField, SubmitField, SelectField, BooleanField,  DateField
-from wtforms.validators import DataRequired, NumberRange
+from wtforms import StringField, TextAreaField, IntegerField, SubmitField, SelectField, BooleanField, DateField, \
+    TimeField, FloatField
+from wtforms.validators import DataRequired, NumberRange, ValidationError
 from flask_wtf.file import FileField, FileAllowed
 from datetime import datetime
 
+
+def validate_estimated_time(form, field):
+    if field.data and field.data < datetime.date(datetime.today()):
+        raise ValidationError('Estimated time cannot be in past')
 
 class AddRequirementForm(FlaskForm):
     content = TextAreaField('Description', validators=[DataRequired()])
@@ -15,21 +20,10 @@ class AddRequirementForm(FlaskForm):
 
 class UpdateRequirementForm(FlaskForm):
     content = TextAreaField('Description')
-    estimated_time = DateField('Estimated Time')
-    real_time = DateField('Real Time')
-    price = IntegerField('Price')
+    estimated_time = DateField('Estimated Time', validators=[validate_estimated_time])
+    real_time = FloatField('Real Time', validators=[NumberRange(min=0)])
+    price = IntegerField('Price', validators=[NumberRange(min=0)])
     submit = SubmitField('Update requirement')
-
-    def validate_on_submit(self):
-        result = super(UpdateRequirementForm, self).validate()
-        if self.estimated_time.data and self.estimated_time.data < datetime.date(datetime.today()):
-            return False
-        elif self.real_time.data and self.real_time.data < datetime.date(datetime.today()):
-            return False
-        elif self.price.data is None or self.price.data >= 0:
-            return result
-        else:
-            return False
 
     def prefill(self, requirement):
         self.content.data = requirement.content

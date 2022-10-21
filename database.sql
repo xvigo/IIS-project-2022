@@ -179,8 +179,8 @@ VALUES
 INSERT INTO
     service_requirement(content, is_finished, estimated_time, price, real_time, created_at, id_manager, id_technician, id_ticket)
 VALUES
-    ('Repair the lamp.', TRUE,  '02:00:00', 5000, '02:30:00', '2004-12-19 19:23:54', 1, 1, 1),
-    ('Please look at the brightness level of the lamp and reduce it if necessary.', FALSE, '01:00:00', NULL, NULL, '2005-12-19 19:23:54', 2, 2, 2);
+    ('Repair the lamp.', TRUE,  '02:00:00', 5000, '50.0', '2004-12-19 19:23:54', 1, 1, 1),
+    ('Please look at the brightness level of the lamp and reduce it if necessary.', FALSE, '2020-12-19 19:23:54', NULL, NULL, '2005-12-19 19:23:54', 2, 2, 2);
 
 /************************** REQUIREMENT COMMENT **************************/
 INSERT INTO
