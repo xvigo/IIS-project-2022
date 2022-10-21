@@ -97,8 +97,8 @@ class ServiceRequirement(db.Model):
     id = db.Column('id_service_requirement', db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
     is_finished = db.Column(db.Boolean, nullable=False, default=False)
-    estimated_time = db.Column(db.Time, nullable=True)
-    real_time = db.Column(db.Time, nullable=True)
+    estimated_time = db.Column(db.TIMESTAMP, nullable=True)
+    real_time = db.Column(db.TIMESTAMP, nullable=True)
     price = db.Column(db.Integer, nullable=True)
     created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
 

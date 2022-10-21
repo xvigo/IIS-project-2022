@@ -60,8 +60,8 @@ CREATE TABLE service_requirement(
 
     content TEXT NOT NULL,
     is_finished BOOLEAN,
-    estimated_time INTERVAL,
-    real_time INTERVAL,
+    estimated_time DATE,
+    real_time DATE,
     price INT,
        created_at TIMESTAMP NOT NULL,
 

@@ -7,46 +7,24 @@
                 <legend class="border-bottom mb-4"> 
                     {{legend}}
                 </legend>
-
-                <div class="form-group">
-                    {{ form.title.label(class="form-control-label") }}
-                    {{ form.title(class="form-control-lg form-control") }}
-                </div>
-
                 <div class="form-group">
                     {{ form.content.label(class="form-control-label") }}
                     {{ form.content(class="form-control-lg form-control") }}
                 </div>
+                <div class="form-group">
+                    {{ form.estimated_time.label(class="form-control-label") }}
+                    {{ form.estimated_time(class="form-control-lg form-control") }}
+                </div>
 
                 <div class="row form-group">
                     <div class="col-sm-6">
-                        {{ form.street.label(class="form-control-label") }}
-                        {{ form.street(class="form-control-lg form-control") }}
+                        {{ form.real_time.label(class="form-control-label") }}
+                        {{ form.real_time(class="form-control-lg form-control") }}
                     </div>
                     <div class="col-sm-6">
-                        {{ form.house_num.label(class="form-control-label") }}
-                        {{ form.house_num(class="form-control-lg form-control") }}
+                        {{ form.price.label(class="form-control-label") }}
+                        {{ form.price(class="form-control-lg form-control") }}
                     </div>
-                </div>
-                <div class="pics-per-row">
-                    {% for img in ticket.images %}
-                      <div class="responsive">
-                        <div class="gallery">
-                          <a target="_blank" href="{{ img.url }}">
-                            <img src="{{ img.url }}" alt=".">
-                          </a>
-                        </div>
-                      </div>
-                    {% endfor %}
-                </div>
-                <div class="form-group mt-2">
-                    {{ form.picture.label() }}
-                    {{ form.picture(class="form-control-file") }}
-                    {% if form.picture.errors %}
-                        {% for error in form.picture.errors %}
-                            <span class="text-danger"> {{ error }} </span></br>
-                        {% endfor %}
-                    {% endif %}
                 </div>
             </fieldset>
             <div class="form-group">

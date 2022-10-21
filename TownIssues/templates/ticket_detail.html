@@ -75,7 +75,7 @@
         </thead>
         <tbody>
     {% for comment in ticket.comments %}
-         <tr>
+        <tr id="comment_{{ comment.id }}">
             <td>{{comment.author.user.name}} {{comment.author.user.surname}}</td>
             <td>{{comment.content}}</td>
             <td>{{comment.created_at}}</td>
@@ -85,7 +85,7 @@
                   <button type="button" class="btn btn-success fa-regular fa-edit mr-2" data-toggle="modal" data-target="#editCommentModal"
                           onclick="loadEditComment({{comment.id}})"> </button>
                   <button type="button" class="btn btn-danger fas fa-trash-alt" data-toggle="modal" data-target="#deleteCommentModal"
-                          onclick="configureModal({{comment.id}})"> </button>
+                          onclick="configureCommentModal({{comment.id}})"> </button>
                 </div>
             </td>
             {% endif %}
@@ -109,7 +109,7 @@
         </thead>
         <tbody>
       {% for requirement in ticket.requirements %}
-      <tr>
+      <tr id="requirement_{{ requirement.id }}">
       {% if requirement.real_time %}
         <td><i class="fa solid fa-square-check status success"></i></td>
       {% else %}
@@ -120,7 +120,8 @@
         <td>{{requirement.created_at}}</td>
         <td>
             <a class="btn btn-primary far fa-eye" href="/tickets/{{ ticket.id }}/requirements/{{ requirement.id }}"></a>
-            <button type="button" class="btn btn-danger fa-solid fa-trash"></button>
+            <button type="button" class="btn btn-danger fas fa-trash-alt" data-toggle="modal" data-target="#deleteRequirementModal"
+                    onclick="configureRequirementModal({{requirement.id}}, {{ ticket.id }})"> </button>
         </td>
       </tr>
     {% endfor %}
@@ -164,7 +165,27 @@
             </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button id="delete_btn_modal" type="button" class="btn btn-danger" data-dismiss="modal" onclick="">Delete</button>
+            <button id="delete_comment_btn_modal" type="button" class="btn btn-danger" data-dismiss="modal" onclick="">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade" id="deleteRequirementModal" tabindex="-1" role="dialog" aria-labelledby="deleteRequirementModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteRequirementModalLabel">Delete Comment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <p>Do you really want to delete this requirement?</p>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button id="delete_requirement_btn_modal" type="button" class="btn btn-danger" data-dismiss="modal" onclick="">Delete</button>
           </div>
         </div>
       </div>
@@ -183,7 +204,6 @@
             <form method="POST" action="">
               {{ edit_comment_form.hidden_tag()}}
               <div class="modal-body">
-
                 {{ edit_comment_form.edit_id(type="hidden", class="form-control-lg form-control") }}
                 {{ edit_comment_form.edit_content(class="form-control-lg form-control", rows="1") }}
               </div>
@@ -203,9 +223,19 @@
           comment.remove()
         }
 
-        function configureModal(commentId) {
-          deleteBtn = document.getElementById("delete_btn_modal");
+        function deleteRequirement(requirementId, ticketId) {
+          const requirement = document.getElementById(`requirement_${requirementId}`);
+          fetch(`/delete_ticket_requirement/${requirementId}`, { method: "POST" });
+          requirement.remove()
+        }
+
+        function configureCommentModal(commentId) {
+          deleteBtn = document.getElementById("delete_comment_btn_modal");
           deleteBtn.setAttribute("onclick", `deleteComment(${commentId})`)
+        }
+
+        function configureRequirementModal(requirementId, ticketId){
+            $('#delete_requirement_btn_modal').attr('onclick', `deleteRequirement(${requirementId}, ${ticketId})`)
         }
 
         function loadEditComment(commentId) {

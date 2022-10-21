@@ -28,14 +28,8 @@ def db_update_requirement_from_form(requirement, form):
     db.session.commit()
 
 
-def db_delete_ticket(ticket):
-    # Delete ticket images from file system
-    for image in ticket.images:
-        path = 'TownIssues' + image.url
-        if os.path.exists(path):
-            os.remove(path)
-
-    db.session.delete(ticket)
+def db_delete_requirement(requirement):
+    db.session.delete(requirement)
     db.session.commit()
 
 

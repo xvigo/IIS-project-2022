@@ -8,12 +8,17 @@
             <p class="article-content">Odhadovaný čas: {{ requirement.estimated_time }}</p>
             <p class="article-content">Reálný čas: {{ requirement.real_time }}</p>
             <p class="article-content">Cena: {{ requirement.price }} </p>
+            <p class="mt-4"> {{ requirement.content }} </p>
+
           </div>
         </div>
+        <a class="btn btn-primary mb-2 mt-2" type="Edit" href="/tickets/{{ ticket.id }}/requirements/{{ requirement.id }}/update">Edit requirement</a>.
     </article>
 
+
+
     {% if current_user.role in ['admin', 'manager'] %} <!-- TODO zmenit na technician -->
-    <div class="ticket_detail_blocks" id="comments_block">
+    <div class="requirement_detail_blocks" id="comments_block">
         <div>
           <form method="POST" action="">
             {{ add_comment_form.hidden_tag()}}
@@ -46,7 +51,7 @@
     </thead>
     <tbody>
     {% for comment in requirement.comments %}
-     <tr>
+     <tr id="comment_{{ comment.id }}">
         <td>{{comment.author.user.name}} {{comment.author.user.surname}}</td>
         <td>{{comment.content}}</td>
         <td>{{comment.created_at}}</td>
@@ -64,4 +69,68 @@
     {% endfor %}
     </tbody>
     </table>
+
+    <div class="modal fade" id="deleteCommentModal" tabindex="-1" role="dialog" aria-labelledby="deleteCommentModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteCommentModalLabel">Delete Comment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <p>Do you really want to delete your comment?</p>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button id="delete_btn_modal" type="button" class="btn btn-danger" data-dismiss="modal" onclick="">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="modal fade" id="editCommentModal" tabindex="-1" role="dialog" aria-labelledby="editCommentModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editCommentModalLabel">Edit Comment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+            <form method="POST" action="">
+              {{ edit_comment_form.hidden_tag()}}
+              <div class="modal-body">
+                {{ edit_comment_form.edit_id(type="hidden", class="form-control-lg form-control") }}
+                {{ edit_comment_form.edit_content(class="form-control-lg form-control", rows="1") }}
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                {{ edit_comment_form.edit_submit(class="btn btn-outline-info") }}
+              </div>
+            </form>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        function deleteComment(commentId) {
+          const comment = document.getElementById(`comment_${commentId}`);
+          fetch(`/delete_requirement_comment/${commentId}`, { method: "POST" });
+          comment.remove()
+        }
+
+        function configureModal(commentId) {
+          let deleteBtn = document.getElementById("delete_btn_modal");
+          deleteBtn.setAttribute("onclick", `deleteComment(${commentId})`)
+        }
+
+        function loadEditComment(commentId) {
+          document.getElementById("modal_edit_comment_id").setAttribute("value", commentId);
+          const comment_content = document.getElementById(`comment_${commentId}_content`).innerHTML.trim();
+          document.getElementById("modal_edit_comment_content").innerHTML = comment_content;
+        }
+    </script>
 {% endblock content %}
