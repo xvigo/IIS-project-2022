@@ -1,11 +1,10 @@
-from flask import Blueprint, flash, jsonify, redirect, url_for, render_template, abort, request
+from flask import Blueprint, flash, redirect, url_for, render_template, abort, request
 from flask_login import login_required, current_user
 from TownIssues.tickets.forms import AddTicketForm, CommentForm, EditCommentForm, UpdateTicketForm
 from TownIssues.models import Ticket, TicketComment
 from TownIssues import db
 from TownIssues.users.utils import check_permissions, has_permissions
-from TownIssues.tickets.repository import db_add_ticket_from_form, db_delete_ticket, db_update_ticket_from_form, \
-    db_get_ticket_or_404
+from TownIssues.tickets.repository import db_add_ticket_from_form, db_delete_ticket, db_update_ticket_from_form, db_get_ticket_or_404
 
 tickets = Blueprint('tickets', __name__)
 
@@ -14,12 +13,13 @@ tickets = Blueprint('tickets', __name__)
 @tickets.route("/tickets/add", methods=['GET', 'POST'])
 @login_required
 def add_ticket():
+    """Route for adding tickets """
     check_permissions(allowed_roles=['resident'])
 
     form = AddTicketForm()
     if form.validate_on_submit():
         db_add_ticket_from_form(form)
-        flash('Ticked created succesfully.', 'success')
+        flash('Ticked created successfully.', 'success')
         return redirect(url_for('tickets.tickets_list'))
 
     return render_template('add_ticket.html', title='Account', form=form, legend='Create New Ticket')

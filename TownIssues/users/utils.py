@@ -1,8 +1,9 @@
-import imp
+import os
 from flask import abort
 from flask_login import current_user
 
 def check_permissions(allowed_roles=None, banned_roles=None, allowed_user=None ):
+    """Aborts if current user doesn't have permission."""
     # Check whether role has access
     if allowed_roles and current_user.role not in allowed_roles:
         abort(403)
@@ -17,6 +18,8 @@ def check_permissions(allowed_roles=None, banned_roles=None, allowed_user=None )
 
 
 def has_permissions(allowed_roles=None,  banned_roles=None, allowed_user=None):
+    """Returns bool marking whether current user has permission."""
+
     # Check whether role has access
     if allowed_roles and current_user.role not in allowed_roles:
         return False
@@ -32,3 +35,10 @@ def has_permissions(allowed_roles=None,  banned_roles=None, allowed_user=None):
     return True
     
  
+def delete_images_from_tickets(tickets):
+    """Deletes images of given tickets from file system."""   
+    for ticket in tickets:
+        for image in ticket.images:
+            path = 'TownIssues' + image.url
+            if os.path.exists(path):
+                os.remove(path)
