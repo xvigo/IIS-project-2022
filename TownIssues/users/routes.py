@@ -83,7 +83,8 @@ def account_details():
         return redirect(url_for('users.account_details'))
 
 
-    profile_form.prefill(current_user)
+    if not profile_form.submitted():
+        profile_form.prefill(current_user)
     return render_template('account_details.html', title='Account Details', password_form=password_form, profile_form=profile_form)
 
 
@@ -134,7 +135,9 @@ def user_detail(user_id):
         flash('Password changed successfully.', 'success')
         return redirect(url_for('users.user_detail', user_id=user_id))
 
-    profile_form.prefill(user)
+    if not profile_form.submitted():
+        profile_form.prefill(user)
+
     return render_template('user_detail.html', title='User Details', password_form=password_form, profile_form=profile_form, user=user)
 
 
