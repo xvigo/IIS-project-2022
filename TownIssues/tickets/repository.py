@@ -1,5 +1,3 @@
-from pydoc import doc
-
 from flask import current_app
 from TownIssues import db
 from flask_login import  current_user

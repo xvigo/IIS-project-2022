@@ -64,13 +64,13 @@ def account_details():
     profile_form = AccountDetailsForm()
     password_form = ChangePasswordForm()
 
-    if profile_form.validate_on_submit():
+    if profile_form.submitted() and profile_form.validate():
         profile_form.populate_user(current_user)
         service.update()
         flash('Profile info updated successfully.', 'success')
         return redirect(url_for('users.account_details'))
 
-    elif password_form.validate_on_submit():
+    if password_form.submitted() and password_form.validate():
         password_correct = bcrypt.check_password_hash(current_user.password, password_form.current_password.data)
         if password_correct:
             hashed_new_password = bcrypt.generate_password_hash(password_form.new_password.data).decode('utf-8')
@@ -117,7 +117,7 @@ def user_detail(user_id):
     profile_form = AccountDetailsForm()
     password_form = SetPasswordForm()
 
-    if profile_form.validate_on_submit():
+    if profile_form.submitted() and profile_form.validate():
         user_identical_email = service.get_user(email=profile_form.email.data)
         if user_identical_email is  None or user_identical_email.id == user.id:
             profile_form.populate_user(user)
@@ -127,13 +127,13 @@ def user_detail(user_id):
             flash('User with this email address already exists. Please use a different one.', 'danger')
         return redirect(url_for('users.user_detail', user_id=user_id))
 
-    elif password_form.validate_on_submit():
+    if password_form.submitted() and password_form.validate():
         hashed_new_password = bcrypt.generate_password_hash(password_form.new_password.data).decode('utf-8')
         user.password = hashed_new_password
         service.update()
         flash('Password changed successfully.', 'success')
         return redirect(url_for('users.user_detail', user_id=user_id))
-        
+
     profile_form.prefill(user)
     return render_template('user_detail.html', title='User Details', password_form=password_form, profile_form=profile_form, user=user)
 

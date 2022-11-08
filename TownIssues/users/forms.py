@@ -40,12 +40,12 @@ class LoginForm(FlaskForm):
 
 
 class AccountDetailsForm(FlaskForm):
-    """Form for editing user details in account section."""             
-    email = StringField('Email', validators=[DataRequired(), Email(message="Email address has invalid format.")])
+    """Form for editing user details in account section."""  
     name = StringField('Name', validators=[DataRequired(), Length(min=2, max=50)])
+    email = StringField('Email', validators=[DataRequired(), Email(message="Email address has invalid format.")])
     surname = StringField('Surname', validators=[DataRequired(), Length(min=2, max=50)])   
     phone_number = StringField('Phone Number')   
-    submit = SubmitField('Update')
+    submit_profile = SubmitField('Update')
 
     def validate_email(self, email):
         """Validates whether email is unique and not used by different user."""
@@ -77,15 +77,20 @@ class AccountDetailsForm(FlaskForm):
             user.manager.phone_number = self.phone_number.data
         elif user.technician:
             user.technician.phone_number = self.phone_number.data
-            
+    
+    def submitted(self):
+        """Returns whether this form was submitted."""
+        return self.submit_profile.data
 
 class ChangePasswordForm(FlaskForm):     
     """Form for changing password in account details."""         
     current_password = PasswordField('Current Password', validators=[DataRequired(), Length(min=4, max=50)])
     new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=4, max=50), EqualTo('confirm_new_password', message="Passwords do not match. Try again!")])
     confirm_new_password = PasswordField('Confirm New Password', validators=[DataRequired(), Length(min=4, max=50)]) 
-    submit = SubmitField('Change Password')
+    submit_pwd = SubmitField('Change Password')
 
+    def submitted(self):
+        return self.submit_pwd.data
 
 ## ADMIN ONLY
 class AddUserForm(FlaskForm):
@@ -119,8 +124,11 @@ class SetPasswordForm(FlaskForm):
     """Admin only form for setting a new password for user."""             
     new_password = PasswordField('New Password', validators=[DataRequired(), Length(min=4, max=50), EqualTo('confirm_new_password', message="Passwords do not match. Try again!")])
     confirm_new_password = PasswordField('Confirm New Password', validators=[DataRequired(), Length(min=4, max=50)]) 
-    submit = SubmitField('Change Password')
+    submit_pwd = SubmitField('Change Password')
 
+    def submitted(self):
+        """Returns whether this form was submitted."""
+        return self.submit_pwd.data
 
 ## MANAGER ONLY
 class AddTechnicianForm(FlaskForm):
