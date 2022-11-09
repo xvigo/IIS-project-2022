@@ -68,7 +68,6 @@ def account_details():
         profile_form.populate_user(current_user)
         service.update()
         flash('Profile info updated successfully.', 'success')
-        return redirect(url_for('users.account_details'))
 
     if password_form.submitted() and password_form.validate():
         password_correct = bcrypt.check_password_hash(current_user.password, password_form.current_password.data)
@@ -80,11 +79,11 @@ def account_details():
 
         else:
             flash("Submitted current password is incorrect. Try again.", 'danger')
-        return redirect(url_for('users.account_details'))
 
 
     if not profile_form.submitted():
         profile_form.prefill(current_user)
+
     return render_template('account_details.html', title='Account Details', password_form=password_form, profile_form=profile_form)
 
 
@@ -126,14 +125,12 @@ def user_detail(user_id):
             flash('Profile info updated successfully.', 'success')
         else:
             flash('User with this email address already exists. Please use a different one.', 'danger')
-        return redirect(url_for('users.user_detail', user_id=user_id))
 
     if password_form.submitted() and password_form.validate():
         hashed_new_password = bcrypt.generate_password_hash(password_form.new_password.data).decode('utf-8')
         user.password = hashed_new_password
         service.update()
         flash('Password changed successfully.', 'success')
-        return redirect(url_for('users.user_detail', user_id=user_id))
 
     if not profile_form.submitted():
         profile_form.prefill(user)
