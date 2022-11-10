@@ -1,6 +1,6 @@
 from TownIssues import db
 from TownIssues.models import User
-from TownIssues.users.utils import delete_images_from_tickets
+from TownIssues.tickets.utils import delete_images_from_tickets
 
 
 def add_user(user):

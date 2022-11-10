@@ -92,6 +92,7 @@ def account_details():
 def delete_account():
     """Route for deleting users own account."""
     service.delete_user(current_user)
+    flash('Your account has been deleted successfully!', 'success')
     return redirect(url_for('users.login'))
 
 
@@ -146,6 +147,7 @@ def delete_user(user_id):
 
     user = service.get_user_or_404(user_id=user_id)
     service.delete_user(user)
+    flash('User deleted successfully!', 'success')
     return redirect(url_for('users.users_list'))
 
 

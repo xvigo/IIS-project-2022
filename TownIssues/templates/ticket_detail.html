@@ -77,7 +77,7 @@
     {% for comment in ticket.comments %}
         <tr id="comment_{{ comment.id }}">
             <td>{{comment.author.user.name}} {{comment.author.user.surname}}</td>
-            <td>{{comment.content}}</td>
+            <td id="comment_{{comment.id}}_content">{{comment.content}}</td>
             <td>{{comment.created_at}}</td>
             {% if has_permissions(allowed_roles=['admin', 'manager']) %}
             <td>
@@ -223,15 +223,15 @@
           comment.remove()
         }
 
+        function configureCommentModal(commentId) {
+          deleteBtn = document.getElementById("delete_comment_btn_modal");
+          deleteBtn.setAttribute("onclick", `deleteComment(${commentId})`)
+        }
+
         function deleteRequirement(requirementId, ticketId) {
           const requirement = document.getElementById(`requirement_${requirementId}`);
           fetch(`/delete_ticket_requirement/${requirementId}`, { method: "POST" });
           requirement.remove()
-        }
-
-        function configureCommentModal(commentId) {
-          deleteBtn = document.getElementById("delete_comment_btn_modal");
-          deleteBtn.setAttribute("onclick", `deleteComment(${commentId})`)
         }
 
         function configureRequirementModal(requirementId, ticketId){

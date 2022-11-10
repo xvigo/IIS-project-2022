@@ -34,11 +34,3 @@ def has_permissions(allowed_roles=None,  banned_roles=None, allowed_user=None):
 
     return True
     
- 
-def delete_images_from_tickets(tickets):
-    """Deletes images of given tickets from file system."""   
-    for ticket in tickets:
-        for image in ticket.images:
-            path = 'TownIssues' + image.url
-            if os.path.exists(path):
-                os.remove(path)
