@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+    <table id="requirements" class="table table-striped table-bordered table-hover" >
+      <thead>
+          <tr>
+              <th>Vyřešeno</th>
+              <th>Přidělený technik</th>
+              <th>Vytvořil</th>
+              <th>Vytvořeno</th>
+              <th>Akce</th>
+          </tr>
+      </thead>
+      <tbody>
+    {% for requirement in requirements %}
+    <tr id="requirement_{{ requirement.id }}">
+    {% if requirement.real_time %}
+      <td><i class="fa solid fa-square-check status success"></i></td>
+    {% else %}
+      <td><i class="fa solid fa-square-xmark status failure"></i> </td>
+    {% endif %}
+      <td>{{requirement.technician.user.name}} {{requirement.technician.user.surname}}</td>
+      <td>{{requirement.manager.user.name}} {{requirement.manager.user.surname}}</td>
+      <td>{{requirement.created_at}}</td>
+      <td>
+          <a class="btn btn-primary far fa-eye" href="{{ url_for('service_requirements.requirement_detail', requirement_id=requirement.id) }}"></a>
+      </td>
+    </tr>
+  {% endfor %}
+      </tbody>
+    </table>
+{% endblock content %}

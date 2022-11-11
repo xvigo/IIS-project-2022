@@ -4,7 +4,7 @@
         <form method="POST" action="">
             {{ form.hidden_tag() }}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-3">Create requirement</legend>
+                <legend class="border-bottom mb-3">{{legend}}</legend>
                 <div class="form-group">
                     {{ form.content.label(class="form-control-label") }}
                     {{ form.content(class="form-control form-control-lg") }}

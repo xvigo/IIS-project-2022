@@ -1,5 +1,3 @@
-import datetime
-from enum import unique
 from flask_login import UserMixin
 from sqlalchemy.ext.hybrid import hybrid_property
 
@@ -79,12 +77,12 @@ class Ticket(db.Model):
     street = db.Column(db.String(200), nullable=False)
     house_number = db.Column(db.Integer, nullable=True)
     current_state = db.Column(db.String(200), nullable=False, default='recieved')
-    created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    created_at = db.Column(db.TIMESTAMP, server_default=db.func.now())
     
     id_resident = db.Column(db.Integer, db.ForeignKey('resident.id_resident'), nullable=True)
     
     images = db.relationship('Image',  cascade='all, delete-orphan', backref='ticket', lazy=True)
-    requirements = db.relationship('ServiceRequirement',  cascade='all, delete-orphan', backref='ticket', lazy=True)
+    requirements = db.relationship('ServiceRequirement',  cascade='all, delete-orphan', backref='ticket', lazy=True, order_by='ServiceRequirement.id.desc()')
     comments = db.relationship('TicketComment', order_by="desc(TicketComment.created_at)", cascade='all, delete-orphan', backref='ticket', lazy=True)
 
     def __repr__(self): #returns data
@@ -100,13 +98,13 @@ class ServiceRequirement(db.Model):
     estimated_time = db.Column(db.TIMESTAMP, nullable=True)
     real_time = db.Column(db.TIMESTAMP, nullable=True)
     price = db.Column(db.Integer, nullable=True)
-    created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    created_at = db.Column(db.TIMESTAMP, server_default=db.func.now())
 
     id_manager = db.Column(db.Integer, db.ForeignKey('manager.id_manager'), nullable=False)
     id_technician = db.Column(db.Integer, db.ForeignKey('technician.id_technician'), nullable=True)
     id_ticket = db.Column(db.Integer, db.ForeignKey('ticket.id_ticket'), nullable=False)
 
-    comments = db.relationship('RequirementComment',  cascade='all, delete-orphan', backref='requirement', lazy=True)
+    comments = db.relationship('RequirementComment',  cascade='all, delete-orphan', backref='requirement', lazy=True, order_by='RequirementComment.created_at.desc()')
 
      
     def __repr__(self): #returns data
@@ -118,7 +116,7 @@ class RequirementComment(db.Model):
     __tablename__ = 'requirement_comment'
     id = db.Column('id_requirement_comment', db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    created_at = db.Column(db.TIMESTAMP, server_default=db.func.now())
 
     id_service_requirement = db.Column(db.Integer, db.ForeignKey('service_requirement.id_service_requirement'), nullable=False)
     id_technician = db.Column(db.Integer, db.ForeignKey('technician.id_technician'), nullable=False)
@@ -131,7 +129,7 @@ class TicketComment(db.Model):
     __tablename__ = 'ticket_comment'
     id = db.Column('id_ticket_comment', db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.TIMESTAMP, nullable=False, default=datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    created_at = db.Column(db.TIMESTAMP, server_default=db.func.now())
 
     id_ticket = db.Column(db.Integer, db.ForeignKey('ticket.id_ticket'), nullable=False)
     id_manager = db.Column(db.Integer, db.ForeignKey('manager.id_manager'), nullable=False)

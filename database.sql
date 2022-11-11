@@ -50,7 +50,7 @@ CREATE TABLE ticket(
     street VARCHAR(200) NOT NULL,
     house_number INT,
     current_state VARCHAR(200) NOT NULL,
-    created_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
 
     id_resident INT REFERENCES resident(id_resident) ON DELETE SET NULL
 );
@@ -63,7 +63,7 @@ CREATE TABLE service_requirement(
     estimated_time DATE,
     real_time DATE,
     price INT,
-       created_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
 
     id_manager INT NOT NULL,
     id_technician INT,
@@ -81,7 +81,7 @@ CREATE TABLE requirement_comment(
     id_requirement_comment SERIAL PRIMARY KEY,
 
     content TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
 
     id_service_requirement INT NOT NULL,
     id_technician INT NOT NULL,
@@ -96,7 +96,7 @@ CREATE TABLE ticket_comment(
     id_ticket_comment SERIAL PRIMARY KEY,
 
     content TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT NOW(),
 
     id_manager INT NOT NULL,
     id_ticket INT NOT NULL,
@@ -179,7 +179,7 @@ VALUES
 INSERT INTO
     service_requirement(content, is_finished, estimated_time, price, real_time, created_at, id_manager, id_technician, id_ticket)
 VALUES
-    ('Repair the lamp.', TRUE,  '02:00:00', 5000, '50.0', '2004-12-19 19:23:54', 1, 1, 1),
+    ('Repair the lamp.', TRUE,  '2004-10-15', 5000, '2004-10-15', '2004-12-19 19:23:54', 1, 1, 1),
     ('Please look at the brightness level of the lamp and reduce it if necessary.', FALSE, '2020-12-19 19:23:54', NULL, NULL, '2005-12-19 19:23:54', 2, 2, 2);
 
 /************************** REQUIREMENT COMMENT **************************/
@@ -189,3 +189,10 @@ VALUES
     ('2004-12-25 19:23:54', 'I am now full, i will look at it next week.', 1, 1),
     ('2004-12-25 19:23:54', 'Lamp repaired, I just had to replace the light bulb.', 1, 1);
 
+
+
+
+INSERT INTO
+    service_requirement(content, is_finished, estimated_time, price, real_time, created_at, id_manager, id_technician, id_ticket)
+VALUES
+    ('test', FALSE, '2020-12-19 19:23:54', NULL, NULL, NULL, 2, 2, 2);

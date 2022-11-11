@@ -28,7 +28,6 @@ def add_ticket():
 def ticket_detail(ticket_id):
     """Route for displaying ticket details."""
     ticket = service.get_ticket_or_404(ticket_id=ticket_id)
-
     add_comment_form = AddCommentForm()
     edit_comment_form = EditCommentForm()
 
@@ -56,7 +55,7 @@ def ticket_detail(ticket_id):
 def update_ticket(ticket_id):
     """Route for updating ticket details."""
     ticket =service.get_ticket_or_404(ticket_id=ticket_id)
-    check_permissions(allowed_roles=['resident', 'admin'], allowed_user=ticket.author.user)
+    check_permissions(allowed_user=ticket.author.user)
 
     form = UpdateTicketForm()
     if request.method == 'GET':
@@ -103,20 +102,21 @@ def my_tickets_list():
     return render_template('tickets_list.html', tickets=tickets)
 
 
-
 @tickets.route("/delete_ticket_comment/<int:comment_id>", methods=['POST'])
 @login_required
 def delete_comment(comment_id):
     """Route for deleting ticket comments."""
     comment = service.get_ticket_comment(comment_id=comment_id)
-    allowed = has_permissions(allowed_roles=['manager', 'admin'], allowed_user=comment.author.user)
+    allowed = has_permissions(allowed_user=comment.author.user)
 
-    if comment  and allowed:
+    if comment and allowed:
         service.delete_ticket_comment(comment=comment)
     return redirect(url_for('main.home'))
 
 @tickets.route("/delete_orphan_images")
 def delete_orphans():
+    """Development route for deleting orphan image files
+    caused by removing images directly from db."""
     from TownIssues.tickets.utils import delete_orphan_images
     delete_orphan_images()
     return render_template('layout.html')

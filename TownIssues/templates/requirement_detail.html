@@ -12,12 +12,12 @@
 
           </div>
         </div>
-        <a class="btn btn-primary mb-2 mt-2" type="Edit" href="/tickets/{{ ticket.id }}/requirements/{{ requirement.id }}/update">Edit requirement</a>.
+        <a class="btn btn-primary mb-2 mt-2" type="Edit" href="{{ url_for('service_requirements.update_requirement', requirement_id=requirement.id) }}">Edit requirement</a>.
     </article>
 
 
 
-    {% if current_user.role in ['admin', 'manager'] %} <!-- TODO zmenit na technician -->
+    {% if current_user.role == 'technician' %}
     <div class="requirement_detail_blocks" id="comments_block">
         <div>
           <form method="POST" action="">
@@ -53,9 +53,9 @@
     {% for comment in requirement.comments %}
      <tr id="comment_{{ comment.id }}">
         <td>{{comment.author.user.name}} {{comment.author.user.surname}}</td>
-        <td>{{comment.content}}</td>
+        <td id="comment_{{comment.id}}_content">{{comment.content}}</td>
         <td>{{comment.created_at}}</td>
-        {% if has_permissions(allowed_roles=['admin', 'manager']) %}
+        {% if has_permissions(allowed_user=comment.author.user) %}
         <td>
             <div id="comment_{{comment.id}}_buttons" class="detail-buttons">
               <button type="button" class="btn btn-success fa-regular fa-edit mr-2" data-toggle="modal" data-target="#editCommentModal"

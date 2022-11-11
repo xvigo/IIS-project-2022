@@ -80,11 +80,6 @@ class EditCommentForm(FlaskForm):
     edit_content = TextAreaField('Comment', id="modal_edit_comment_content", validators=[DataRequired()])
     edit_submit = SubmitField('Save')
 
-    def prefill(self, comment):
-        """Prefills form with values form given comment."""
-        self.edit_id.data = comment.id
-        self.edit_content.data = comment.content
-
     def populate_comment(self, comment):
         """Populates given comment variables with values submitted in form."""
         comment.content = self.edit_content.data

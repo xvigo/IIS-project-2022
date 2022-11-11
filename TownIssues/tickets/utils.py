@@ -23,6 +23,7 @@ def delete_images_from_tickets(tickets):
 
 
 def delete_orphan_images():
+    """Development route for deleting orphan image files."""
     from TownIssues.models import Image
     from TownIssues import db
 

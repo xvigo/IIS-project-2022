@@ -34,3 +34,6 @@ def has_permissions(allowed_roles=None,  banned_roles=None, allowed_user=None):
 
     return True
     
+def check_technician_permitted(allowed_technician):
+    if current_user.role == 'technician' and current_user.technician != allowed_technician:
+        abort(403)
