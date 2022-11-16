@@ -1,7 +1,8 @@
 from flask import Blueprint, flash, abort, redirect, url_for, render_template, request
 from flask_login import login_required, current_user
 
-from TownIssues.service_requirements.forms import AddRequirementForm, RequirementCommentForm, RequirementEditCommentForm
+from TownIssues.service_requirements.forms import AddRequirementForm, RequirementCommentForm, \
+    RequirementEditCommentForm, UpdateRequirementForm
 from TownIssues.models import ServiceRequirement, RequirementComment
 from TownIssues.service_requirements import service
 from TownIssues.users.utils import check_permissions, has_permissions, check_technician_permitted
@@ -48,6 +49,27 @@ def update_requirement(requirement_id):
     form.prefill(requirement)
 
     return render_template('add_requirement.html', title='Edit Requirement', form=form, legend='Edit Requirement')
+
+
+@service_requirements.route("/requirements/<int:requirement_id>/update/technician",
+                            methods=['GET', 'POST'])
+@login_required
+def update_requirement_as_technician(requirement_id):
+    """Manager route for updating service requirement."""
+    requirement = service.get_requirement_or_404(requirement_id)
+    check_permissions(allowed_user=requirement.technician.user)
+
+    form = UpdateRequirementForm(submit_label='Update Requirement', technician=requirement.id_technician)
+
+    if form.validate_on_submit():
+        form.populate_requirement(requirement)
+        service.update()
+        flash('Requirement updated successfully.', 'success')
+        return redirect(url_for('service_requirements.requirement_detail', requirement_id=requirement.id))
+
+    form.prefill(requirement)
+
+    return render_template('update_requirement.html', title='Edit Requirement', form=form, legend='Edit Requirement')
 
 
 

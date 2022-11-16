@@ -8,10 +8,6 @@
                     {{legend}}
                 </legend>
                 <div class="form-group">
-                    {{ form.content.label(class="form-control-label") }}
-                    {{ form.content(class="form-control-lg form-control") }}
-                </div>
-                <div class="form-group">
                     {{ form.estimated_time.label(class="form-control-label") }}
                     {{ form.estimated_time(class="form-control-lg form-control") }}
                     {% if form.estimated_time.errors %}
@@ -20,7 +16,6 @@
                         {% endfor %}
                     {% endif %}
                 </div>
-
                 <div class="row form-group">
                     <div class="col-sm-6">
                         {{ form.real_time.label(class="form-control-label") }}
@@ -42,5 +37,32 @@
             </div>
         </form>
     </div>
+    <script>
+        function enabled_change()
+        {
+            const real_time_input = $("#real_time");
+            const price_input = $("#price");
+            if ($('#estimated_time').val() === '')
+            {
+                real_time_input.prop('disabled', true);
+                real_time_input.css('background', 'lightgrey');
+                price_input.prop('disabled', true);
+                price_input.css('background', 'lightgrey');
+            }
+            else
+            {
+                real_time_input.prop('disabled', false);
+                real_time_input.css('background', 'white');
+                price_input.prop('disabled', false);
+                price_input.css('background', 'white');
+
+            }
+        }
+        enabled_change();
+        $('#estimated_time').on('input', function(){
+            enabled_change();
+        })
+
+    </script>
 
 {% endblock content %}

@@ -2,7 +2,7 @@ from time import strftime
 
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, IntegerField, SubmitField, SelectField, BooleanField, DateField, \
-    TimeField, FloatField
+    TimeField, FloatField, validators
 from wtforms.validators import DataRequired, NumberRange, ValidationError
 from flask_wtf.file import FileField, FileAllowed
 from datetime import datetime
@@ -86,3 +86,27 @@ class RequirementEditCommentForm(FlaskForm):
     def submitted_and_valid(self):
         """Returns whether this form was submitted and is valid."""
         return self.edit_submit.data and self.validate()
+
+class UpdateRequirementForm(FlaskForm):
+    """Form for updating service requirement as technician"""
+    def __init__(self, submit_label=None, **kw):
+        super(UpdateRequirementForm, self).__init__(**kw)
+        if submit_label is not None:
+            self.submit.label.text = submit_label
+
+    estimated_time = DateField('Estimated time', validators=[validate_estimated_time])
+    real_time = FloatField('Real time', validators=[validators.Optional(), NumberRange(min=0)])
+    price = IntegerField('Price', validators=[validators.Optional(), NumberRange(min=0)])
+    submit = SubmitField('Update Requirement')
+
+    def populate_requirement(self, requirement):
+        """Populates requirement variables with values form form."""
+        requirement.estimated_time = self.estimated_time.data
+        requirement.real_time = self.real_time.data
+        requirement.price = self.price.data
+
+    def prefill(self, requirement):
+        """Prefill form with requirement data."""
+        self.estimated_time.data = requirement.estimated_time
+        self.real_time.data = requirement.real_time
+        self.price.data = requirement.price

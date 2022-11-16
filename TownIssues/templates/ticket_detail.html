@@ -119,7 +119,7 @@
         <td>{{requirement.manager.user.name}} {{requirement.manager.user.surname}}</td>
         <td>{{requirement.created_at}}</td>
         <td>
-            <a class="btn btn-primary far fa-eye" href="/tickets/{{ ticket.id }}/requirements/{{ requirement.id }}"></a>
+            <a class="btn btn-primary far fa-eye" href="/requirements/{{ requirement.id }}"></a>
             <button type="button" class="btn btn-danger fas fa-trash-alt" data-toggle="modal" data-target="#deleteRequirementModal"
                     onclick="configureRequirementModal({{requirement.id}}, {{ ticket.id }})"> </button>
         </td>

@@ -9,10 +9,13 @@
             <p class="article-content">Reálný čas: {{ requirement.real_time }}</p>
             <p class="article-content">Cena: {{ requirement.price }} </p>
             <p class="mt-4"> {{ requirement.content }} </p>
-
           </div>
         </div>
-        <a class="btn btn-primary mb-2 mt-2" type="Edit" href="{{ url_for('service_requirements.update_requirement', requirement_id=requirement.id) }}">Edit requirement</a>.
+        {% if current_user.role == 'technician' and current_user.id == requirement.technician.user.id %}
+            <a class="btn btn-primary mb-2 mt-2" type="Edit" href="{{ url_for('service_requirements.update_requirement_as_technician', requirement_id=requirement.id) }}">Edit requirement</a>.
+        {% elif current_user.role == 'manager' and current_user.id == requirement.manager.user.id %}
+            <a class="btn btn-primary mb-2 mt-2" type="Edit" href="{{ url_for('service_requirements.update_requirement', requirement_id=requirement.id) }}">Edit requirement</a>.
+        {% endif %}
     </article>
 
 
