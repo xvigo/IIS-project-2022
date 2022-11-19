@@ -84,9 +84,17 @@ body {
   }
 
   .responsive {
+    position: relative;
     padding: 0 6px;
     float: left;
     width: 25%;
+  }
+
+  .absolute{
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding-right: 6px;
   }
 
   div.gallery {
@@ -149,4 +157,9 @@ body {
 
 .success{
   color:green;
+}
+
+.delete-icon{
+  width: 30px;
+  height: 30px;
 }

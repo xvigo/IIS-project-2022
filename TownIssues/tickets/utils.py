@@ -13,6 +13,13 @@ def save_image(form_image):
     return picture_fn
 
 
+def delele_image_from_ticket(image):
+    """Deletes image of given ticket from file system."""
+    path = 'TownIssues' + image.url
+    if os.path.exists(path):
+        os.remove(path)
+
+
 def delete_images_from_tickets(tickets):
     """Deletes images of given tickets from file system."""   
     for ticket in tickets:

@@ -1,6 +1,6 @@
 from TownIssues import db
-from TownIssues.models import Ticket, TicketComment
-from TownIssues.tickets.utils import delete_images_from_tickets
+from TownIssues.models import Ticket, TicketComment, Image
+from TownIssues.tickets.utils import delete_images_from_tickets, delele_image_from_ticket
 
 def add_ticket(ticket):
     """Adds ticket into database."""
@@ -44,6 +44,17 @@ def delete_ticket_comment(comment):
     """Delete ticket comment from database."""
     db.session.delete(comment)
     db.session.commit()
+    
+def get_ticket_image(image_id):
+    """Return ticket image with given id."""
+    return Image.query.get_or_404(image_id)
+
+def delete_ticket_image(image):
+    """Delete image from database."""
+    delele_image_from_ticket(image)
+    db.session.delete(image)
+    db.session.commit()
+
 
 def update():
     """Saves any changes made in models to db."""
