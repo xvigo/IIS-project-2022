@@ -6,14 +6,21 @@
             <th>Uživatel</th>
             <th>Role</th>
             <th>E-mail</th>
+            <th>Akce</th>
         </tr>
     </thead>
     <tbody>
     {% for user in users.items %}
-        <tr>
-            <td><a href="{{ url_for('users.user_detail', user_id=user.id) }}">{{ user.name }} {{ user.surname }}</a></td>
+        <tr id="technician_{{ user.id }}">
+            <td>{{ user.name }} {{ user.surname }}</td>
             <td>{{user.role}}</td>
             <td>{{user.email}}</td>
+            <td>
+              <div id="technician_{{user.id}}_button" class="detail-buttons">
+                <button type="button" class="btn btn-danger fas fa-trash-alt" data-toggle="modal" data-target="#deleteTechnicianModal"
+                        onclick="configureTechnicianModal({{user.id}})"> </button>
+              </div>
+            </td>
         </tr>
     {% endfor %}
     </tbody>
@@ -29,5 +36,37 @@
         <span class="align-top">...</span>
         {% endif %}
     {% endfor %}
-    
+
+    <div class="modal fade" id="deleteTechnicianModal" tabindex="-1" role="dialog" aria-labelledby="deleteTechnicianModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteTechnicianModalLabel">Delete Technician</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <p>Do you really want to delete your technician?</p>
+            </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button id="delete_technician_btn_modal" type="button" class="btn btn-danger" data-dismiss="modal" onclick="">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function deleteTechnician(technicianId) {
+        const technician = document.getElementById(`technician_${technicianId}`);
+        fetch(`/delete_technician/${technicianId}`, { method: "POST" });
+        technician.remove()
+      }
+
+      function configureTechnicianModal(technicianId) {
+        deleteBtn = document.getElementById("delete_technician_btn_modal");
+        deleteBtn.setAttribute("onclick", `deleteTechnician(${technicianId})`)
+      }
+    </script>
 {% endblock content %}

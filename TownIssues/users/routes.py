@@ -187,10 +187,25 @@ def add_technician():
     
     return render_template('add_service_technician.html', title='Add Technician', form=form)
 
+
+@users.route("/delete_technician/<int:technician_id>", methods=['POST'])
+@login_required
+def delete_technician(technician_id):
+    """Manager route for deleting technicians"""
+    check_permissions(allowed_roles=['manager'])
+    
+    technician = service.get_user_or_404(user_id=technician_id)
+    
+    if technician:
+        service.delete_user(user=technician)
+    return redirect(url_for('main.home'))
+    
+
+
 @users.route("/technicians")
 @login_required
 def technicians_list():
-    """Manager route for viewing all users using pagination."""
+    """Manager route for viewing all technicians using pagination."""
     check_permissions(allowed_roles=['manager'])
 
     page = request.args.get('page', 1, type=int)

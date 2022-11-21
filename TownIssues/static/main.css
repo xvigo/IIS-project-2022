@@ -90,7 +90,7 @@ body {
     width: 25%;
   }
 
-  .absolute{
+  .absolute {
     position: absolute;
     top: 0px;
     right: 0px;
@@ -135,31 +135,31 @@ body {
     }
   }
 
-#tickets{
+#tickets {
   width: 100%;
   border-spacing: 0
 }
 
-#sreq_block{
+#sreq_block {
   display: none;
 }
-.row{
+.row {
   display: flex;
 }
 
-.status{
+.status {
   font-size: 2.5rem;
 }
 
-.failure{
+.failure {
   color: red;
 }
 
-.success{
+.success {
   color:green;
 }
 
-.delete-icon{
+.delete-icon {
   width: 30px;
   height: 30px;
 }
