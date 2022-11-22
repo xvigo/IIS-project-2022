@@ -20,7 +20,7 @@
     {% endif %}
       <td>{{requirement.technician.user.name}} {{requirement.technician.user.surname}}</td>
       <td>{{requirement.manager.user.name}} {{requirement.manager.user.surname}}</td>
-      <td>{{requirement.created_at}}</td>
+      <td>{{requirement.created_at.strftime("%m/%d/%Y %H:%M:%S")}}</td>
       <td>
           <a class="btn btn-primary far fa-eye" href="{{ url_for('service_requirements.requirement_detail', requirement_id=requirement.id) }}"></a>
       </td>

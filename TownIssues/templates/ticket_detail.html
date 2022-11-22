@@ -78,7 +78,7 @@
         <tr id="comment_{{ comment.id }}">
             <td>{{comment.author.user.name}} {{comment.author.user.surname}}</td>
             <td id="comment_{{comment.id}}_content">{{comment.content}}</td>
-            <td>{{comment.created_at}}</td>
+            <td>{{comment.created_at.strftime("%m/%d/%Y %H:%M:%S")}}</td>
             {% if has_permissions(allowed_roles=['admin', 'manager']) %}
             <td>
                 <div id="comment_{{comment.id}}_buttons" class="detail-buttons">
@@ -117,7 +117,7 @@
       {% endif %}
         <td>{{requirement.technician.user.name}} {{requirement.technician.user.surname}}</td>
         <td>{{requirement.manager.user.name}} {{requirement.manager.user.surname}}</td>
-        <td>{{requirement.created_at}}</td>
+        <td>{{requirement.created_at.strftime("%m/%d/%Y %H:%M:%S")}}</td>
         <td>
             <a class="btn btn-primary far fa-eye" href="/requirements/{{ requirement.id }}"></a>
             <button type="button" class="btn btn-danger fas fa-trash-alt" data-toggle="modal" data-target="#deleteRequirementModal"

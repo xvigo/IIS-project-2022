@@ -57,7 +57,7 @@
      <tr id="comment_{{ comment.id }}">
         <td>{{comment.author.user.name}} {{comment.author.user.surname}}</td>
         <td id="comment_{{comment.id}}_content">{{comment.content}}</td>
-        <td>{{comment.created_at}}</td>
+        <td>{{comment.created_at.strftime("%m/%d/%Y %H:%M:%S")}}</td>
         {% if has_permissions(allowed_user=comment.author.user) %}
         <td>
             <div id="comment_{{comment.id}}_buttons" class="detail-buttons">
