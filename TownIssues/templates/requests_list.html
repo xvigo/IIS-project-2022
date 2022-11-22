@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+    <table id="requests" class="table table-striped table-bordered table-hover" >
+      <thead>
+          <tr>
+              <th>State</th>
+              <th>Technician</th>
+              <th>Created by</th>
+              <th>Created at</th>
+              <th>Action</th>
+          </tr>
+      </thead>
+      <tbody>
+    {% for request in requests %}
+    <tr id="request_{{ request.id }}">
+    {% if request.real_time %}
+      <td><i class="fa solid fa-square-check status success"></i></td>
+    {% else %}
+      <td><i class="fa solid fa-square-xmark status failure"></i> </td>
+    {% endif %}
+      <td>{{request.technician.user.name}} {{request.technician.user.surname}}</td>
+      <td>{{request.manager.user.name}} {{request.manager.user.surname}}</td>
+      <td>{{request.created_at.strftime("%m/%d/%Y %H:%M:%S")}}</td>
+      <td>
+          <a class="btn btn-primary far fa-eye" href="{{ url_for('service_requests.request_detail', request_id=request.id) }}"></a>
+      </td>
+    </tr>
+  {% endfor %}
+      </tbody>
+    </table>
+{% endblock content %}

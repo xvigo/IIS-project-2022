@@ -26,12 +26,12 @@ def create_app(config_class=None):
     from TownIssues.users.routes import users
     from TownIssues.tickets.routes import tickets
     from TownIssues.errors.handlers import errors
-    from TownIssues.service_requirements.routes import service_requirements
+    from TownIssues.service_requests.routes import service_requests
 
     app.register_blueprint(main)
     app.register_blueprint(users)
     app.register_blueprint(tickets)
     app.register_blueprint(errors)
-    app.register_blueprint(service_requirements)
+    app.register_blueprint(service_requests)
 
     return app

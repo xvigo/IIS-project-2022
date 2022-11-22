@@ -40,13 +40,17 @@
                 <a class="nav-item nav-link" href="/my_tickets">My Tickets</a>
                 <a class="nav-item nav-link" href="/tickets/add">New Ticket</a>
               {% elif current_user.role == 'manager' %}
-              <a class="nav-item nav-link" href="/add_technician">Add Technician</a>
+              <a class="nav-item nav-link" href="/tickets">Tickets</a>
               <a class="nav-item nav-link" href="/technicians">Technicians</a>
+              <a class="nav-item nav-link" href="/add_technician">Add Technician</a>
               {% elif current_user.role == 'technician' %}
+              <a class="nav-item nav-link" href="/my_service_requests">Pending Services</a>
+              <a class="nav-item nav-link" href="/my_service_requests">Finished Services</a>
+
 
               {% else %}
                 <a class="nav-item nav-link" href="/admin/users">Users</a>
-                <a class="nav-item nav-link" href="/admin/users/add">New User</a>
+                <a class="nav-item nav-link" href="/admin/users/add">Add User</a>
                 <a class="nav-item nav-link" href="/tickets">Tickets</a>
               {% endif %}
             </div>

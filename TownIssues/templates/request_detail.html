@@ -2,26 +2,26 @@
 {% block content %}
     <article class="media content-section flex">
         <div class="media-body">
-          <h3 class="article-title">Technician: {{ requirement.technician.user.name }} {{ requirement.technician.user.surname }}</h3>
+          <h3 class="article-title">Technician: {{ request.technician.user.name }} {{ request.technician.user.surname }}</h3>
           <div>
-            <p class="article-content">Created by: {{ requirement.manager.user.name }} {{ requirement.manager.user.surname }}</p>
-            <p class="article-content">Estimated time: {{ requirement.estimated_time }}</p>
-            <p class="article-content">Real time: {{ requirement.real_time }}</p>
-            <p class="article-content">Price: {{ requirement.price }} </p>
-            <p class="mt-4"> {{ requirement.content }} </p>
+            <p class="article-content">Created by: {{ request.manager.user.name }} {{ request.manager.user.surname }}</p>
+            <p class="article-content">Estimated time: {{ request.estimated_time }}</p>
+            <p class="article-content">Real time: {{ request.real_time }}</p>
+            <p class="article-content">Price: {{ request.price }} </p>
+            <p class="mt-4"> {{ request.content }} </p>
           </div>
         </div>
-        {% if current_user.role == 'technician' and current_user.id == requirement.technician.user.id %}
-            <a class="btn btn-primary mb-2 mt-2" type="Edit" href="{{ url_for('service_requirements.update_requirement_as_technician', requirement_id=requirement.id) }}">Edit requirement</a>.
-        {% elif current_user.role == 'manager' and current_user.id == requirement.manager.user.id %}
-            <a class="btn btn-primary mb-2 mt-2" type="Edit" href="{{ url_for('service_requirements.update_requirement', requirement_id=requirement.id) }}">Edit requirement</a>.
+        {% if current_user.role == 'technician' and current_user.id == request.technician.user.id %}
+            <a class="btn btn-primary mb-2 mt-2" type="Edit" href="{{ url_for('service_requests.update_request_as_technician', request_id=request.id) }}">Edit request</a>.
+        {% elif current_user.role == 'manager' and current_user.id == request.manager.user.id %}
+            <a class="btn btn-primary mb-2 mt-2" type="Edit" href="{{ url_for('service_requests.update_request', request_id=request.id) }}">Edit request</a>.
         {% endif %}
     </article>
 
 
 
     {% if current_user.role == 'technician' %}
-    <div class="requirement_detail_blocks" id="comments_block">
+    <div class="request_detail_blocks" id="comments_block">
         <div>
           <form method="POST" action="">
             {{ add_comment_form.hidden_tag()}}
@@ -53,7 +53,7 @@
         </tr>
     </thead>
     <tbody>
-    {% for comment in requirement.comments %}
+    {% for comment in request.comments %}
      <tr id="comment_{{ comment.id }}">
         <td>{{comment.author.user.name}} {{comment.author.user.surname}}</td>
         <td id="comment_{{comment.id}}_content">{{comment.content}}</td>
@@ -121,7 +121,7 @@
     <script>
         function deleteComment(commentId) {
           const comment = document.getElementById(`comment_${commentId}`);
-          fetch(`/delete_requirement_comment/${commentId}`, { method: "POST" });
+          fetch(`/delete_request_comment/${commentId}`, { method: "POST" });
           comment.remove()
         }
 

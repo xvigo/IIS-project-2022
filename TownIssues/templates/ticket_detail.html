@@ -37,7 +37,7 @@
         <input type="radio" name="options" id="comments_option" autocomplete="off" checked> Comments
       </label>
       <label class="btn btn-secondary">
-        <input type="radio" name="options" id="sreq_option" autocomplete="off"> Service requirements
+        <input type="radio" name="options" id="sreq_option" autocomplete="off"> Service requests
       </label>
     </div>
 
@@ -96,8 +96,8 @@
     </div>
 
     <div class="ticket_detail_blocks" id="sreq_block">
-        <a class="btn btn-primary mb-2 mt-2" type="submit" href="/tickets/{{ ticket.id }}/add_requirement">Add requirement</a>.
-     <table id="requirements" class="table table-striped table-bordered table-hover" >
+        <a class="btn btn-primary mb-2 mt-2" type="submit" href="/tickets/{{ ticket.id }}/add_request">Add request</a>.
+     <table id="requests" class="table table-striped table-bordered table-hover" >
         <thead>
             <tr>
                 <th>State</th>
@@ -108,20 +108,20 @@
             </tr>
         </thead>
         <tbody>
-      {% for requirement in ticket.requirements %}
-      <tr id="requirement_{{ requirement.id }}">
-      {% if requirement.real_time %}
+      {% for request in ticket.requests %}
+      <tr id="request_{{ request.id }}">
+      {% if request.real_time %}
         <td><i class="fa solid fa-square-check status success"></i></td>
       {% else %}
         <td><i class="fa solid fa-square-xmark status failure"></i> </td>
       {% endif %}
-        <td>{{requirement.technician.user.name}} {{requirement.technician.user.surname}}</td>
-        <td>{{requirement.manager.user.name}} {{requirement.manager.user.surname}}</td>
-        <td>{{requirement.created_at.strftime("%m/%d/%Y %H:%M:%S")}}</td>
+        <td>{{request.technician.user.name}} {{request.technician.user.surname}}</td>
+        <td>{{request.manager.user.name}} {{request.manager.user.surname}}</td>
+        <td>{{request.created_at.strftime("%m/%d/%Y %H:%M:%S")}}</td>
         <td>
-            <a class="btn btn-primary far fa-eye" href="/requirements/{{ requirement.id }}"></a>
-            <button type="button" class="btn btn-danger fas fa-trash-alt" data-toggle="modal" data-target="#deleteRequirementModal"
-                    onclick="configureRequirementModal({{requirement.id}}, {{ ticket.id }})"> </button>
+            <a class="btn btn-primary far fa-eye" href="/requests/{{ request.id }}"></a>
+            <button type="button" class="btn btn-danger fas fa-trash-alt" data-toggle="modal" data-target="#deleteRequestModal"
+                    onclick="configureRequestModal({{request.id}}, {{ ticket.id }})"> </button>
         </td>
       </tr>
     {% endfor %}
@@ -171,21 +171,21 @@
       </div>
     </div>
 
-    <div class="modal fade" id="deleteRequirementModal" tabindex="-1" role="dialog" aria-labelledby="deleteRequirementModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteRequestModal" tabindex="-1" role="dialog" aria-labelledby="deleteRequestModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="deleteRequirementModalLabel">Delete Comment</h5>
+            <h5 class="modal-title" id="deleteRequestModalLabel">Delete Comment</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-              <p>Do you really want to delete this requirement?</p>
+              <p>Do you really want to delete this request?</p>
             </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            <button id="delete_requirement_btn_modal" type="button" class="btn btn-danger" data-dismiss="modal" onclick="">Delete</button>
+            <button id="delete_request_btn_modal" type="button" class="btn btn-danger" data-dismiss="modal" onclick="">Delete</button>
           </div>
         </div>
       </div>
@@ -228,14 +228,14 @@
           deleteBtn.setAttribute("onclick", `deleteComment(${commentId})`)
         }
 
-        function deleteRequirement(requirementId, ticketId) {
-          const requirement = document.getElementById(`requirement_${requirementId}`);
-          fetch(`/delete_ticket_requirement/${requirementId}`, { method: "POST" });
-          requirement.remove()
+        function deleteRequest(requestId, ticketId) {
+          const request = document.getElementById(`request_${requestId}`);
+          fetch(`/delete_ticket_request/${requestId}`, { method: "POST" });
+          request.remove()
         }
 
-        function configureRequirementModal(requirementId, ticketId){
-            $('#delete_requirement_btn_modal').attr('onclick', `deleteRequirement(${requirementId}, ${ticketId})`)
+        function configureRequestModal(requestId, ticketId){
+            $('#delete_request_btn_modal').attr('onclick', `deleteRequest(${requestId}, ${ticketId})`)
         }
 
         function loadEditComment(commentId) {

@@ -36,7 +36,7 @@ class Manager(db.Model):
 
     id_user = db.Column(db.Integer, db.ForeignKey('user_t.id_user'), nullable=False)
 
-    requirements = db.relationship('ServiceRequirement', cascade='all, delete-orphan', backref='manager', lazy=True)
+    requests = db.relationship('ServiceRequest', cascade='all, delete-orphan', backref='manager', lazy=True)
     comments = db.relationship('TicketComment', cascade='all, delete-orphan', backref='author', lazy=True)
 
     def __repr__(self): #returns data
@@ -50,8 +50,8 @@ class Technician(db.Model):
 
     id_user = db.Column(db.Integer, db.ForeignKey('user_t.id_user'), nullable=False)
 
-    requirements = db.relationship('ServiceRequirement', backref='technician', lazy=True)
-    comments = db.relationship('RequirementComment', cascade='all, delete-orphan', backref='author', lazy=True)
+    requests = db.relationship('ServiceRequest', backref='technician', lazy=True)
+    comments = db.relationship('RequestComment', cascade='all, delete-orphan', backref='author', lazy=True)
 
 
     def __repr__(self): #returns data
@@ -82,7 +82,7 @@ class Ticket(db.Model):
     id_resident = db.Column(db.Integer, db.ForeignKey('resident.id_resident'), nullable=True)
     
     images = db.relationship('Image',  cascade='all, delete-orphan', backref='ticket', lazy=True)
-    requirements = db.relationship('ServiceRequirement',  cascade='all, delete-orphan', backref='ticket', lazy=True, order_by='ServiceRequirement.id.desc()')
+    requests = db.relationship('ServiceRequest',  cascade='all, delete-orphan', backref='ticket', lazy=True, order_by='ServiceRequest.id.desc()')
     comments = db.relationship('TicketComment', order_by="desc(TicketComment.created_at)", cascade='all, delete-orphan', backref='ticket', lazy=True)
 
     def __repr__(self): #returns data
@@ -90,9 +90,9 @@ class Ticket(db.Model):
                 {self.current_state}, {self.created_at}, {self.author}')"""
 
 
-class ServiceRequirement(db.Model):
-    __tablename__ = 'service_requirement'
-    id = db.Column('id_service_requirement', db.Integer, primary_key=True)
+class ServiceRequest(db.Model):
+    __tablename__ = 'service_request'
+    id = db.Column('id_service_request', db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
     is_finished = db.Column(db.Boolean, nullable=False, default=False)
     estimated_time = db.Column(db.TIMESTAMP, nullable=True)
@@ -104,25 +104,25 @@ class ServiceRequirement(db.Model):
     id_technician = db.Column(db.Integer, db.ForeignKey('technician.id_technician'), nullable=True)
     id_ticket = db.Column(db.Integer, db.ForeignKey('ticket.id_ticket'), nullable=False)
 
-    comments = db.relationship('RequirementComment',  cascade='all, delete-orphan', backref='requirement', lazy=True, order_by='RequirementComment.created_at.desc()')
+    comments = db.relationship('RequestComment',  cascade='all, delete-orphan', backref='request', lazy=True, order_by='RequestComment.created_at.desc()')
 
      
     def __repr__(self): #returns data
-        return f"""ServiceRequirement('{self.content}, {self.is_finished}, {self.estimated_time},
+        return f"""ServiceRequest('{self.content}, {self.is_finished}, {self.estimated_time},
          {self.real_time}, {self.price}, {self.created_at}, {self.manager}, {self.technician}, {self.ticket}')"""
 
 
-class RequirementComment(db.Model):
-    __tablename__ = 'requirement_comment'
-    id = db.Column('id_requirement_comment', db.Integer, primary_key=True)
+class RequestComment(db.Model):
+    __tablename__ = 'request_comment'
+    id = db.Column('id_request_comment', db.Integer, primary_key=True)
     content = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.now())
 
-    id_service_requirement = db.Column(db.Integer, db.ForeignKey('service_requirement.id_service_requirement'), nullable=False)
+    id_service_request = db.Column(db.Integer, db.ForeignKey('service_request.id_service_request'), nullable=False)
     id_technician = db.Column(db.Integer, db.ForeignKey('technician.id_technician'), nullable=False)
 
     def __repr__(self): #returns data
-        return f"RequirementComment('{self.content}, {self.created_at}, {self.requirement}, {self.author}')"
+        return f"RequestComment('{self.content}, {self.created_at}, {self.request}, {self.author}')"
 
 
 class TicketComment(db.Model):
@@ -135,7 +135,7 @@ class TicketComment(db.Model):
     id_manager = db.Column(db.Integer, db.ForeignKey('manager.id_manager'), nullable=False)
 
     def __repr__(self): #returns data
-        return f"RequirementComment('{self.content}, {self.created_at}, {self.ticket}, {self.author}')"
+        return f"RequestComment('{self.content}, {self.created_at}, {self.ticket}, {self.author}')"
 
 
 class Image(db.Model):

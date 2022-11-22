@@ -12,17 +12,17 @@ def validate_estimated_time(form, field):
     if field.data and field.data < datetime.date(datetime.today()):
         raise ValidationError('Estimated time cannot be in past')
 
-class AddRequirementForm(FlaskForm):
-    """Form for adding service requirement."""
+class AddRequestForm(FlaskForm):
+    """Form for adding service request."""
 
     def __init__(self, submit_label = None, **kw):
-        super(AddRequirementForm, self).__init__(**kw)
+        super(AddRequestForm, self).__init__(**kw)
         if submit_label is not None:
             self.submit.label.text = submit_label
 
     content = TextAreaField('Description', validators=[DataRequired()])
     technician = SelectField('Technician', validators=[DataRequired()])
-    submit = SubmitField('Create Requirement')
+    submit = SubmitField('Create Request')
 
     def init_technicians(self):
         """Add technicians to form select field."""
@@ -30,35 +30,35 @@ class AddRequirementForm(FlaskForm):
         technicians_names = [(technician.id, technician.user.fullname) for technician in technicians]
         self.technician.choices = technicians_names
 
-    def populate_requirement(self, requirement):
-        """Populates requirement variables with values form form."""
-        requirement.content = self.content.data
-        requirement.id_technician = self.technician.data
+    def populate_request(self, request):
+        """Populates request variables with values form form."""
+        request.content = self.content.data
+        request.id_technician = self.technician.data
 
-    def prefill(self, requirement):
-        """Prefill form with requirement data."""
-        self.content.data = requirement.content
+    def prefill(self, request):
+        """Prefill form with request data."""
+        self.content.data = request.content
         technicians = Technician.query.all()
         technicians_names = [(technician.id, technician.user.fullname) for technician in technicians]
         self.technician.choices = technicians_names
 
 
-class TechnicianRequirementForm(FlaskForm):
+class TechnicianRequestForm(FlaskForm):
     content = TextAreaField('Description')
     estimated_time = DateField('Estimated Time', validators=[validate_estimated_time])
     real_time = FloatField('Real Time', validators=[NumberRange(min=0)])
     price = IntegerField('Price', validators=[NumberRange(min=0)])
-    submit = SubmitField('Update requirement')
+    submit = SubmitField('Update request')
 
-    def prefill(self, requirement):
-        self.content.data = requirement.content
-        self.estimated_time.data = requirement.estimated_time
-        self.real_time.data = requirement.real_time
-        self.price.data = requirement.price
+    def prefill(self, request):
+        self.content.data = request.content
+        self.estimated_time.data = request.estimated_time
+        self.real_time.data = request.real_time
+        self.price.data = request.price
 
 
-class RequirementCommentForm(FlaskForm):
-    """From for adding requirement comment."""
+class RequestCommentForm(FlaskForm):
+    """From for adding request comment."""
     content = TextAreaField('Comment', validators=[DataRequired()])
     submit = SubmitField('Add')
 
@@ -74,7 +74,7 @@ class RequirementCommentForm(FlaskForm):
         """Clear form contents."""
         self.content.data = ""
 
-class RequirementEditCommentForm(FlaskForm):
+class RequestEditCommentForm(FlaskForm):
     edit_id = IntegerField('Id', id="modal_edit_comment_id")
     edit_content = TextAreaField('Comment', id="modal_edit_comment_content", validators=[DataRequired()])
     edit_submit = SubmitField('Save')
@@ -87,26 +87,26 @@ class RequirementEditCommentForm(FlaskForm):
         """Returns whether this form was submitted and is valid."""
         return self.edit_submit.data and self.validate()
 
-class UpdateRequirementForm(FlaskForm):
-    """Form for updating service requirement as technician"""
+class UpdateRequestForm(FlaskForm):
+    """Form for updating service request as technician"""
     def __init__(self, submit_label=None, **kw):
-        super(UpdateRequirementForm, self).__init__(**kw)
+        super(UpdateRequestForm, self).__init__(**kw)
         if submit_label is not None:
             self.submit.label.text = submit_label
 
     estimated_time = DateField('Estimated time', validators=[validate_estimated_time])
     real_time = FloatField('Real time', validators=[validators.Optional(), NumberRange(min=0)])
     price = IntegerField('Price', validators=[validators.Optional(), NumberRange(min=0)])
-    submit = SubmitField('Update Requirement')
+    submit = SubmitField('Update Request')
 
-    def populate_requirement(self, requirement):
-        """Populates requirement variables with values form form."""
-        requirement.estimated_time = self.estimated_time.data
-        requirement.real_time = self.real_time.data
-        requirement.price = self.price.data
+    def populate_request(self, request):
+        """Populates request variables with values form form."""
+        request.estimated_time = self.estimated_time.data
+        request.real_time = self.real_time.data
+        request.price = self.price.data
 
-    def prefill(self, requirement):
-        """Prefill form with requirement data."""
-        self.estimated_time.data = requirement.estimated_time
-        self.real_time.data = requirement.real_time
-        self.price.data = requirement.price
+    def prefill(self, request):
+        """Prefill form with request data."""
+        self.estimated_time.data = request.estimated_time
+        self.real_time.data = request.real_time
+        self.price.data = request.price

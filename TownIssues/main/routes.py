@@ -14,7 +14,7 @@ def home():
     elif current_user.role == 'manager':
         return redirect(url_for('tickets.tickets_list'))
     elif current_user.role == 'technician':
-        return redirect(url_for('service_requirements.my_requirements'))
+        return redirect(url_for('service_requests.my_requests'))
     else:
         abort(404)
     return

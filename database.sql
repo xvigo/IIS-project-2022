@@ -2,8 +2,8 @@ DROP TABLE IF EXISTS user_t CASCADE;
 DROP TABLE IF EXISTS manager CASCADE;
 DROP TABLE IF EXISTS technician CASCADE;
 DROP TABLE IF EXISTS resident CASCADE;
-DROP TABLE IF EXISTS service_requirement CASCADE;
-DROP TABLE IF EXISTS requirement_comment CASCADE;
+DROP TABLE IF EXISTS service_request CASCADE;
+DROP TABLE IF EXISTS request_comment CASCADE;
 DROP TABLE IF EXISTS ticket_comment CASCADE;
 DROP TABLE IF EXISTS ticket CASCADE;
 DROP TABLE IF EXISTS attached_image CASCADE;
@@ -55,8 +55,8 @@ CREATE TABLE ticket(
     id_resident INT REFERENCES resident(id_resident) ON DELETE SET NULL
 );
 
-CREATE TABLE service_requirement(
-    id_service_requirement SERIAL PRIMARY KEY,
+CREATE TABLE service_request(
+    id_service_request SERIAL PRIMARY KEY,
 
     content TEXT NOT NULL,
     is_finished BOOLEAN,
@@ -77,17 +77,17 @@ CREATE TABLE service_requirement(
         REFERENCES ticket(id_ticket) ON DELETE CASCADE
 );
 
-CREATE TABLE requirement_comment(
-    id_requirement_comment SERIAL PRIMARY KEY,
+CREATE TABLE request_comment(
+    id_request_comment SERIAL PRIMARY KEY,
 
     content TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
 
-    id_service_requirement INT NOT NULL,
+    id_service_request INT NOT NULL,
     id_technician INT NOT NULL,
 
-    CONSTRAINT fk_requirement FOREIGN KEY (id_service_requirement)
-        REFERENCES service_requirement(id_service_requirement) ON DELETE CASCADE,
+    CONSTRAINT fk_request FOREIGN KEY (id_service_request)
+        REFERENCES service_request(id_service_request) ON DELETE CASCADE,
     CONSTRAINT fk_technician FOREIGN KEY (id_technician)
         REFERENCES technician(id_technician) ON DELETE CASCADE
 );
@@ -175,16 +175,16 @@ VALUES
     ('2004-11-25 19:23:54', 'The issue was forwarded to an expert, which will check the brightness level of the lamp.', 1, 2),
     ('2006-11-19 19:23:54', 'This road is still in a good shape, there is no need to repair it yet.', 2, 3);
 
-/************************** SERVICE REQUIREMENT **************************/
+/************************** SERVICE REQUEST **************************/
 INSERT INTO
-    service_requirement(content, is_finished, estimated_time, price, real_time, created_at, id_manager, id_technician, id_ticket)
+    service_request(content, is_finished, estimated_time, price, real_time, created_at, id_manager, id_technician, id_ticket)
 VALUES
     ('Repair the lamp.', TRUE,  '2004-10-15', 5000, '2004-10-15', '2004-12-19 19:23:54', 1, 1, 1),
     ('Please look at the brightness level of the lamp and reduce it if necessary.', FALSE, '2020-12-19 19:23:54', NULL, NULL, '2005-12-19 19:23:54', 2, 2, 2);
 
-/************************** REQUIREMENT COMMENT **************************/
+/************************** REQUEST COMMENT **************************/
 INSERT INTO
-    requirement_comment(created_at, content, id_service_requirement, id_technician)
+    request_comment(created_at, content, id_service_request, id_technician)
 VALUES
     ('2004-12-25 19:23:54', 'I am now full, i will look at it next week.', 1, 1),
     ('2004-12-25 19:23:54', 'Lamp repaired, I just had to replace the light bulb.', 1, 1);
@@ -193,6 +193,6 @@ VALUES
 
 
 INSERT INTO
-    service_requirement(content, is_finished, estimated_time, price, real_time, created_at, id_manager, id_technician, id_ticket)
+    service_request(content, is_finished, estimated_time, price, real_time, created_at, id_manager, id_technician, id_ticket)
 VALUES
     ('test', FALSE, '2020-12-19 19:23:54', NULL, NULL, NULL, 2, 2, 2);
