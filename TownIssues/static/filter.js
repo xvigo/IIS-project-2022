@@ -1,27 +1,61 @@
-$(document).ready(function () {
-    var $rows = $('tbody#report tr')
-   
-     var $filters = $('.table-filter').on("input", function(){
-       var filterArr = $filters.filter(function(){
-          return this.value
-       }).map(function(){
-          var $el = $(this);
-          var value = $el.is('select') ? $el.find(':selected').text() :$el.val()  
-          return {
-            col: $el.data('col'),
-            value: value.toLowerCase()
-          }
-       }).get();
-       if(!filterArr.length){
-         $rows.show()
-       }else{
-         $rows.hide().filter(function(){
-            var $row = $(this)
-            return filterArr.every(function(filterObj, i){
-               var cellText = $row.find('td').eq(filterObj.col).text().toLowerCase();             
-              return  cellText.includes(filterObj.value);
+$(document).ready(function() {
+    $('.table-filter').on("input", function () {
+        $('.table-filter').each(function (){
+            let filterDate;
+            let currentFilter = this.id;
+            let filter = $(this).val().toLowerCase();
+            $('#tickets > tbody > tr').each(function(){
+                let date = new Date($(this).children('td').eq(2).text().split(" ")[0]);
+                switch (currentFilter) {
+                    case 'namefilter':
+                        if ($(this).children('td').eq(0).text().toLowerCase().indexOf(filter) >= 0 && $(this).hasClass('nameFilterHidden')){
+                            $(this).removeClass('nameFilterHidden');
+                        } else if ($(this).children('td').eq(0).text().toLowerCase().indexOf(filter) < 0) {
+                            $(this).hide();
+                            $(this).addClass('nameFilterHidden');
+                        }
+                        break;
+                    case 'authorfilter':
+                        if ($(this).children('td').eq(1).text().toLowerCase().indexOf(filter) >= 0 && $(this).hasClass('authorFilterHidden')){
+                            $(this).removeClass('authorFilterHidden');
+                        } else if ($(this).children('td').eq(1).text().toLowerCase().indexOf(filter) < 0) {
+                            $(this).hide();
+                            $(this).addClass('authorFilterHidden');
+                        }
+                        break;
+                    case 'datefilterfrom':
+                        filterDate = new Date(filter);
+                        if ((date >= filterDate && $(this).hasClass('dateFromFilterHidden')) || filter === '') {
+                            $(this).removeClass('dateFromFilterHidden');
+                        }
+                        else if (date < filterDate) {
+                            $(this).hide();
+                            $(this).addClass('dateFromFilterHidden');
+                        }
+                        break;
+                    case 'datefilterto':
+                        filterDate = new Date(filter);
+                        if ((date <= filterDate && $(this).hasClass('dateToFilterHidden')) || filter === ''){
+                            $(this).removeClass('dateToFilterHidden');
+                        }
+                        else if (date > filterDate) {
+                            $(this).hide();
+                            $(this).addClass('dateToFilterHidden');
+                        }
+                        break;
+                    case 'statefilter':
+                        if ($(this).children('td').eq(3).text().toLowerCase().indexOf(filter) >= 0 && $(this).hasClass('stateFilterHidden')){
+                            $(this).removeClass('stateFilterHidden');
+                        } else if ($(this).children('td').eq(3).text().toLowerCase().indexOf(filter) < 0) {
+                            $(this).hide();
+                            $(this).addClass('stateFilterHidden');
+                        }
+                        break;
+                }
+                if ($(this)[0].classList.length === 0){
+                    $(this).show();
+                }
             })
-         }).show()
-       }
-     })
+        })
+    });
 });
