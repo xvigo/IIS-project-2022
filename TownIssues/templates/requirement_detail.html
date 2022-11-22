@@ -2,12 +2,12 @@
 {% block content %}
     <article class="media content-section flex">
         <div class="media-body">
-          <h3 class="article-title">Přidělený technik: {{ requirement.technician.user.name }} {{ requirement.technician.user.surname }}</h3>
+          <h3 class="article-title">Technician: {{ requirement.technician.user.name }} {{ requirement.technician.user.surname }}</h3>
           <div>
-            <p class="article-content">Vytvořil: {{ requirement.manager.user.name }} {{ requirement.manager.user.surname }}</p>
-            <p class="article-content">Odhadovaný čas: {{ requirement.estimated_time }}</p>
-            <p class="article-content">Reálný čas: {{ requirement.real_time }}</p>
-            <p class="article-content">Cena: {{ requirement.price }} </p>
+            <p class="article-content">Created by: {{ requirement.manager.user.name }} {{ requirement.manager.user.surname }}</p>
+            <p class="article-content">Estimated time: {{ requirement.estimated_time }}</p>
+            <p class="article-content">Real time: {{ requirement.real_time }}</p>
+            <p class="article-content">Price: {{ requirement.price }} </p>
             <p class="mt-4"> {{ requirement.content }} </p>
           </div>
         </div>
@@ -44,11 +44,11 @@
    <table id="comments" class="table table-striped table-bordered table-hover" >
     <thead>
         <tr>
-            <th>Autor</th>
-            <th>Komentář</th>
-            <th>Vytvořeno</th>
+            <th>Author</th>
+            <th>Comment</th>
+            <th>Created at</th>
           {% if has_permissions(allowed_roles=['admin', 'manager']) %}
-            <th>Akce</th>
+            <th>Action</th>
           {% endif %}
         </tr>
     </thead>
