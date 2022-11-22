@@ -118,7 +118,7 @@ body {
   }
 
   .flex {
-    display: flex;
+    display: -webkit-box;
     flex-wrap: wrap;
     row-gap: 30px;
   }
@@ -143,8 +143,10 @@ body {
 #sreq_block {
   display: none;
 }
+
 .row {
   display: flex;
+  padding-bottom: 25px;
 }
 
 .status {
