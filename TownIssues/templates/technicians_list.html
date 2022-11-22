@@ -25,6 +25,9 @@
     {% endfor %}
     </tbody>
  </table>
+{% if not users.items %}
+  <div class="d-flex justify-content-center pt-3"><h2>No technicians to display yet.</h2></div>
+{% endif %}   
     {% for page_num in users.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
       {% if page_num %}
         {% if users.page == page_num %}

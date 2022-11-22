@@ -11,7 +11,7 @@
           </tr>
       </thead>
       <tbody>
-    {% for request in requests %}
+    {% for request in requests.items %}
     <tr id="request_{{ request.id }}">
     {% if request.real_time %}
       <td><i class="fa solid fa-square-check status success"></i></td>
@@ -28,4 +28,7 @@
   {% endfor %}
       </tbody>
     </table>
+  {% if not requests.items %}
+      <div class="d-flex justify-content-center pt-3"><h2>No requests to display yet.</h2></div>
+  {% endif %}   
 {% endblock content %}

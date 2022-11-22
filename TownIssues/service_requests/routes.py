@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 
 from TownIssues.service_requests.forms import AddRequestForm, RequestCommentForm, \
     RequestEditCommentForm, UpdateRequestForm
-from TownIssues.models import ServiceRequest, RequestComment
+from TownIssues.models import ServiceRequest, RequestComment, Ticket
 from TownIssues.service_requests import service
 from TownIssues.users.utils import check_permissions, has_permissions, check_technician_permitted
 from TownIssues.tickets import service as ticket_service
@@ -19,6 +19,8 @@ def add_request(ticket_id):
     form = AddRequestForm()
     form.init_technicians()
     if form.validate_on_submit():
+        ticket = ticket_service.get_ticket_or_404(ticket_id=ticket_id)
+        ticket.current_state = "In process"
         request = ServiceRequest(manager=current_user.manager, id_ticket=ticket_id)
         form.populate_request(request=request)
         service.add_request(request=request)
@@ -72,9 +74,6 @@ def update_request_as_technician(request_id):
     return render_template('update_request.html', title='Edit Request', form=form, legend='Edit Request')
 
 
-
-
-
 @service_requests.route("/requests/<int:request_id>", methods=['GET', 'POST'])
 @login_required
 def request_detail(request_id):
@@ -126,6 +125,17 @@ def delete_comment(comment_id):
         service.delete_request_comment(comment=comment)
     return redirect(url_for('main.home'))
 
+@service_requests.route("/my_service_requests_p", methods=['GET'])
+@login_required
+def my_requests_pending():
+    """Route for deleting request comment."""
+    check_permissions(allowed_roles=["technician"])
+
+    page = request.args.get('page', 1, type=int)
+    requests = service.get_requests_list(page=page, is_finished=False, technician=current_user.technician)
+    
+    return render_template('requests_list.html', requests=requests, title='Pending Service Requests')
+
 @service_requests.route("/my_service_requests", methods=['GET'])
 @login_required
 def my_requests():
@@ -135,27 +145,4 @@ def my_requests():
     page = request.args.get('page', 1, type=int)
     requests = service.get_requests_list(page=page, technician=current_user.technician)
     
-    return render_template('requests_list.html', requests=requests, title='My Requests')
-
-# @service_requests.route("/tickets/<int:ticket_id>/requests/<int:request_id>/update",
-#                             methods=['GET', 'POST'])
-# @login_required
-# def update_request(request_id, ticket_id):
-#     """Manager route for updating service request."""
-#     request = service.get_request_or_404(request_id)
-#     check_permissions(allowed_user=request.manager.user)
-
-#     ticket = ticket_service.get_ticket_or_404(ticket_id)
-
-#     form = AddRequestForm(submit_label='Update Request')
-#     if request.method == 'GET':
-#         form.prefill(request)
-
-#     elif form.validate_on_submit():
-#         form.populate_request(request)
-#         service.update()
-#         flash('Request updated successfully.', 'success')
-#         return redirect(url_for('service_requests.request_detail', ticket_id=ticket.id, request_id=request.id))
-
-#     return render_template('update_request.html', title='Update Request', request=request, ticket=ticket,
-#                            form=form, legend='Update Request')
+    return render_template('requests_list.html', requests=requests, title='All Service Requests')

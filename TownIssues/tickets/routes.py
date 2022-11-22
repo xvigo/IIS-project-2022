@@ -31,6 +31,7 @@ def ticket_detail(ticket_id):
     add_comment_form = AddCommentForm()
     edit_comment_form = EditCommentForm()
 
+
     if add_comment_form.submitted_and_valid() and has_permissions(allowed_roles='manager'):
         comment = TicketComment(ticket=ticket, author=current_user.manager)
         add_comment_form.populate_comment(comment=comment)
@@ -68,6 +69,32 @@ def update_ticket(ticket_id):
         return redirect(url_for('tickets.ticket_detail', ticket_id=ticket.id))
 
     return render_template('update_ticket.html', title='Account', ticket=ticket, form=form, legend='Update Ticket')
+
+@tickets.route("/tickets/<int:ticket_id>/finish", methods=['GET'])
+@login_required
+def finish_ticket(ticket_id):
+    """Route for updating ticket details."""
+    ticket =service.get_ticket_or_404(ticket_id=ticket_id)
+    check_permissions(allowed_roles=['manager'])
+
+    ticket.current_state = "Finished"
+    service.update()
+    flash('Ticket state updated successfully.', 'success')
+
+    return redirect(url_for('tickets.ticket_detail', ticket_id=ticket.id))
+
+@tickets.route("/tickets/<int:ticket_id>/deny", methods=['GET'])
+@login_required
+def deny_ticket(ticket_id):
+    """Route for updating ticket details."""
+    ticket =service.get_ticket_or_404(ticket_id=ticket_id)
+    check_permissions(allowed_roles=['manager'])
+
+    ticket.current_state = "Denied"
+    service.update()
+    flash('Ticket state updated successfully.', 'success')
+
+    return redirect(url_for('tickets.ticket_detail', ticket_id=ticket.id))
 
 
 @tickets.route("/tickets/<int:ticket_id>/delete", methods=['POST'])
@@ -112,19 +139,6 @@ def delete_comment(comment_id):
     if comment and allowed:
         service.delete_ticket_comment(comment=comment)
     return redirect(url_for('main.home'))
-
-
-@tickets.route("/delete_ticket_image/<int:image_id>", methods=['POST'])
-@login_required
-def delete_image(image_id):
-    """Route for deleting ticket images."""
-    image = service.get_ticket_image(image_id=image_id)
-    allowed = has_permissions(allowed_user=image.ticket.author.user)
-    
-    if image and allowed:
-        service.delete_ticket_image(image=image)
-    return redirect(url_for('main.home'))
-
 
 @tickets.route("/delete_orphan_images")
 def delete_orphans():

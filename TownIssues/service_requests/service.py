@@ -34,13 +34,15 @@ def delete_request_comment(comment):
     db.session.delete(comment)
     db.session.commit()
 
-def get_requests_list(page, order=ServiceRequest.created_at.desc(), amount=100, technician=None):
+def get_requests_list(page, order=ServiceRequest.created_at.desc(), is_finished=None, amount=100, technician=None):
     """Returns <amount> tickets with given author from given page in given order."""
     if technician is not None:
-        return ServiceRequest.query.filter_by(technician=technician).order_by(order).paginate(page=page, per_page=amount)
+        if is_finished is not None:
+            return ServiceRequest.query.filter_by(technician=technician, is_finished = is_finished).order_by(order).paginate(page=page, per_page=amount)
+        else:
+            return ServiceRequest.query.filter_by(technician=technician).order_by(order).paginate(page=page, per_page=amount)
     else:
         return ServiceRequest.query.order_by(order).paginate(page=page, per_page=amount)
-
 
 def update():
     """Saves any changes made in models to db."""

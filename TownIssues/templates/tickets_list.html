@@ -48,6 +48,11 @@
         {% endfor %}
         </tbody>
     </table>
+    {% if not tickets.items %}
+      <div class="d-flex justify-content-center pt-3"><h2>No tickets to display yet.</h2></div>
+    {% endif %}
+    
+
     {% for page_num in tickets.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
       {% if page_num %}
         {% if tickets.page == page_num %}
