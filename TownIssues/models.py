@@ -76,7 +76,7 @@ class Ticket(db.Model):
     content = db.Column(db.Text, nullable=False)
     street = db.Column(db.String(200), nullable=False)
     house_number = db.Column(db.Integer, nullable=True)
-    current_state = db.Column(db.String(200), nullable=False, default='recieved')
+    current_state = db.Column(db.String(200), nullable=False, default='Accepted')
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.now())
     
     id_resident = db.Column(db.Integer, db.ForeignKey('resident.id_resident'), nullable=True)
