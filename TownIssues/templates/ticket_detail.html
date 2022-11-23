@@ -18,7 +18,7 @@
           <div>
             <p class="time-pad">{{ ticket.created_at }}</p>
             </br>
-            <h5 class="article-content">Adress: {{ ticket.street }} {{ ticket.house_number }}</h5>
+            <h5 class="article-content">Address: {{ ticket.street }} {{ ticket.house_number }}</h5>
             </br>
             <h5>Description:</h5>
             <p class="article-content">{{ ticket.content }}</p>
@@ -41,14 +41,14 @@
               </div>
             {% endfor %}
           </div>
-        </br></br>
 
-          {% if has_permissions(allowed_roles=['resident', 'admin'], allowed_user=ticket.author.user) %}
-            <div class="detail-buttons bottom-right">
-              <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('tickets.update_ticket', ticket_id=ticket.id) }}">Edit</a>
-              <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteTicketModal">Delete</button>
-            </div>
-          {% endif %}
+        {% if has_permissions(allowed_roles=['resident', 'admin'], allowed_user=ticket.author.user) %}
+          </br></br>
+          <div class="detail-buttons bottom-right">
+            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('tickets.update_ticket', ticket_id=ticket.id) }}">Edit</a>
+            <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteTicketModal">Delete</button>
+          </div>
+        {% endif %}
         </div>
     </article>
 
