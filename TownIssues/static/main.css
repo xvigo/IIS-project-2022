@@ -34,7 +34,6 @@ body {
   
   .article-title {
     color: #444444;
-    padding-bottom: 20px;
   }
 
   .time-title {
@@ -180,4 +179,20 @@ body {
 
 .relative {
   position: relative;
+}
+
+.time-pad {
+  padding-left: 10px;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.blue {
+  color: blue;
 }

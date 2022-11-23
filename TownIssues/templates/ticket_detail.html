@@ -2,11 +2,22 @@
 {% block content %}
     <article class="media content-section flex">
         <div class="media-body relative">
-          <h2 class="article-title">{{ ticket.title }}</h2>
+          <h2 class="article-title">{{ ticket.title }}
+            - 
+            {% if ticket.current_state == "Finished" %}
+              <font class="green">{{ ticket.current_state }}</font>
+            {% elif ticket.current_state == "Denied" %}
+              <font class="red">{{ ticket.current_state }}</font>
+            {% else %}
+              <font class="blue">{{ ticket.current_state }}</font>
+            {% endif %}
+          </h2>
           {% if ticket.author.user != current_user %}
             <p class="article-content top-right">Author: {{ ticket.author.user.name }} {{ ticket.author.user.surname }}</p>
           {% endif %}
           <div>
+            <p class="time-pad">{{ ticket.created_at }}</p>
+            </br>
             <h5 class="article-content">Adress: {{ ticket.street }} {{ ticket.house_number }}</h5>
             </br>
             <h5>Description:</h5>
