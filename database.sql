@@ -188,11 +188,3 @@ INSERT INTO
 VALUES
     ('2004-12-25 19:23:54', 'I am now full, i will look at it next week.', 1, 1),
     ('2004-12-25 19:23:54', 'Lamp repaired, I just had to replace the light bulb.', 1, 1);
-
-
-
-
-INSERT INTO
-    service_request(content, is_finished, estimated_time, price, real_time, created_at, id_manager, id_technician, id_ticket)
-VALUES
-    ('test', FALSE, '2020-12-19 19:23:54', NULL, NULL, NULL, 2, 2, 2);
