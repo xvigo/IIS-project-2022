@@ -101,7 +101,11 @@
               </button>
             </div>
             <div class="modal-body">
-                <p>Do you really want to delete your account?</p>
+                {% if current_user.role == "admin" and current_user != user %}
+                    <p>Do you really want to delete this account?</p>
+                {% else %}
+                    <p>Do you really want to delete your account?</p>
+                {% endif %}                
               </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>

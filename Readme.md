@@ -4,13 +4,13 @@ Commands:
 ```
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -r requests.txt
+pip install -r requirements.txt
 python run_debug.py
 ```
 
 ## Project files
  * **Procfile** - file that tells heroku how to run this app
- * **requests.txt** - dependencies which are needed to run this app
+ * **requirements.txt** - dependencies which are needed to run this app
  * **run_debug.py** - use this to run app locally in debug mode - it has hardcoded configuration
  * **run.py** - used for running on the server - takes congifuration from enviroment variables
  * **TownIssues/config.py** - contains class with configuration variables for running on the server

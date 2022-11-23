@@ -163,8 +163,8 @@ INSERT INTO
     attached_image(url_path, id_ticket)
 VALUES
     ('/static/ticket_pics/8cd4255ddb3184a5.png', 1),
-    ('/static/ticket_pics/52dc7258209a56b4.jpg', 2),
-    ('/static/ticket_pics/1ef64478b0d1cf65.png', 3);
+    ('/static/ticket_pics/52dc7258209a56b4.jpg', 3),
+    ('/static/ticket_pics/1ef64478b0d1cf65.png', 2);
 
 /************************** TICKET COMMENT **************************/
 INSERT INTO
