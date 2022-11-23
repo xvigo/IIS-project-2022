@@ -1,6 +1,22 @@
 {% extends "layout.html" %}
 {% block content %}
- <table id="tickets" class="table table-striped table-bordered table-hover" >
+<div class="row">
+  <div class="col-md-2">
+    <h4>User</h4>
+    <input type="text" class="user-filter form-control" id="userfilter" data-col="0">
+  </div>
+  <div class="col-md-2">
+    <h4>Role</h4>
+        <select id="rolefilter" name="rolefilter" class="user-filter form-control"  data-col="3">
+          <option value="">Select one</option>
+          <option value="1">resident</option>
+          <option value="2">technician</option>
+          <option value="3">manager</option>
+          <option value="4">admin</option>
+        </select>
+  </div>
+</div>
+ <table id="users" class="table table-striped table-bordered table-hover" >
     <thead>
         <tr>
             <th>User</th>
