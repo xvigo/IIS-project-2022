@@ -50,7 +50,7 @@ def update_request(request_id):
 
     form.prefill(request)
 
-    return render_template('add_request.html', title='Edit Request', form=form, legend='Edit Request')
+    return render_template('add_request.html', title='Update Request', form=form, legend='Update Request')
 
 
 @service_requests.route("/requests/<int:request_id>/update/technician",
@@ -71,7 +71,7 @@ def update_request_as_technician(request_id):
 
     form.prefill(request)
 
-    return render_template('update_request.html', title='Edit Request', form=form, legend='Edit Request')
+    return render_template('update_request.html', title='Update Request', form=form, legend='Update Request')
 
 
 @service_requests.route("/requests/<int:request_id>", methods=['GET', 'POST'])

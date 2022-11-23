@@ -23,7 +23,7 @@
           </div>
 
         {% if current_user.role == 'technician' and current_user.id == request.technician.user.id %}
-          <a class="btn btn-primary mb-2 mt-2 bottom-right" type="Edit" href="{{ url_for('service_requests.update_request_as_technician', request_id=request.id) }}">Edit request</a>
+          <a class="btn btn-primary mb-2 mt-2 bottom-right" type="Edit" href="{{ url_for('service_requests.update_request_as_technician', request_id=request.id) }}">Update request</a>
         {% elif current_user.role == 'manager' and current_user.id == request.manager.user.id %}
           <a class="btn btn-primary mb-2 mt-2 bottom-right" type="Edit" href="{{ url_for('service_requests.update_request', request_id=request.id) }}">Update request</a>
         {% endif %}

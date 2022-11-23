@@ -9,8 +9,10 @@ from datetime import datetime
 from TownIssues.models import Technician
 
 def validate_estimated_time(form, field):
+    if form.real_time.data or form.price.data:
+        return
     if field.data and field.data < datetime.date(datetime.today()):
-        raise ValidationError('Estimated time cannot be in past')
+        raise ValidationError('Estimated date cannot be in past')
 
 class AddRequestForm(FlaskForm):
     """Form for adding service request."""
