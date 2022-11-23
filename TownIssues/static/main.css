@@ -196,3 +196,7 @@ body {
 .blue {
   color: blue;
 }
+
+.desc-font {
+  font-size: 20px;
+}

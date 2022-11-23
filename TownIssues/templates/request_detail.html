@@ -1,22 +1,31 @@
 {% extends "layout.html" %}
 {% block content %}
+    <div class="content-section">
+      <a href="{{ url_for('tickets.ticket_detail', ticket_id=request.ticket.id) }}">Show me the ticket</a>
+    </div>
     <article class="media content-section flex">
         <div class="media-body relative">
-          <h3 class="article-title">Technician: {{ request.technician.user.name }} {{ request.technician.user.surname }}</h3>
+          <h3 class="article-title">Description:</h3>
+          <p class="desc-font"> {{ request.content }} </p>
+          </br>
           <div>
             <p class="article-content top-right">Created by: {{ request.manager.user.name }} {{ request.manager.user.surname }}</p>
-            <p class="article-content">Estimated time: {{ request.estimated_time }}</p>
-            <p class="article-content">Real time: {{ request.real_time }}</p>
-            <p class="article-content">Price: {{ request.price }} </p>
+            {% if request.estimated_time %}
+              <p class="article-content">Expected completion date: {{ request.estimated_time.strftime("%m/%d/%Y") }}</p>
+            {% endif %}
+            {% if request.real_time %}
+              <p class="article-content">Real time: {{ request.real_time }} hours</p>
+            {% endif %}
+            {% if request.price %}
+              <p class="article-content">Price: {{ request.price }} CZK</p>
+            {% endif %}
             </br>
-            <h5>Description:</h5>
-            <p class="mt-4"> {{ request.content }} </p>
           </div>
 
         {% if current_user.role == 'technician' and current_user.id == request.technician.user.id %}
           <a class="btn btn-primary mb-2 mt-2 bottom-right" type="Edit" href="{{ url_for('service_requests.update_request_as_technician', request_id=request.id) }}">Edit request</a>
         {% elif current_user.role == 'manager' and current_user.id == request.manager.user.id %}
-          <a class="btn btn-primary mb-2 mt-2 bottom-right" type="Edit" href="{{ url_for('service_requests.update_request', request_id=request.id) }}">Edit request</a>
+          <a class="btn btn-primary mb-2 mt-2 bottom-right" type="Edit" href="{{ url_for('service_requests.update_request', request_id=request.id) }}">Update request</a>
         {% endif %}
         </div>
     </article>

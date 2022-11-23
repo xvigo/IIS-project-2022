@@ -16,7 +16,7 @@
             <p class="article-content top-right">Author: {{ ticket.author.user.name }} {{ ticket.author.user.surname }}</p>
           {% endif %}
           <div>
-            <p class="time-pad">{{ ticket.created_at }}</p>
+            <p class="time-pad">{{ ticket.created_at.strftime("%m/%d/%Y %H:%M:%S") }}</p>
             </br>
             <h5 class="article-content">Address: {{ ticket.street }} {{ ticket.house_number }}</h5>
             </br>
@@ -45,7 +45,9 @@
         {% if has_permissions(allowed_roles=['resident', 'admin'], allowed_user=ticket.author.user) %}
           </br></br>
           <div class="detail-buttons bottom-right">
-            <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('tickets.update_ticket', ticket_id=ticket.id) }}">Edit</a>
+            {% if ticket.current_state != "Finished" and ticket.current_state != "Denied" %}
+              <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('tickets.update_ticket', ticket_id=ticket.id) }}">Edit</a>
+            {% endif %}
             <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteTicketModal">Delete</button>
           </div>
         {% endif %}

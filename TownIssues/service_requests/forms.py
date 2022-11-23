@@ -46,8 +46,8 @@ class AddRequestForm(FlaskForm):
 class TechnicianRequestForm(FlaskForm):
     content = TextAreaField('Description')
     estimated_time = DateField('Estimated Time', validators=[validate_estimated_time])
-    real_time = FloatField('Real Time', validators=[NumberRange(min=0)])
-    price = IntegerField('Price', validators=[NumberRange(min=0)])
+    real_time = FloatField('Real Time', validators=[NumberRange(min=0.5)])
+    price = IntegerField('Price', validators=[NumberRange(min=1)])
     submit = SubmitField('Update request')
 
     def prefill(self, request):
@@ -94,7 +94,7 @@ class UpdateRequestForm(FlaskForm):
         if submit_label is not None:
             self.submit.label.text = submit_label
 
-    estimated_time = DateField('Estimated time', validators=[validate_estimated_time])
+    estimated_time = DateField('Expected completion date', validators=[validate_estimated_time])
     real_time = FloatField('Real time', validators=[validators.Optional(), NumberRange(min=0)])
     price = IntegerField('Price', validators=[validators.Optional(), NumberRange(min=0)])
     submit = SubmitField('Update Request')
