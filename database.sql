@@ -61,7 +61,7 @@ CREATE TABLE service_request(
     content TEXT NOT NULL,
     is_finished BOOLEAN,
     estimated_time DATE,
-    real_time DATE,
+    real_time FLOAT,
     price INT,
     created_at TIMESTAMP DEFAULT NOW(),
 
@@ -179,7 +179,7 @@ VALUES
 INSERT INTO
     service_request(content, is_finished, estimated_time, price, real_time, created_at, id_manager, id_technician, id_ticket)
 VALUES
-    ('Repair the lamp.', TRUE,  '2004-10-15', 5000, '2004-10-15', '2004-12-19 19:23:54', 1, 1, 1),
+    ('Repair the lamp.', TRUE,  '2004-10-15', 5000, 50.0, '2004-12-19 19:23:54', 1, 1, 1),
     ('Please look at the brightness level of the lamp and reduce it if necessary.', FALSE, '2020-12-19 19:23:54', NULL, NULL, '2005-12-19 19:23:54', 2, 2, 2);
 
 /************************** REQUEST COMMENT **************************/
@@ -188,3 +188,4 @@ INSERT INTO
 VALUES
     ('2004-12-25 19:23:54', 'I am now full, i will look at it next week.', 1, 1),
     ('2004-12-25 19:23:54', 'Lamp repaired, I just had to replace the light bulb.', 1, 1);
+

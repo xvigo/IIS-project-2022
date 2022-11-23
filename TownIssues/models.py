@@ -96,7 +96,7 @@ class ServiceRequest(db.Model):
     content = db.Column(db.Text, nullable=False)
     is_finished = db.Column(db.Boolean, nullable=False, default=False)
     estimated_time = db.Column(db.TIMESTAMP, nullable=True)
-    real_time = db.Column(db.TIMESTAMP, nullable=True)
+    real_time = db.Column(db.Float, nullable=True)
     price = db.Column(db.Integer, nullable=True)
     created_at = db.Column(db.TIMESTAMP, server_default=db.func.now())
 
