@@ -140,6 +140,19 @@ def delete_comment(comment_id):
         service.delete_ticket_comment(comment=comment)
     return redirect(url_for('main.home'))
 
+
+@tickets.route("/delete_ticket_image/<int:image_id>", methods=['POST'])
+@login_required
+def delete_image(image_id):
+    """Route for deleting ticket images."""
+    image = service.get_ticket_image(image_id=image_id)
+    allowed = has_permissions(allowed_user=image.ticket.author.user)
+    
+    if image and allowed:
+        service.delete_ticket_image(image=image)
+    return redirect(url_for('main.home'))
+
+
 @tickets.route("/delete_orphan_images")
 def delete_orphans():
     """Development route for deleting orphan image files
