@@ -1,17 +1,20 @@
 {% extends "layout.html" %}
 {% block content %}
     <article class="media content-section flex">
-        <div class="media-body">
+        <div class="media-body relative">
           <h2 class="article-title">{{ ticket.title }}</h2>
-          <p class="article-content">Author: {{ ticket.author.user.name }} {{ ticket.author.user.surname }}</p>
+          {% if  ticket.author.user != current_user %}
+            <p class="article-content top-right">Author: {{ ticket.author.user.name }} {{ ticket.author.user.surname }}</p>
+          {% endif %}
           <div>
+            <h5 class="article-content">Adress: {{ ticket.street }} {{ ticket.house_number }}</h5>
+            </br>
+            <h5>Description:</h5>
             <p class="article-content">{{ ticket.content }}</p>
-            <p class="article-content">Street: {{ ticket.street }}</p>
-            <p class="article-content">House number: {{ ticket.house_number }}</p>
           </div>
         </div>
 
-        {%  if has_permissions(allowed_roles=['resident', 'admin'], allowed_user=ticket.author.user) %}
+        {% if has_permissions(allowed_roles=['resident', 'admin'], allowed_user=ticket.author.user) %}
           <div class="detail-buttons">
             <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('tickets.update_ticket', ticket_id=ticket.id) }}">Edit</a>
             <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteTicketModal">Delete</button>
