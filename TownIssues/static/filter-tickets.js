@@ -44,7 +44,9 @@ $(document).ready(function() {
                         }
                         break;
                     case 'statefilter':
-                        if ($(this).children('td').eq(3).text().toLowerCase().indexOf(filter) >= 0 && $(this).hasClass('stateFilterHidden')){
+                        filter = $('#statefilter option:selected').text().toLowerCase();
+                        if (($(this).children('td').eq(3).text().toLowerCase().indexOf(filter) >= 0
+                                && $(this).hasClass('stateFilterHidden')) || filter === 'select one'){
                             $(this).removeClass('stateFilterHidden');
                         } else if ($(this).children('td').eq(3).text().toLowerCase().indexOf(filter) < 0) {
                             $(this).hide();
