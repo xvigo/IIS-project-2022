@@ -43,21 +43,50 @@
 <tr><td>technician2@auto.cz</td><td>heslo</td><td>Servisní technik</td></tr>
 <tr><td>resident1@auto.cz</td><td>heslo</td><td>Obyvatel města</td></tr>
 <tr><td>resident2@auto.cz</td><td>heslo</td><td>Obyvatel města</td></tr>
-<tr><td>resident3@auto.cz</td><td>heslo</td><td>Obyvatel města</td></tr>
 </table>
 
-<p>(Diagram případů užití není nutné vkládat, pokud IS implementuje role a případy užití definované zadáním.)</p> 
 
 <h3>Video</h3>
 TODO
-<p>Přiložte odkaz na komentované video demostrující použití informačního systému. Zaměřte se na případy užití definované zadáním (např. registrace uživatele, správa uživatelů a činnosti jednotlivých rolí). Video nahrajte například na VUT Google Drive, kde ho bude možné přímo spustit z odkazu.</p> 
+<p>Přiložte odkaz na komentované video demostrující použití informačního systému. 
+	Zaměřte se na případy užití definované zadáním (např. registrace uživatele, 
+	správa uživatelů a činnosti jednotlivých rolí). Video nahrajte například na VUT Google Drive, kde ho bude možné přímo spustit z odkazu.</p> 
 
 <h2>Implementace</h2>
-TODO
-<p>Stručná dokumentace k implementaci, která popisuje, které části projektu (např. PHP skripty) implementují jednotlivé případy použití.</p>
+Webová aplikace je implementována v jazyce Python verze 3.10 za použití frameworku Flask. Aplikace využívá návrhový vzor Model-View-Controller.
+Samotá implementace je rozdělena do čtyř modulů main, tickets, users a service_requirements.
 
-<h3>Databáze</h3>
-TODO
+<h3> Model</h3>
+Model aplikace je vytvořen za použítí knihovny umožňující objektově relační mapování - Flask SQL alchemy.
+Jednotlivé řádky tabulek databáze jsou mapovány na objekty tříd definovaných v souboru model.py. Objektový přístup k databázi umožňuje pohodlnější a přehlednější práci s databází a zamezuje SQL útokům.
+Za účelem čistoty kódu a zjednodušením přístupu k databázovým objektům byla vytvořena samostatná vrstva, která implementuje veškeré využívané databázové operace. <br> 
+Tato vrstva jsou rozděleny do tří souborů s názvy service uvnitř jednotlivých modulů:
+<ul>
+	<li>/TownIssues/tickets/service.py - databázové operace pro práci s tickety</li>
+	<li>/TownIssues/users/service.py - databázové operace pro práci s uživateli</li>
+	<li>/TownIssues/service_requests/service.py - databázové operace pro práci se servisními požadavky</li>
+</ul>
+
+<h3> View</h3>
+Pohledy jsou realizovány pomocí šablon frameworku Flask. Tyto šablony umožňují snadné tvoření výsledných html stránek pomocí systému Jinja2.
+Jednotlivé šablony jsou uloženy ve složce /TownIssues/templates. Formuláře jsou definovány pomocí knohovny WTForms, která umožňuje nejen definici formulářů, ale také jejich následnou validaci uvnitř jednotlivých funkcí controllerů controllerů.
+Formuláře jsou v jednotlivých modulech uloženy v souboru forms.py.
+
+<h3> Controller </h3>
+Logika aplikace se nachází v controllerech umístěných uvnitř každého z modulů, ty zpracovávají příchozí požadavky a pomocí šablon generují příslušné odpověďi.
+V aplikaci existují následující controllery:
+<ul>
+	<li>/TownIssues/main/routes.py - přesměrování uživatelů s různými rolemi na jim příslušící domovské stránky
+	<li>/TownIssues/users/routes.py - logika registrace, přihlášení a správy uživatelských účtů 
+	<li>/TownIssues/tickets/routes.py - vytváření, správa a přidávání komentářů k jednotlivým tiketům
+	<li>/TownIssues/service_requests/routes.py - přidávání servisních požadavků k tiketům a manipulace s nimi
+</ul>
+
+<h2>Databáze</h2>
+Jako databázi jsme zvolili postgreSQL, aplikace by však díky použití sady nástrojů SQL alchemy fungovala s kteroukoliv SQL databází.
+Na základě vytvořeného ER diagramu jsme vytvořili skript pod názvem database.sql, který vytvoří schéma databáze a naplní ji testovacími daty. 
+Zmíněný ER diagram a diagram databáze vygenerovaný pomocí DataGripu můžete vidět na obrázcích níže:
+
 
 <h2>Instalace</h2>
 TODO
@@ -69,8 +98,6 @@ Stručně popište:
 </ul>
 
 <h2>Známé problémy</h2>
-TODO
-<p>Zde popište, které body zadání nejsou implementovány a z jakého důvodu. Např. &bdquo;Z časových důvodů nebyla implementována správa uživatelů.&rdquo; Pomůžete tím zrychlit hodnocení, když neimplementované funkce nebudeme muset dlouze hledat.</p>
-
+<h1> NELZE!</h1>
 </body>
 </html>
