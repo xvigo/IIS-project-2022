@@ -1,0 +1,202 @@
+body {
+    background: #fafafa;
+    color: #333333;
+    margin-top: 5rem;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    color: #444444;
+  }
+  
+  .bg-blue {
+    background-color: #1d7fc5;
+  }
+  
+  .site-header .navbar-nav .nav-link {
+    color: #cbd5db;
+  }
+  
+  .site-header .navbar-nav .nav-link:hover {
+    color: #ffffff;
+  }
+  
+  .site-header .navbar-nav .nav-link.active {
+    font-weight: 500;
+  }
+  
+  .content-section {
+    background: #F0F0F0;
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+    margin-bottom: 20px;
+  }
+  
+  .article-title {
+    color: #444444;
+  }
+
+  .time-title {
+    color: #444444;
+  }
+  
+  a.article-title:hover {
+    color: #428bca;
+    text-decoration: none;
+  }
+  
+  .author-title {
+    color: #5f5858;
+  }
+  
+  a.author-title:hover {
+    color: #428bca;
+    text-decoration: none;
+  }
+
+  .article-content {
+    white-space: pre-line;
+  }
+  
+  .article-img {
+    height: 65px;
+    width: 65px;
+    margin-right: 16px;
+  }
+  
+  
+  .article-svg {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+  }
+  
+  .account-img {
+    height: 125px;
+    width: 125px;
+    margin-right: 20px;
+    margin-bottom: 16px;
+  }
+  
+  .account-heading {
+    font-size: 2.5rem;
+  }
+
+  .responsive {
+    position: relative;
+    padding: 0 6px;
+    float: left;
+    width: 25%;
+  }
+
+  .absolute {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding-right: 6px;
+  }
+
+  div.gallery {
+    border: 1px solid #ccc;
+  }
+
+  div.gallery:hover {
+    border: 1px solid #777;
+  }
+
+  div.gallery img {
+    width: 100%;
+    height: auto;
+    min-width: 140px;
+  }
+
+  .pics-per-row {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 10px;
+  }
+
+  .flex {
+    display: -webkit-box;
+    flex-wrap: wrap;
+    row-gap: 30px;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .responsive {
+      width: 50%;
+    }
+  }
+
+  @media only screen and (max-width: 570px) {
+    .responsive {
+      width: 100%;
+    }
+  }
+
+#tickets {
+  width: 100%;
+  border-spacing: 0
+}
+
+#sreq_block {
+  display: none;
+}
+
+.row {
+  display: flex;
+  padding-bottom: 25px;
+}
+
+.status {
+  font-size: 2.5rem;
+}
+
+.failure {
+  color: red;
+}
+
+.success {
+  color:green;
+}
+
+.delete-icon {
+  width: 30px;
+  height: 30px;
+}
+
+.top-right {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}
+
+.bottom-right {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+
+.relative {
+  position: relative;
+}
+
+.time-pad {
+  padding-left: 10px;
+}
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.blue {
+  color: blue;
+}
+
+.desc-font {
+  font-size: 20px;
+}
