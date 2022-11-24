@@ -103,7 +103,7 @@
             <td>{{comment.author.user.name}} {{comment.author.user.surname}}</td>
             <td id="comment_{{comment.id}}_content">{{comment.content}}</td>
             <td>{{comment.created_at.strftime("%m/%d/%Y %H:%M:%S")}}</td>
-            {% if has_permissions(allowed_roles=['admin', 'manager']) %}
+            {% if has_permissions(allowed_roles=['admin', 'manager'], allowed_user=comment.author.user) %}
             <td>
                 <div id="comment_{{comment.id}}_buttons" class="detail-buttons">
                   <button type="button" class="btn btn-success fa-regular fa-edit mr-2" data-toggle="modal" data-target="#editCommentModal"
@@ -150,8 +150,10 @@
         <td>{{request.created_at.strftime("%m/%d/%Y %H:%M:%S")}}</td>
         <td>
             <a class="btn btn-primary far fa-eye" href="/requests/{{ request.id }}"></a>
+            {% if has_permissions(allowed_roles=['admin', 'manager'], allowed_user=request.manager.user)%}
             <button type="button" class="btn btn-danger fas fa-trash-alt" data-toggle="modal" data-target="#deleteRequestModal"
                     onclick="configureRequestModal({{request.id}}, {{ ticket.id }})"> </button>
+            {% endif %}
         </td>
       </tr>
     {% endfor %}
