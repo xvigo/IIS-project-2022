@@ -110,7 +110,7 @@ def delete_request(request_id):
     """Route for deleting service request."""
     request = service.get_request_or_404(request_id=request_id)
     check_permissions(allowed_user=request.manager.user)
-    ticket_id = request.ticket_id
+    ticket_id = request.id_ticket
     service.delete_request(request=request)
     return redirect(url_for("tickets.ticket_detail", ticket_id=ticket_id))
 
