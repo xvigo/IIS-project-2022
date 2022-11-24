@@ -50,7 +50,7 @@ class Technician(db.Model):
 
     id_user = db.Column(db.Integer, db.ForeignKey('user_t.id_user'), nullable=False)
 
-    requests = db.relationship('ServiceRequest', backref='technician', lazy=True)
+    requests = db.relationship('ServiceRequest', cascade='all, delete-orphan', backref='technician', lazy=True)
     comments = db.relationship('RequestComment', cascade='all, delete-orphan', backref='author', lazy=True)
 
 

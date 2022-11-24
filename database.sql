@@ -52,7 +52,7 @@ CREATE TABLE ticket(
     current_state VARCHAR(200) NOT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
 
-    id_resident INT REFERENCES resident(id_resident) ON DELETE SET NULL
+    id_resident INT REFERENCES resident(id_resident) ON DELETE CASCADE
 );
 
 CREATE TABLE service_request(
@@ -72,7 +72,7 @@ CREATE TABLE service_request(
     CONSTRAINT fk_manager FOREIGN KEY (id_manager)
         REFERENCES manager(id_manager) ON DELETE CASCADE,
     CONSTRAINT fk_technician FOREIGN KEY (id_technician)
-        REFERENCES technician(id_technician) ON DELETE SET NULL,
+        REFERENCES technician(id_technician) ON DELETE CASCADE,
     CONSTRAINT fk_ticket FOREIGN KEY (id_ticket)
         REFERENCES ticket(id_ticket) ON DELETE CASCADE
 );
