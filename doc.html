@@ -7,6 +7,7 @@
     	td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
     	dt { font-weight: bold; margin-top: 0.5em; }
 		.flex {display: flex; gap: 50px;}
+		.courier { font-family: 'Courier New', monospace; }
     </style>
 </head>
 <body>
@@ -55,33 +56,33 @@ Samotá implementace je rozdělena do čtyř modulů main, tickets, users a serv
 
 <h3> Model</h3>
 Model aplikace je vytvořen za použítí knihovny umožňující objektově relační mapování - Flask SQL alchemy.
-Jednotlivé řádky tabulek databáze jsou mapovány na objekty tříd definovaných v souboru model.py. Objektový přístup k databázi umožňuje pohodlnější a přehlednější práci s databází a zamezuje SQL útokům.
+Jednotlivé řádky tabulek databáze jsou mapovány na objekty tříd definovaných v souboru <span class="courier">model.py</span>. Objektový přístup k databázi umožňuje pohodlnější a přehlednější práci s databází a zamezuje SQL útokům.
 Za účelem čistoty kódu a zjednodušením přístupu k databázovým objektům byla vytvořena samostatná vrstva, která implementuje veškeré využívané databázové operace. <br> 
 Tato vrstva jsou rozděleny do tří souborů s názvy service uvnitř jednotlivých modulů:
 <ul>
-	<li>/TownIssues/tickets/service.py - databázové operace pro práci s tickety</li>
-	<li>/TownIssues/users/service.py - databázové operace pro práci s uživateli</li>
-	<li>/TownIssues/service_requests/service.py - databázové operace pro práci se servisními požadavky</li>
+	<li><span class="courier">/TownIssues/tickets/service.py</span> - databázové operace pro práci s tickety</p></li>
+	<li><span class="courier">/TownIssues/users/service.py</span> - databázové operace pro práci s uživateli</p></li>
+	<li><span class="courier">/TownIssues/service_requests/service.py</span> - databázové operace pro práci se servisními požadavky</p></li>
 </ul>
 
 <h3> View</h3>
 Pohledy jsou realizovány pomocí šablon frameworku Flask. Tyto šablony umožňují snadné tvoření výsledných html stránek pomocí systému Jinja2.
-Jednotlivé šablony jsou uloženy ve složce /TownIssues/templates. Formuláře jsou definovány pomocí knohovny WTForms, která umožňuje nejen definici formulářů, ale také jejich následnou validaci uvnitř jednotlivých funkcí controllerů controllerů.
+Jednotlivé šablony jsou uloženy ve složce <span class="courier">/TownIssues/templates</span>. Formuláře jsou definovány pomocí knohovny WTForms, která umožňuje nejen definici formulářů, ale také jejich následnou validaci uvnitř jednotlivých funkcí controllerů controllerů.
 Formuláře jsou v jednotlivých modulech uloženy v souboru forms.py.
 
 <h3> Controller </h3>
 Logika aplikace se nachází v controllerech umístěných uvnitř každého z modulů, ty zpracovávají příchozí požadavky a pomocí šablon generují příslušné odpověďi.
 V aplikaci existují následující controllery:
 <ul>
-	<li>/TownIssues/main/routes.py - přesměrování uživatelů s různými rolemi na jim příslušící domovské stránky
-	<li>/TownIssues/users/routes.py - logika registrace, přihlášení a správy uživatelských účtů 
-	<li>/TownIssues/tickets/routes.py - vytváření, správa a přidávání komentářů k jednotlivým tiketům
-	<li>/TownIssues/service_requests/routes.py - přidávání servisních požadavků k tiketům a manipulace s nimi
+	<li><span class="courier">/TownIssues/main/routes.py</span> - přesměrování uživatelů s různými rolemi na jim příslušící domovské stránky</p></li>
+	<li><span class="courier">/TownIssues/users/routes.py</span> - logika registrace, přihlášení a správy uživatelských účtů </p></li>
+	<li><span class="courier">/TownIssues/tickets/routes.py</span> - vytváření, správa a přidávání komentářů k jednotlivým tiketům</p></li>
+	<li><span class="courier">/TownIssues/service_requests/routes.py</span> - přidávání servisních požadavků k tiketům a manipulace s nimi</p></li>
 </ul>
 
 <h2>Databáze</h2>
 Jako databázi jsme zvolili postgreSQL, aplikace by však díky použití sady nástrojů SQL alchemy fungovala s kteroukoliv SQL databází.
-Na základě vytvořeného ER diagramu jsme vytvořili skript pod názvem database.sql, který vytvoří schéma databáze a vloží do ní testovací data.
+Na základě vytvořeného ER diagramu jsme vytvořili skript pod názvem <span class="courier">database.sql</span>, který vytvoří schéma databáze a vloží do ní testovací data.
 Zmíněný ER diagram a schéma databáze vygenerovaný pomocí DataGripu můžete vidět na obrázcích níže:
 
 <div class="flex">
@@ -101,7 +102,7 @@ Hesla jsou do databáze vkládána jako kryptografický hash vytvořený knihovn
 <h2>Instalace</h2>
 <ul>
 <li>Nejdříve je nutné vytvořit PostgreSQL databázi,</li>
-<li>následně v ní spustíme inicializační skript <b>database.sql</b>b>, který vytvoří schéma DB a vloží demonstrační data.</li>
+<li>následně v ní spustíme inicializační skript <b>database.sql</b>, který vytvoří schéma DB a vloží demonstrační data.</li>
 </ul>
 
 Postup instalace aplikace je následující:
