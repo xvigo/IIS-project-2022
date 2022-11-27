@@ -6,29 +6,26 @@
     	table { border-collapse: collapse; }
     	td, th { border: 1px solid black; padding: 0.3em 0.5em; text-align: left; }
     	dt { font-weight: bold; margin-top: 0.5em; }
+		.flex {display: flex; gap: 50px;}
     </style>
 </head>
 <body>
-
-<!-- Zkontrolujte prosím nastavení kódování v hlavičce dokumentu 
-     podle použitého editoru -->
 
 <h1>Chytré město</h1>
 
 <dl>
 	<dt>Autoři</dt>
 	<dd>Vilém Gottwald
-	    <a href="mailto:xgottw07@stud.fit.vutbr.cz">xgottw07@stud.fit.vutbr.cz</a> -
-		popis činnosti v týmu
+	    <a href="mailto:xgottw07@stud.fit.vutbr.cz">xgottw07@stud.fit.vutbr.cz</a>
 	</dd>
 	<dd>Pavel Tetauer
-	    <a href="mailto:xtetau00@stud.fit.vutbr.cz">xtetau00@stud.fit.vutbr.cz</a> - 
-		popis činnosti v týmu
+	    <a href="mailto:xtetau00@stud.fit.vutbr.cz">xtetau00@stud.fit.vutbr.cz</a>
 	</dd>
   <dd>Daniel Zmrzlý
-	    <a href="mailto:xzmrzl00@stud.fit.vutbr.cz">xzmrzl00@stud.fit.vutbr.cz</a> - 
-		popis činnosti v týmu
+	    <a href="mailto:xzmrzl00@stud.fit.vutbr.cz">xzmrzl00@stud.fit.vutbr.cz</a>
 	</dd>
+	<dt>Popis činnosti v týmu</dt>
+	<dd></dd>
 	<dt>URL aplikace</dt>
 	<dd><a href="https://iis-town-issues.herokuapp.com/">https://iis-town-issues.herokuapp.com/</a></dd>
 </dl>
@@ -84,11 +81,16 @@ V aplikaci existují následující controllery:
 Na základě vytvořeného ER diagramu jsme vytvořili skript pod názvem database.sql, který vytvoří schéma databáze a naplní ji testovacími daty. 
 Zmíněný ER diagram a diagram databáze vygenerovaný pomocí DataGripu můžete vidět na obrázcích níže:</p>
 
-<h3>Schéma databáze</h3>
-<img src="doc/db_diagram.png" alt="." width="500" height="600">
-
-<h3>ER diagram</h3>
-<img src="doc/er_diagram.png" alt="." width="500" height="600">
+<div class="flex">
+	<div>
+		<h3>Schéma databáze</h3>
+		<img src="doc/db_diagram.png" alt="." width="500" height="600">
+	</div>
+	<div>
+		<h3>ER diagram</h3>
+		<img src="doc/er_diagram.png" alt="." width="500" height="600">
+	</div>
+</div>
 
 
 <h2>Instalace</h2>
