@@ -50,8 +50,8 @@
 <a href="https://youtu.be/-DJrCtWwa-0">https://youtu.be/-DJrCtWwa-0</a>
 
 <h2>Implementace</h2>
-Webová aplikace je implementována v jazyce Python verze 3.10 za použití frameworku Flask. Aplikace využívá návrhový vzor Model-View-Controller.
-Samotá implementace je rozdělena do čtyř modulů main, tickets, users a service_requirements.
+Webová aplikace je implementována v jazyce Python verze 3.10 za použití frameworku Flask. Pro hosting byla zvolena cloudová platforma Heroku, protože podporuje Pyhton i SQL a nabízí bezplatný program pro studenty. Aplikace využívá návrhový vzor Model-View-Controller.
+Samotá implementace je rozdělena do čtyř modulů main, tickets, users a service_requirements. 
 
 <h3> Model</h3>
 Model aplikace je vytvořen za použítí knihovny umožňující objektově relační mapování - Flask SQL alchemy.
@@ -80,27 +80,39 @@ V aplikaci existují následující controllery:
 </ul>
 
 <h2>Databáze</h2>
-<p></p>Jako databázi jsme zvolili postgreSQL, aplikace by však díky použití sady nástrojů SQL alchemy fungovala s kteroukoliv SQL databází.
-Na základě vytvořeného ER diagramu jsme vytvořili skript pod názvem database.sql, který vytvoří schéma databáze a naplní ji testovacími daty. 
-Zmíněný ER diagram a diagram databáze vygenerovaný pomocí DataGripu můžete vidět na obrázcích níže:</p>
+Jako databázi jsme zvolili postgreSQL, aplikace by však díky použití sady nástrojů SQL alchemy fungovala s kteroukoliv SQL databází.
+Na základě vytvořeného ER diagramu jsme vytvořili skript pod názvem database.sql, který vytvoří schéma databáze a vloží do ní testovací data.
 
+Zmíněný ER diagram a diagram databáze vygenerovaný pomocí DataGripu můžete vidět na obrázcích níže:
 <h3>Schéma databáze</h3>
 <img src="doc/db_diagram.png" alt="." width="500" height="600">
 
 <h3>ER diagram</h3>
 <img src="doc/er_diagram.png" alt="." width="500" height="600">
 
+<h3>Hesla</h3>
+Hesla jsou do databáze vkládána jako kryptografický hash vytvořený knihovnou BCrypt. Ta také umožňuje ověření shodnosti zadaného hesla s již existujícím hashem.
 
 <h2>Instalace</h2>
-TODO
-Stručně popište: 
 <ul>
-<li>postup instalace na server,</li>
-<li>softwarové požadavky (verze PHP apod.),</li>
-<li>jak rozbalit, konfigurovat, inicializovat databázi, ...</li>
+<li>Nejdříve je nutné vytvořit PostgreSQL databázi,</li>
+<li>následně v ní spustíme inicializační skript <b>database.sql</b>b>, který vytvoří schéma DB a vloží demonstrační data.</li>
+</ul>
+
+Postup instalace aplikace je následující:
+<ul>
+<li>Vytvoření virtualního prostředí: <b>python3 -m venv .venv</b></li>
+<li>Aktivace virtuálnního prostředí: <b>source .venv/bin/activate</b></li>
+<li>Instalace závislostí: <b>pip install -r requirements.txt</b></li>
+<li>Konfigurace připojení k DB: <b>export DB_CONN_STR='&ltDB connection string&gt'</b></li>
+<li>Spuštění aplikace: <b>gunicorn run:app</b></li>
 </ul>
 
 <h2>Známé problémy</h2>
-<h1> NELZE!</h1>
+Jediným známým nedostatkem, je způsob filtrování tiketů a uživatelů v pohledech zobrazujícíh jejich seznamy pomocí stránkování.
+Filtrace je implementována pomocí javascriptu, takže filtovány jsou pouze položky obsaženy na právě zobrazované stránce. 
+Vzhledem k tomu, že filtrace není v zadání projektu vyžadována, jsme se rozhodli ji implemetovat takto, abychom si vyzkoušeli práci s javascriptem.
+V opačném případě by bylo filtrování implementováno pomocí odesílání hodnot formulářů skrze get požadavky na server, který by vyfiltrované záznamy vracel v odpovědi. 
+
 </body>
 </html>
