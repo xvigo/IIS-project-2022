@@ -6,7 +6,7 @@ The system is meant for the following types of users:
 
 ## Setup - to start application locally
 Commands: 
-ptblema 
+
 ```
 python3 -m venv .venv
 source .venv/bin/activate
